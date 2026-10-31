@@ -121,7 +121,8 @@ button{transition:background .18s ease,transform .18s ease,box-shadow .18s ease}
 button:focus-visible{outline:3px solid #d6c879;outline-offset:3px}
 .panel,.stat{box-shadow:0 8px 26px #554c450b}
 .tag{font-weight:600;letter-spacing:.01em}
-.hero{isolation:isolate}
+.hero{isolation:isolate;background-image:linear-gradient(115deg,#526b50ee,#71866ae8),url('https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=1600&q=80');background-size:cover;background-position:center}
+.adventure-open{font:inherit}.adventure-detail{padding:8px 14px 14px 64px;border-bottom:1px solid var(--line);background:#f8f5ed;border-radius:0 0 12px 12px}.stage-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:12px}.stage-row:last-child{border:0}.stage-number{font:600 11px Lora,serif;color:var(--gold)}.stage-name{flex:1}.stage-status{font-size:10px;color:var(--moss);background:#e9eee4;padding:4px 8px;border-radius:12px}
 @media(max-width:699px){
  .hero{align-items:center}
  .hero-copy{max-width:calc(100% - 76px)}
@@ -183,7 +184,9 @@ button:focus-visible{outline:3px solid #d6c879;outline-offset:3px}
 <script>
 
 const API='https://herbario-notion-api.antuneseloisa135.workers.dev';
-let tasks=[], adventures=[], rituals=[], xpEntries=[];
+let tasks=[], adventures=[], rituals=[], xpEntries=[], recipes=[];
+const localToday=()=>{const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')};
+const recipeTitle=p=>{for(const [k,v] of Object.entries(p.properties||{})){if(v.type==='title')return (v.title||[]).map(x=>x.plain_text||'').join('')}return 'Etapa sem título'};
 const pages={
  aventuras:["🧭","Aventuras em andamento","Projetos que ganham vida quando são divididos em etapas.","Suas aventuras",[]],
  rituais:["🌱","Rituais do Jardim","Pequenos cuidados repetidos criam raízes.","Hábitos em cultivo",[]],
@@ -202,31 +205,23 @@ function toast(msg){const el=document.getElementById('toast');el.textContent=msg
 async function load(resource){const r=await fetch(API+'/api/'+resource+'?page_size=100');if(!r.ok)throw new Error('Falha ao consultar '+resource);const j=await r.json();if(!j.ok)throw new Error('Resposta inválida de '+resource);return j.results||[]}
 function renderTasks(){
  const box=document.getElementById('task-list');box.innerHTML='';
- const open=tasks.filter(t=>select(t,'Status')!=='Done');
+ const todays=tasks.filter(t=>(date(t,'Date')||'').slice(0,10)===localToday());
+ const open=todays.filter(t=>select(t,'Status')!=='Done');
  document.getElementById('remaining').textContent=open.length;
- if(!tasks.length){box.innerHTML='<div class="empty-state"><span>Nenhuma tarefa encontrada no Notion.</span></div>';return}
- tasks.slice(0,12).forEach(t=>{
-  const status=select(t,'Status'), done=status==='Done';
-  const name=title(t,'Tarefa')||'Tarefa sem título';
-  const tags=multi(t,'Tags').join(' · ');
-  const row=document.createElement('div');row.className='task'+(done?' done':'');
-  row.innerHTML='<span class="check '+(done?'done':'')+'">'+(done?'✓':'')+'</span><div class="task-info"><strong></strong><small></small></div><span class="xp"></span>';
-  row.querySelector('strong').textContent=name;
-  row.querySelector('small').textContent=[tags, date(t,'Date')].filter(Boolean).join(' · ')||status||'Sem categoria';
-  row.querySelector('.xp').textContent='+'+number(t,'XP')+' XP';
-  box.append(row);
- });
+ if(!todays.length){box.innerHTML='<div class="empty-state"><span>Nenhuma flor agendada para hoje. Que tal aproveitar o espaço para respirar ou planejar o próximo passo?</span></div>';return}
+ todays.forEach(t=>{const status=select(t,'Status'),done=status==='Done',name=title(t,'Tarefa')||'Tarefa sem título',tags=multi(t,'Tags').join(' · ');const row=document.createElement('div');row.className='task'+(done?' done':'');row.innerHTML='<span class="check '+(done?'done':'')+'">'+(done?'✓':'')+'</span><div class="task-info"><strong></strong><small></small></div><span class="xp"></span>';row.querySelector('strong').textContent=name;row.querySelector('small').textContent=[tags,status].filter(Boolean).join(' · ')||'Sem categoria';row.querySelector('.xp').textContent='+'+number(t,'XP')+' XP';box.append(row)});
 }
 function renderAdventures(){
  const box=document.getElementById('adventure-list');box.innerHTML='';
  if(!adventures.length){box.textContent='Nenhuma aventura cadastrada no Notion.';return}
  adventures.forEach(a=>{
-  const row=document.createElement('div');row.className='adventure';
-  row.innerHTML='<div class="adventure-icon">✦</div><div class="adventure-info"><strong></strong><small></small></div><span class="tag"></span>';
+  const row=document.createElement('button');row.type='button';row.className='adventure adventure-open';row.style.cssText='width:100%;border:0;background:transparent;text-align:left;color:inherit;cursor:pointer';
+  row.innerHTML='<span class="adventure-icon"><img alt="" src="https://api.iconify.design/ph/plant-duotone.svg?color=%23526b50" width="25" height="25"></span><span class="adventure-info"><strong></strong><small></small></span><span class="tag">Ver etapas⌄</span>';
   row.querySelector('strong').textContent=title(a,'Name')||'Aventura sem título';
-  row.querySelector('small').textContent=relationCount(a,'Receitas e Feitiços')+' etapas/receitas relacionadas · '+Math.round((number(a,'Progresso')||0)*100)+'%';
-  row.querySelector('.tag').textContent=select(a,'Status')||'Sem status';
-  box.append(row);
+  const related=prop(a,'Receitas e Feitiços')?.relation||[];row.querySelector('small').textContent=related.length+' etapas vinculadas · '+Math.round((number(a,'Progresso')||0)*100)+'% concluído';
+  const detail=document.createElement('div');detail.className='adventure-detail';detail.hidden=true;const stages=related.map(rel=>recipes.find(r=>r.id===rel.id)).filter(Boolean);
+  if(stages.length){stages.forEach((stage,i)=>{const item=document.createElement('div');item.className='stage-row';item.innerHTML='<span class="stage-number"></span><span class="stage-name"></span><span class="stage-status"></span>';item.querySelector('.stage-number').textContent=String(i+1).padStart(2,'0');item.querySelector('.stage-name').textContent=recipeTitle(stage);item.querySelector('.stage-status').textContent=select(stage,'Status')||'Etapa';detail.append(item)})}else detail.textContent=related.length?'As etapas estão vinculadas, mas não foi possível carregar seus detalhes.':'Esta aventura ainda não tem etapas vinculadas.';
+  row.addEventListener('click',()=>{detail.hidden=!detail.hidden;row.querySelector('.tag').textContent=detail.hidden?'Ver etapas⌄':'Ocultar etapas⌃'});box.append(row,detail);
  });
 }
 function renderRituals(){
@@ -257,7 +252,7 @@ function showView(view){
 }
 async function refreshData(){
  try{
-  [tasks,adventures,rituals,xpEntries]=await Promise.all([load('tasks'),load('adventures'),load('rituals'),load('xp')]);
+  [tasks,adventures,rituals,xpEntries,recipes]=await Promise.all([load('tasks'),load('adventures'),load('rituals'),load('xp'),load('recipes')]);
   renderTasks();renderAdventures();renderRituals();
   document.querySelector('.stats .stat:nth-child(2) strong').textContent=xpEntries.reduce((sum,x)=>sum+(number(x,'XP')||0),0)+' XP';
   document.querySelector('.stats .stat:nth-child(2) em').textContent='dados do Notion';
