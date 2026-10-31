@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#526b50">
+<title>Herbário do Sol</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Lora:wght@500;600;700&display=swap');
+:root{
+ --linen:#f4f0e5;--paper:#e9e2cf;--earth:#554c45;--moss:#526b50;
+ --sage:#a9b69a;--gold:#a97836;--pink:#d9b8a7;--lav:#b9a8ce;--sun:#d6c879;
+ --white:#fffdf7;--muted:#837b70;--line:#ded6c4;--shadow:0 12px 35px #554c4510;
+}
+*{box-sizing:border-box} body{margin:0;background:var(--linen);color:var(--earth);font-family:'DM Sans',sans-serif}
+button,input{font:inherit} button{cursor:pointer}
+.shell{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
+aside{background:#eae5d7;border-right:1px solid var(--line);padding:28px 18px;display:flex;flex-direction:column;gap:30px}
+.brand{padding:4px 12px}.brand-mark{font-size:30px}.brand h1{font:600 25px Lora,serif;margin:8px 0 3px;color:var(--moss)}.brand p{font-size:11px;color:var(--muted);margin:0;letter-spacing:.04em}
+.nav-label{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:#928a7d;padding:0 12px;margin-bottom:8px}
+nav{display:grid;gap:5px}.nav-btn{border:0;background:transparent;text-align:left;padding:11px 12px;border-radius:12px;color:var(--earth);display:flex;gap:12px;align-items:center;font-size:13px}
+.nav-btn:hover,.nav-btn.active{background:#dce3d5;color:var(--moss)}.nav-btn span:first-child{width:20px;text-align:center;font-size:16px}
+.aside-note{margin-top:auto;background:#f5f0e4;border:1px solid var(--line);border-radius:16px;padding:15px;font:italic 13px Lora,serif;line-height:1.5;color:#756d5e}
+main{padding:30px clamp(18px,4vw,54px);max-width:1500px;width:100%;margin:auto}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:28px}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--gold);font-weight:700}
+h2{font:600 clamp(28px,4vw,40px) Lora,serif;margin:6px 0;color:var(--earth)}
+.subtitle{color:var(--muted);font-size:13px}.date-pill{background:var(--white);border:1px solid var(--line);border-radius:30px;padding:10px 15px;font-size:12px;color:var(--muted)}
+.hero{background:linear-gradient(115deg,#526b50,#71866a);color:#fffdf7;border-radius:22px;padding:27px 30px;display:flex;justify-content:space-between;align-items:center;gap:20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.hero:after{content:"✿";position:absolute;right:23%;top:-40px;font-size:170px;color:#ffffff10;transform:rotate(-18deg)}
+.hero h3{font:500 25px Lora,serif;margin:0 0 8px}.hero p{font-size:13px;line-height:1.6;color:#edf0e7;margin:0;max-width:490px}.hero-mark{font-size:62px;opacity:.9;z-index:1}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin:18px 0 27px}
+.stat,.panel{background:var(--white);border:1px solid var(--line);border-radius:17px;box-shadow:var(--shadow)}
+.stat{padding:16px 18px}.stat small{color:var(--muted);font-size:11px}.stat strong{display:block;font:600 25px Lora,serif;margin-top:6px;color:var(--moss)}.stat em{font-style:normal;font-size:11px;color:var(--muted)}
+.section-head{display:flex;justify-content:space-between;align-items:end;margin:27px 0 13px;gap:12px}.section-head h3{font:600 21px Lora,serif;margin:0}.section-head p{font-size:12px;color:var(--muted);margin:5px 0 0}
+.text-btn{border:0;background:transparent;color:var(--moss);font-weight:700;font-size:12px;padding:8px}
+.columns{display:grid;grid-template-columns:1.35fr .85fr;gap:16px}
+.panel{padding:19px}.panel-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px}.panel-title h4{font:600 16px Lora,serif;margin:0}.tag{font-size:10px;padding:5px 9px;border-radius:20px;background:#e9eee4;color:var(--moss)}
+.task{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #eee9de}.task:last-child{border:0}.check{width:19px;height:19px;border:1.5px solid #a9b69a;border-radius:6px;background:transparent;flex:none;color:white}.check.done{background:var(--moss);border-color:var(--moss)}.task-info{flex:1;min-width:0}.task-info strong{display:block;font-size:12px;font-weight:600}.task-info small{font-size:10px;color:var(--muted)}.task.done strong{text-decoration:line-through;color:#aaa397}.xp{font-size:10px;color:var(--gold);font-weight:700}
+.ritual{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #eee9de;font-size:12px}.ritual:last-child{border:0}.ritual-icon{width:30px;height:30px;border-radius:10px;background:#f1eee3;display:grid;place-items:center}
+.progress{height:8px;background:#eee9de;border-radius:20px;overflow:hidden;margin:10px 0 7px}.progress span{display:block;height:100%;width:34%;background:var(--gold);border-radius:20px}
+.adventure{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid #eee9de}.adventure:last-child{border:0}.adventure-icon{font-size:22px;width:40px;height:40px;border-radius:13px;background:#f2eee3;display:grid;place-items:center}.adventure-info{flex:1}.adventure-info strong{font:600 13px Lora,serif}.adventure-info small{display:block;color:var(--muted);font-size:10px;margin-top:3px}
+.footer{text-align:center;color:#a39a8c;font:italic 12px Lora,serif;padding:30px 0 10px}
+.modal-backdrop{position:fixed;inset:0;background:#29271f77;display:none;align-items:center;justify-content:center;padding:18px}.modal-backdrop.open{display:flex}.modal{background:var(--white);padding:24px;border-radius:18px;width:min(420px,100%);box-shadow:0 20px 70px #0003}.modal h3{font:600 21px Lora,serif;margin:0 0 15px}.modal input{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff;margin:8px 0 14px}.modal-actions{display:flex;justify-content:flex-end;gap:8px}.primary,.secondary{border:0;border-radius:10px;padding:10px 14px;font-size:12px;font-weight:700}.primary{background:var(--moss);color:white}.secondary{background:#eee9de;color:var(--earth)}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--earth);color:white;padding:11px 16px;border-radius:20px;font-size:12px;opacity:0;pointer-events:none;transition:.25s}.toast.show{opacity:1}
+@media(max-width:900px){.shell{grid-template-columns:1fr}aside{padding:12px 14px;position:sticky;top:0;z-index:5;border-right:0;border-bottom:1px solid var(--line)}.brand{display:none}nav{display:flex;overflow:auto;gap:4px}.nav-label,.aside-note{display:none}.nav-btn{white-space:nowrap;padding:9px 11px;font-size:11px}.nav-btn span:first-child{width:auto}}
+@media(max-width:680px){main{padding:22px 15px}.topbar{align-items:flex-start}.date-pill{font-size:10px}.hero{padding:22px}.hero-mark{font-size:43px}.stats{grid-template-columns:repeat(2,1fr);gap:9px}.stat{padding:13px}.stat strong{font-size:22px}.columns{grid-template-columns:1fr}.section-head{margin-top:23px}}
+</style>
+</head>
+<body>
+<div class="shell">
+<aside>
+ <div class="brand"><div class="brand-mark">🌿</div><h1>Herbário do Sol</h1><p>UM PEQUENO UNIVERSO PARA CULTIVAR A PRÓPRIA VIDA</p></div>
+ <div><div class="nav-label">Meu universo</div><nav id="navigation">
+  <button class="nav-btn active" data-view="inicio"><span>☀️</span> Jardim do dia</button>
+  <button class="nav-btn" data-view="aventuras"><span>🧭</span> Aventuras</button>
+  <button class="nav-btn" data-view="rituais"><span>🌱</span> Rituais do Jardim</button>
+  <button class="nav-btn" data-view="personagem"><span>🪞</span> Minha personagem</button>
+  <button class="nav-btn" data-view="conquistas"><span>🏆</span> Conquistas</button>
+  <button class="nav-btn" data-view="pergaminho"><span>📜</span> Pergaminho</button>
+ </nav></div>
+ <div class="aside-note">“A vida floresce quando cuidamos, um pouquinho por dia, daquilo que importa.”</div>
+</aside>
+<main>
+ <div class="topbar"><div><div class="eyebrow">Seu espaço de cultivo</div><h2 id="page-title">O jardim desperta</h2><div class="subtitle" id="page-subtitle">Pequenos passos também fazem florescer grandes mudanças.</div></div><div class="date-pill" id="today"></div></div>
+ <section id="home-view">
+  <div class="hero"><div><h3>Bom dia, Guardiã do Jardim ☀️</h3><p>Este é um novo dia para cuidar dos seus planos, cultivar bons hábitos e avançar no seu próprio ritmo. Escolha uma pequena coisa para fazer florescer.</p></div><div class="hero-mark">🌼</div></div>
+  <div class="stats">
+   <div class="stat"><small>Flores para hoje</small><strong id="remaining">3</strong><em>tarefas em aberto</em></div>
+   <div class="stat"><small>Experiência acumulada</small><strong>0 XP</strong><em>saldo demonstrativo</em></div>
+   <div class="stat"><small>Nível atual</small><strong>Semente</strong><em>primeiros brotos</em></div>
+   <div class="stat"><small>Rituais ativos</small><strong>3</strong><em>hábitos em cultivo</em></div>
+  </div>
+  <div class="section-head"><div><h3>O que floresce hoje</h3><p>Suas tarefas e pequenos compromissos.</p></div><button class="text-btn" id="add-task">＋ Nova flor</button></div>
+  <div class="columns">
+   <div class="panel"><div class="panel-title"><h4>🌷 Flores do Dia</h4><span class="tag">Hoje</span></div><div id="task-list"></div></div>
+   <div class="panel"><div class="panel-title"><h4>🌿 Rituais do Jardim</h4><span class="tag">Cultivo</span></div>
+    <div class="ritual"><span class="ritual-icon">💧</span><span>Beber água</span><span class="tag">Diário</span></div>
+    <div class="ritual"><span class="ritual-icon">📖</span><span>Momento de estudo</span><span class="tag">Diário</span></div>
+    <div class="ritual"><span class="ritual-icon">🧘</span><span>Cuidar de mim</span><span class="tag">Diário</span></div>
+    <div style="margin-top:19px"><div class="panel-title"><h4>✨ Próximo florescer</h4><small style="font-size:10px;color:var(--muted)">Nível 2 · Broto</small></div><div class="progress"><span></span></div><small style="font-size:10px;color:var(--muted)">Progresso ilustrativo — conectado ao XP depois.</small></div>
+   </div>
+  </div>
+  <div class="section-head"><div><h3>Aventuras em andamento</h3><p>Projetos maiores, divididos em etapas possíveis.</p></div><button class="text-btn" data-go="aventuras">Ver aventuras →</button></div>
+  <div class="panel" id="adventure-list">
+   <div class="adventure"><div class="adventure-icon">📖</div><div class="adventure-info"><strong>Livro: Não Anjo</strong><small>Diagnóstico · Revisão · Preparação · Publicação</small></div><span class="tag">Em andamento</span></div>
+   <div class="adventure"><div class="adventure-icon">🌻</div><div class="adventure-info"><strong>Glow Up Carreira</strong><small>Projeto de desenvolvimento profissional</small></div><span class="tag">Planejado</span></div>
+   <div class="adventure"><div class="adventure-icon">🏺</div><div class="adventure-info"><strong>Cofrinho 06 meses</strong><small>Construir uma reserva com constância</small></div><span class="tag">Planejado</span></div>
+  </div>
+ </section>
+ <section id="other-view" style="display:none">
+  <div class="hero"><div><h3 id="other-title">Um espaço em construção</h3><p id="other-copy">Esta área será conectada aos registros do Notion na próxima etapa do projeto.</p></div><div class="hero-mark" id="other-icon">🌿</div></div>
+  <div class="section-head"><div><h3 id="other-heading">Seu conteúdo</h3><p>Esta é uma prévia visual do painel.</p></div></div>
+  <div class="panel" id="other-content"></div>
+ </section>
+ <div class="footer">Feito de pequenos começos, cuidado e luz. ✦</div>
+</main>
+</div>
+<div class="modal-backdrop" id="modal"><div class="modal"><h3>Plantar uma nova flor</h3><label for="task-name" style="font-size:12px;color:var(--muted)">Nome da tarefa</label><input id="task-name" placeholder="O que você deseja cultivar hoje?"><div class="modal-actions"><button class="secondary" id="cancel">Cancelar</button><button class="primary" id="save">Adicionar flor</button></div></div></div>
+<div class="toast" id="toast"></div>
+<script>
+const sampleTasks=[
+ {name:"Revisar uma etapa do livro Não Anjo",meta:"Projeto · Não Anjo",xp:10,done:false},
+ {name:"Assistir à aula do curso de IA",meta:"Estudos · Coursera",xp:10,done:false},
+ {name:"Organizar pequenas prioridades do dia",meta:"Pessoal",xp:5,done:false}
+];
+const pages={
+ aventuras:["🧭","Aventuras em andamento","Projetos que ganham vida quando são divididos em etapas.","Suas aventuras",["Livro: Não Anjo — 5 etapas organizadas","Glow Up Carreira — planejamento e desenvolvimento","Cofrinho 06 meses — construção da reserva","Associação Revivendo — projeto institucional"]],
+ rituais:["🌱","Rituais do Jardim","Pequenos cuidados repetidos criam raízes.","Hábitos em cultivo",["Beber água — Diário","Momento de estudo — Diário","Cuidar de mim — Diário"]],
+ personagem:["🪞","Minha personagem","Acompanhe sua evolução, atributos e experiência.","Ficha da guardiã",["Nível: Semente","XP: aguardando integração com o Extrato de XP","Atributos: disciplina · criatividade · coragem · equilíbrio"]],
+ conquistas:["🏆","Coleção de conquistas","Cada avanço merece ser reconhecido.","Conquistas",["Primeiro broto — concluir sua primeira tarefa","Raízes fortes — manter um ritual por sete dias","Jardineira dedicada — cultivar várias áreas da vida"]],
+ pergaminho:["📜","Pergaminho","Seu espaço de referências, ideias e conhecimentos.","Biblioteca",["Estudos e cursos","Referências importantes","Anotações e ideias para revisitar"]]
+};
+const taskList=document.getElementById('task-list');
+function renderTasks(){taskList.innerHTML='';sampleTasks.forEach((t,i)=>{const row=document.createElement('div');row.className='task'+(t.done?' done':'');row.innerHTML=`<button class="check ${t.done?'done':''}" aria-label="Concluir tarefa">${t.done?'✓':''}</button><div class="task-info"><strong></strong><small></small></div><span class="xp">+${t.xp} XP</span>`;row.querySelector('strong').textContent=t.name;row.querySelector('small').textContent=t.meta;row.querySelector('button').onclick=()=>{t.done=!t.done;renderTasks();toast(t.done?'Flor concluída nesta prévia!':'Tarefa reaberta.');};taskList.append(row)});document.getElementById('remaining').textContent=sampleTasks.filter(t=>!t.done).length}
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2200)}
+function showView(view){document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===view));const home=view==='inicio';document.getElementById('home-view').style.display=home?'block':'none';document.getElementById('other-view').style.display=home?'none':'block';if(home){document.getElementById('page-title').textContent='O jardim desperta';document.getElementById('page-subtitle').textContent='Pequenos passos também fazem florescer grandes mudanças.';return}const p=pages[view];document.getElementById('page-title').textContent=p[1];document.getElementById('page-subtitle').textContent=p[2];document.getElementById('other-title').textContent=p[1];document.getElementById('other-copy').textContent=p[2];document.getElementById('other-icon').textContent=p[0];document.getElementById('other-heading').textContent=p[3];const box=document.getElementById('other-content');box.innerHTML='';p[4].forEach(item=>{const div=document.createElement('div');div.className='task';div.innerHTML='<span class="ritual-icon">✦</span><div class="task-info"><strong></strong></div>';div.querySelector('strong').textContent=item;box.append(div)})}
+document.getElementById('navigation').addEventListener('click',e=>{const b=e.target.closest('[data-view]');if(b)showView(b.dataset.view)});
+document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>showView(b.dataset.go));
+const modal=document.getElementById('modal');document.getElementById('add-task').onclick=()=>{modal.classList.add('open');document.getElementById('task-name').focus()};document.getElementById('cancel').onclick=()=>modal.classList.remove('open');
+document.getElementById('save').onclick=()=>{const input=document.getElementById('task-name');const name=input.value.trim();if(!name){input.focus();return}sampleTasks.push({name,meta:'Nova flor · criada nesta prévia',xp:5,done:false});renderTasks();input.value='';modal.classList.remove('open');toast('Flor adicionada à prévia. A gravação no Notion virá na integração.')}
+document.getElementById('today').textContent=new Intl.DateTimeFormat('pt-BR',{weekday:'long',day:'2-digit',month:'long'}).format(new Date());
+renderTasks();
+</script>
+</body>
+</html>
