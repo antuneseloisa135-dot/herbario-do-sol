@@ -122,7 +122,7 @@ button:focus-visible{outline:3px solid #d6c879;outline-offset:3px}
 .panel,.stat{box-shadow:0 8px 26px #554c450b}
 .tag{font-weight:600;letter-spacing:.01em}
 .hero{isolation:isolate;background-image:linear-gradient(115deg,#526b50ee,#71866ae8),url('https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=1600&q=80');background-size:cover;background-position:center}
-.adventure-open{font:inherit}.adventure-detail{padding:8px 14px 14px 64px;border-bottom:1px solid var(--line);background:#f8f5ed;border-radius:0 0 12px 12px}.stage-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:12px}.stage-row:last-child{border:0}.stage-number{font:600 11px Lora,serif;color:var(--gold)}.stage-name{flex:1}.stage-status{font-size:10px;color:var(--moss);background:#e9eee4;padding:4px 8px;border-radius:12px}
+.adventure-open{font:inherit}.adventure-detail{padding:8px 14px 14px 64px;border-bottom:1px solid var(--line);background:#f8f5ed;border-radius:0 0 12px 12px}.stage-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:12px}.stage-row:last-child{border:0}.view-card{padding:16px 0;border-bottom:1px solid var(--line)}.view-card:last-child{border:0}.view-card h4{font:600 16px Lora,serif;margin:0 0 5px}.view-card p{font-size:12px;color:var(--muted);margin:0;line-height:1.5}.metric-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:16px}.metric{background:#f5f1e7;border-radius:13px;padding:14px}.metric strong{display:block;font:600 22px Lora,serif;color:var(--moss)}.metric small{font-size:10px;color:var(--muted)}.view-filter{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}.view-filter span{font-size:11px;background:#f1eee3;color:var(--moss);padding:7px 10px;border-radius:20px}.stage-number{font:600 11px Lora,serif;color:var(--gold)}.stage-name{flex:1}.stage-status{font-size:10px;color:var(--moss);background:#e9eee4;padding:4px 8px;border-radius:12px}
 @media(max-width:699px){
  .hero{align-items:center}
  .hero-copy{max-width:calc(100% - 76px)}
@@ -211,8 +211,8 @@ function renderTasks(){
  if(!todays.length){box.innerHTML='<div class="empty-state"><span>Nenhuma flor agendada para hoje. Que tal aproveitar o espaço para respirar ou planejar o próximo passo?</span></div>';return}
  todays.forEach(t=>{const status=select(t,'Status'),done=status==='Done',name=title(t,'Tarefa')||'Tarefa sem título',tags=multi(t,'Tags').join(' · ');const row=document.createElement('div');row.className='task'+(done?' done':'');row.innerHTML='<span class="check '+(done?'done':'')+'">'+(done?'✓':'')+'</span><div class="task-info"><strong></strong><small></small></div><span class="xp"></span>';row.querySelector('strong').textContent=name;row.querySelector('small').textContent=[tags,status].filter(Boolean).join(' · ')||'Sem categoria';row.querySelector('.xp').textContent='+'+number(t,'XP')+' XP';box.append(row)});
 }
-function renderAdventures(){
- const box=document.getElementById('adventure-list');box.innerHTML='';
+function renderAdventures(target){
+ const box=target||document.getElementById('adventure-list');box.innerHTML='';
  if(!adventures.length){box.textContent='Nenhuma aventura cadastrada no Notion.';return}
  adventures.forEach(a=>{
   const row=document.createElement('button');row.type='button';row.className='adventure adventure-open';row.style.cssText='width:100%;border:0;background:transparent;text-align:left;color:inherit;cursor:pointer';
@@ -239,22 +239,31 @@ function renderRituals(){
   heading.after(row);
  });
 }
+function totalXP(){return xpEntries.reduce((sum,x)=>sum+(number(x,'XP')||0),0)}
+function levelInfo(xp){const levels=[['Semente',0],['Broto',100],['Muda',250],['Floração',500],['Árvore',900],['Bosque',1500]];let current=levels[0],next=levels[1];for(let i=0;i<levels.length;i++){if(xp>=levels[i][1]){current=levels[i];next=levels[i+1]||null}}const pct=next?Math.min(100,Math.round((xp-current[1])/(next[1]-current[1])*100)):100;return{name:current[0],next:next?next[0]:'Nível máximo',pct,remaining:next?Math.max(0,next[1]-xp):0}}
+function renderRitualView(box){
+ if(!rituals.length){box.innerHTML='<div class="empty-state">Seu jardim ainda não tem rituais cadastrados no Notion.</div>';return}
+ rituals.forEach(r=>{const card=document.createElement('div');card.className='view-card';card.innerHTML='<h4></h4><div class="view-filter"><span class="tag"></span><span class="tag"></span><span class="tag"></span></div><p></p>';card.querySelector('h4').textContent=title(r,'Ritual')||'Ritual';const tags=card.querySelectorAll('.tag');tags[0].textContent=prop(r,'Área')?.select?.name||'Área não definida';tags[1].textContent=prop(r,'Frequência')?.select?.name||'Frequência não definida';tags[2].textContent=prop(r,'Ativo')?.checkbox?'Ativo':'Pausado';const chosen=multi(r,'Dia');card.querySelector('p').textContent=chosen.length?'Dias: '+chosen.join(' · '):'Dias ainda não definidos';box.append(card)});
+}
+function renderCharacter(box){const xp=totalXP(),level=levelInfo(xp);box.innerHTML='<div class="metric-grid"><div class="metric"><strong>'+xp+' XP</strong><small>Experiência registrada</small></div><div class="metric"><strong>'+level.name+'</strong><small>Nível atual</small></div></div><div class="view-card"><h4>Próximo florescer: '+level.next+'</h4><div class="progress"><span style="width:'+level.pct+'%"></span></div><p>'+level.pct+'% do caminho · '+(level.remaining?level.remaining+' XP para avançar':'Você alcançou o último nível cadastrado!')+'</p></div><div class="view-card"><h4>Seu cultivo</h4><p>Continue registrando suas tarefas e experiências no Notion. Os atributos pessoais poderão ser conectados quando definirmos como deseja acompanhá-los.</p></div>'}
+function renderAchievements(box){const xp=totalXP(),milestones=[100,250,500,900,1500];box.innerHTML='<div class="view-card"><h4>Marcos de experiência</h4><p>Conquistas calculadas a partir do XP registrado, sem criar registros no Notion.</p></div>';milestones.forEach((m,i)=>{const done=xp>=m,row=document.createElement('div');row.className='task';row.innerHTML='<span class="ritual-icon"></span><div class="task-info"><strong></strong><small></small></div><span class="tag"></span>';row.querySelector('.ritual-icon').textContent=done?'✦':'◇';row.querySelector('strong').textContent=['Primeiro broto','Raízes firmes','Em floração','Árvore forte','Bosque vivo'][i];row.querySelector('small').textContent=m+' XP';row.querySelector('.tag').textContent=done?'Alcançado':'Bloqueado';box.append(row)})}
+function renderPergaminho(box){box.innerHTML='<div class="view-card"><h4>Biblioteca do jardim</h4><p>Um espaço para reunir estudos, referências e ideias. As coleções de Pergaminho e Receitas e Feitiços poderão ganhar filtros e pesquisa nesta área.</p></div><div class="view-card"><h4>Etapas e receitas</h4><p>'+recipes.length+' registros encontrados na coleção Receitas e Feitiços.</p></div>'}
 function showView(view){
  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
  const home=view==='inicio';document.getElementById('home-view').style.display=home?'block':'none';document.getElementById('other-view').style.display=home?'none':'block';
  if(home){document.getElementById('page-title').textContent='O jardim desperta';document.getElementById('page-subtitle').textContent='Pequenos passos também fazem florescer grandes mudanças.';return}
- const p=pages[view];document.getElementById('page-title').textContent=p[1];document.getElementById('page-subtitle').textContent=p[2];document.getElementById('other-title').textContent=p[1];document.getElementById('other-copy').textContent=p[2];document.getElementById('other-icon').textContent=p[0];document.getElementById('other-heading').textContent=p[3];
+ const p=pages[view];if(!p)return;
+ document.getElementById('page-title').textContent=p[1];document.getElementById('page-subtitle').textContent=p[2];document.getElementById('other-title').textContent=p[1];document.getElementById('other-copy').textContent=p[2];document.getElementById('other-icon').textContent=p[0];document.getElementById('other-heading').textContent=p[3];
  const box=document.getElementById('other-content');box.innerHTML='';
- const data=view==='aventuras'?adventures:view==='rituais'?rituals:[];
- if(data.length){
-  data.forEach(item=>{const div=document.createElement('div');div.className='task';div.innerHTML='<span class="ritual-icon">✦</span><div class="task-info"><strong></strong><small></small></div>';div.querySelector('strong').textContent=title(item,view==='aventuras'?'Name':'Ritual');div.querySelector('small').textContent=select(item,'Status')||prop(item,'Frequência')?.select?.name||'';box.append(div)});
- }else p[4].forEach(item=>{const div=document.createElement('div');div.className='task';div.innerHTML='<span class="ritual-icon">✦</span><div class="task-info"><strong></strong></div>';div.querySelector('strong').textContent=item;box.append(div)});
+ if(view==='aventuras')renderAdventures(box);else if(view==='rituais')renderRitualView(box);else if(view==='personagem')renderCharacter(box);else if(view==='conquistas')renderAchievements(box);else if(view==='pergaminho')renderPergaminho(box);
 }
 async function refreshData(){
  try{
   [tasks,adventures,rituals,xpEntries,recipes]=await Promise.all([load('tasks'),load('adventures'),load('rituals'),load('xp'),load('recipes')]);
   renderTasks();renderAdventures();renderRituals();
-  document.querySelector('.stats .stat:nth-child(2) strong').textContent=xpEntries.reduce((sum,x)=>sum+(number(x,'XP')||0),0)+' XP';
+  document.querySelector('.stats .stat:nth-child(2) strong').textContent=totalXP()+' XP';
+  document.querySelector('.stats .stat:nth-child(3) strong').textContent=levelInfo(totalXP()).name;
+  document.querySelector('.stats .stat:nth-child(3) em').textContent=levelInfo(totalXP()).remaining+' XP para o próximo nível';
   document.querySelector('.stats .stat:nth-child(2) em').textContent='dados do Notion';
   document.querySelector('.stats .stat:nth-child(4) strong').textContent=rituals.length;
   document.querySelector('.stats .stat:nth-child(4) em').textContent='registros no Notion';
