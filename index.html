@@ -29,6 +29,15 @@ h2{font:600 clamp(28px,4vw,40px) Lora,serif;margin:6px 0;color:var(--earth)}
 .hero{background:linear-gradient(115deg,#526b50,#71866a);color:#fffdf7;border-radius:22px;padding:27px 30px;display:flex;justify-content:space-between;align-items:center;gap:20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
 .hero:after{content:"✿";position:absolute;right:23%;top:-40px;font-size:170px;color:#ffffff10;transform:rotate(-18deg)}
 .hero h3{font:500 25px Lora,serif;margin:0 0 8px}.hero p{font-size:13px;line-height:1.6;color:#edf0e7;margin:0;max-width:490px}.hero-mark{font-size:62px;opacity:.9;z-index:1}
+.ghost-mascot{width:clamp(76px,11vw,118px);height:auto;flex:none;filter:drop-shadow(0 8px 8px #263b2a30);z-index:2}
+.ghost-mascot .ghost-body{fill:#fffdf7;stroke:#e9e2cf;stroke-width:2}
+.ghost-mascot .ghost-eye{fill:#554c45}
+.ghost-mascot .ghost-cheek{fill:#d9b8a7}
+.ghost-mascot .ghost-leaf{fill:#a9b69a;stroke:#526b50;stroke-width:1.5}
+.brand-mark .ghost-mascot{width:38px;display:block}
+.hero-copy{position:relative;z-index:2;max-width:560px}
+.empty-state{display:flex;align-items:center;gap:14px;padding:18px 8px;color:var(--muted);font-size:12px;line-height:1.5}
+.empty-state .ghost-mascot{width:64px}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin:18px 0 27px}
 .stat,.panel{background:var(--white);border:1px solid var(--line);border-radius:17px;box-shadow:var(--shadow)}
 .stat{padding:16px 18px}.stat small{color:var(--muted);font-size:11px}.stat strong{display:block;font:600 25px Lora,serif;margin-top:6px;color:var(--moss)}.stat em{font-style:normal;font-size:11px;color:var(--muted)}
@@ -105,13 +114,25 @@ main{padding:20px 14px 28px;max-width:760px}
  .brand{padding:4px 12px}
  .aside-note{display:block;margin-top:auto}
  .columns{grid-template-columns:1.35fr .85fr}
-}.topbar{align-items:flex-start}.date-pill{font-size:10px}.hero{padding:22px}.hero-mark{font-size:43px}.stats{grid-template-columns:repeat(2,1fr);gap:9px}.stat{padding:13px}.stat strong{font-size:22px}.columns{grid-template-columns:1fr}.section-head{margin-top:23px}}
+}
+
+/* Shared visual language */
+button{transition:background .18s ease,transform .18s ease,box-shadow .18s ease}
+button:focus-visible{outline:3px solid #d6c879;outline-offset:3px}
+.panel,.stat{box-shadow:0 8px 26px #554c450b}
+.tag{font-weight:600;letter-spacing:.01em}
+.hero{isolation:isolate}
+@media(max-width:699px){
+ .hero{align-items:center}
+ .hero-copy{max-width:calc(100% - 76px)}
+ .hero-mascot{width:72px}
+}
 </style>
 </head>
 <body>
 <div class="shell">
 <aside>
- <div class="brand"><div class="brand-mark">🌿</div><h1>Herbário do Sol</h1><p>UM PEQUENO UNIVERSO PARA CULTIVAR A PRÓPRIA VIDA</p></div>
+ <div class="brand"><div class="brand-mark"><svg class="ghost-mascot" viewBox="0 0 120 140" role="img" aria-label="Fantasminha do Herbário"><path class="ghost-body" d="M18 116V62C18 31 37 10 61 10s43 21 43 52v54c-8-8-15-8-22 0-7-8-15-8-22 0-7-8-15-8-22 0-7-8-13-8-20 0Z"/><ellipse class="ghost-eye" cx="47" cy="62" rx="4" ry="6"/><ellipse class="ghost-eye" cx="76" cy="62" rx="4" ry="6"/><ellipse class="ghost-cheek" cx="35" cy="76" rx="7" ry="4"/><ellipse class="ghost-cheek" cx="88" cy="76" rx="7" ry="4"/><path d="M54 79q7 7 14 0" fill="none" stroke="#554c45" stroke-width="2.5" stroke-linecap="round"/><path class="ghost-leaf" d="M69 15q-2-13 12-13 0 12-12 13Zm-2 1q-13-8-19 1 10 7 19-1Z"/></svg></div><h1>Herbário do Sol</h1><p>UM PEQUENO UNIVERSO PARA CULTIVAR A PRÓPRIA VIDA</p></div>
  <div><div class="nav-label">Meu universo</div><nav id="navigation">
   <button class="nav-btn active" data-view="inicio"><span>☀️</span> Jardim do dia</button>
   <button class="nav-btn" data-view="aventuras"><span>🧭</span> Aventuras</button>
@@ -125,7 +146,7 @@ main{padding:20px 14px 28px;max-width:760px}
 <main>
  <div class="topbar"><div><div class="eyebrow">Seu espaço de cultivo</div><h2 id="page-title">O jardim desperta</h2><div class="subtitle" id="page-subtitle">Pequenos passos também fazem florescer grandes mudanças.</div></div><div class="date-pill" id="today"></div></div>
  <section id="home-view">
-  <div class="hero"><div><h3>Bom dia, Guardiã do Jardim ☀️</h3><p>Este é um novo dia para cuidar dos seus planos, cultivar bons hábitos e avançar no seu próprio ritmo. Escolha uma pequena coisa para fazer florescer.</p></div><div class="hero-mark">🌼</div></div>
+  <div class="hero"><div class="hero-copy"><h3>Bom dia, Guardiã do Jardim ☀️</h3><p>Este é um novo dia para cuidar dos seus planos, cultivar bons hábitos e avançar no seu próprio ritmo. Escolha uma pequena coisa para fazer florescer.</p></div><svg class="ghost-mascot hero-mascot" viewBox="0 0 120 140" role="img" aria-label="Fantasminha guardião do jardim"><path class="ghost-body" d="M18 116V62C18 31 37 10 61 10s43 21 43 52v54c-8-8-15-8-22 0-7-8-15-8-22 0-7-8-15-8-22 0-7-8-13-8-20 0Z"/><ellipse class="ghost-eye" cx="47" cy="62" rx="4" ry="6"/><ellipse class="ghost-eye" cx="76" cy="62" rx="4" ry="6"/><ellipse class="ghost-cheek" cx="35" cy="76" rx="7" ry="4"/><ellipse class="ghost-cheek" cx="88" cy="76" rx="7" ry="4"/><path d="M54 79q7 7 14 0" fill="none" stroke="#554c45" stroke-width="2.5" stroke-linecap="round"/><path class="ghost-leaf" d="M69 15q-2-13 12-13 0 12-12 13Zm-2 1q-13-8-19 1 10 7 19-1Z"/></svg></div>
   <div class="stats">
    <div class="stat"><small>Flores para hoje</small><strong id="remaining">3</strong><em>tarefas em aberto</em></div>
    <div class="stat"><small>Experiência acumulada</small><strong>0 XP</strong><em>saldo demonstrativo</em></div>
@@ -183,7 +204,7 @@ function renderTasks(){
  const box=document.getElementById('task-list');box.innerHTML='';
  const open=tasks.filter(t=>select(t,'Status')!=='Done');
  document.getElementById('remaining').textContent=open.length;
- if(!tasks.length){box.textContent='Nenhuma tarefa encontrada no Notion.';return}
+ if(!tasks.length){box.innerHTML='<div class="empty-state"><span>Nenhuma tarefa encontrada no Notion.</span></div>';return}
  tasks.slice(0,12).forEach(t=>{
   const status=select(t,'Status'), done=status==='Done';
   const name=title(t,'Tarefa')||'Tarefa sem título';
