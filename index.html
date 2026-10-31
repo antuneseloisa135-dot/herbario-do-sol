@@ -128,6 +128,65 @@ button:focus-visible{outline:3px solid #d6c879;outline-offset:3px}
  .hero-copy{max-width:calc(100% - 76px)}
  .hero-mascot{width:72px}
 }
+
+/* Herbário do Sol · camada de encantamento */
+:root{--night:#344b3b;--glow:#f3df9c;--ink:#66594b}
+body{background-color:var(--linen);background-image:radial-gradient(ellipse at 12% 8%,#e7dfc8aa 0,transparent 34%),radial-gradient(ellipse at 92% 28%,#dce5d4aa 0,transparent 30%),url("https://www.transparenttextures.com/patterns/cream-paper.png")}
+.shell{position:relative}
+aside{background:linear-gradient(180deg,#e9e4d5f5,#e4e8d9f5),url("https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=700&q=75");background-size:cover;background-position:center;border-right:1px solid #d4cbb7}
+.brand{position:relative;padding:14px 12px 18px}
+.brand:after{content:"✧  ❧  ✧";display:block;color:var(--gold);font:18px Lora,serif;letter-spacing:.3em;margin-top:13px;opacity:.8}
+.brand-mark{display:inline-flex;align-items:center;justify-content:center;width:54px;height:54px;border-radius:50%;background:#f8f4e8;border:1px solid #d8cba9;box-shadow:0 4px 15px #554c4512}
+.brand-mark .ghost-mascot{width:39px}
+.brand h1{font-size:27px;letter-spacing:-.04em}
+.nav-label{color:#9a8058}
+.nav-btn{position:relative;border:1px solid transparent}
+.nav-btn.active{background:#f5f1e5;border-color:#d8d9c6;box-shadow:0 3px 12px #554c450d}
+.nav-btn.active:before{content:"✦";color:var(--gold);font-size:9px;position:absolute;left:3px}
+main{position:relative}
+.topbar{position:relative}
+.topbar:after{content:"";position:absolute;right:4%;bottom:-17px;width:115px;height:1px;background:linear-gradient(90deg,transparent,#c6b58c,transparent)}
+.eyebrow{display:flex;align-items:center;gap:9px}
+.eyebrow:before{content:"✧";font-size:15px;color:var(--gold)}
+.date-pill{background:#fffdf7d9;box-shadow:0 3px 15px #554c4508}
+.hero{min-height:190px;border:1px solid #829477;box-shadow:0 15px 36px #344b3b20}
+.hero:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 78% 40%,#f5e4a833,transparent 25%),linear-gradient(90deg,transparent 50%,#283d3030);pointer-events:none}
+.hero:after{content:"✧     ·    ✦       ·     ✧";right:8%;top:18px;font:18px Lora,serif;letter-spacing:.7em;color:#f7e8b477;transform:none}
+.hero h3{font-size:clamp(24px,3vw,31px);text-shadow:0 2px 12px #263b2a40}
+.hero p{max-width:510px;color:#f4f0e5;line-height:1.75}
+.hero-mascot{filter:drop-shadow(0 10px 12px #1f332a66);transform:translateY(4px)}
+.stat,.panel{position:relative;overflow:hidden}
+.stat:after{content:"";position:absolute;width:68px;height:68px;border:1px solid #d9cfb7;border-radius:50%;right:-29px;top:-32px;opacity:.48}
+.stat:nth-child(1){background:linear-gradient(145deg,#fffdf7,#f6f1e5)}
+.stat:nth-child(2){background:linear-gradient(145deg,#fffdf7,#f0eee3)}
+.stat:nth-child(3){background:linear-gradient(145deg,#fffdf7,#eaf0e5)}
+.stat:nth-child(4){background:linear-gradient(145deg,#fffdf7,#f5eae5)}
+.stat strong{font-size:26px}
+.section-head{position:relative}
+.section-head h3{display:flex;align-items:center;gap:9px}
+.section-head h3:before{content:"";display:inline-block;width:18px;height:1px;background:var(--gold)}
+.panel{background:linear-gradient(145deg,#fffdf9,#fffdf7 72%,#f8f4e9);border-color:#e0d8c7}
+.panel-title h4{letter-spacing:.01em}
+.task{transition:background .2s ease;padding-left:7px;padding-right:7px;border-radius:10px}
+.task:hover{background:#f7f3e9}
+.check{border-radius:50%;background:#fffdf7}
+.check.done{background:var(--moss)}
+.ritual-icon,.adventure-icon{border:1px solid #e5ddca;background:linear-gradient(145deg,#f7f3e8,#e9eee4)}
+.adventure-open:hover{background:#f8f5ec!important;border-radius:12px}
+.adventure-detail{background:linear-gradient(120deg,#f8f5ed,#f1f0e5);border-left:2px solid #c4b17f}
+.stage-status{background:#e6ecdf}
+.tag{border:1px solid #dfe5d8}
+.view-card{position:relative;padding:17px 12px;border-radius:12px}
+.view-card:hover{background:#faf7ef}
+.view-card h4:before{content:"✧";color:var(--gold);font-size:13px;margin-right:8px}
+.metric{background:linear-gradient(145deg,#f7f3e8,#e9eee4);border:1px solid #e5decd}
+.progress{height:9px;background:#e9e3d5;border:1px solid #e0d8c7}
+.progress span{background:linear-gradient(90deg,#8da17b,#c7a45f);box-shadow:0 0 9px #c7a45f66}
+.footer{position:relative;letter-spacing:.03em}
+.footer:before{content:"❧  ✧  ❧";display:block;color:#b39a6b;font-size:18px;margin-bottom:8px}
+@media(min-width:700px){aside{background-blend-mode:soft-light}.brand{margin-bottom:4px}.nav-btn{padding:12px 14px}.hero{min-height:205px}}
+@media(max-width:699px){aside{background:#eae5d7f5;backdrop-filter:blur(12px)}.hero{min-height:164px}.hero:after{right:0;letter-spacing:.35em}.brand-mark{display:none}}
+
 </style>
 </head>
 <body>
