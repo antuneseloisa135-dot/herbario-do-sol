@@ -99,28 +99,95 @@ h2{font:600 clamp(28px,4vw,40px) Lora,serif;margin:6px 0;color:var(--earth)}
 <div class="modal-backdrop" id="modal"><div class="modal"><h3>Plantar uma nova flor</h3><label for="task-name" style="font-size:12px;color:var(--muted)">Nome da tarefa</label><input id="task-name" placeholder="O que você deseja cultivar hoje?"><div class="modal-actions"><button class="secondary" id="cancel">Cancelar</button><button class="primary" id="save">Adicionar flor</button></div></div></div>
 <div class="toast" id="toast"></div>
 <script>
-const sampleTasks=[
- {name:"Revisar uma etapa do livro Não Anjo",meta:"Projeto · Não Anjo",xp:10,done:false},
- {name:"Assistir à aula do curso de IA",meta:"Estudos · Coursera",xp:10,done:false},
- {name:"Organizar pequenas prioridades do dia",meta:"Pessoal",xp:5,done:false}
-];
+
+const API='https://herbario-notion-api.antuneseloisa135.workers.dev';
+let tasks=[], adventures=[], rituals=[], xpEntries=[];
 const pages={
- aventuras:["🧭","Aventuras em andamento","Projetos que ganham vida quando são divididos em etapas.","Suas aventuras",["Livro: Não Anjo — 5 etapas organizadas","Glow Up Carreira — planejamento e desenvolvimento","Cofrinho 06 meses — construção da reserva","Associação Revivendo — projeto institucional"]],
- rituais:["🌱","Rituais do Jardim","Pequenos cuidados repetidos criam raízes.","Hábitos em cultivo",["Beber água — Diário","Momento de estudo — Diário","Cuidar de mim — Diário"]],
- personagem:["🪞","Minha personagem","Acompanhe sua evolução, atributos e experiência.","Ficha da guardiã",["Nível: Semente","XP: aguardando integração com o Extrato de XP","Atributos: disciplina · criatividade · coragem · equilíbrio"]],
- conquistas:["🏆","Coleção de conquistas","Cada avanço merece ser reconhecido.","Conquistas",["Primeiro broto — concluir sua primeira tarefa","Raízes fortes — manter um ritual por sete dias","Jardineira dedicada — cultivar várias áreas da vida"]],
+ aventuras:["🧭","Aventuras em andamento","Projetos que ganham vida quando são divididos em etapas.","Suas aventuras",[]],
+ rituais:["🌱","Rituais do Jardim","Pequenos cuidados repetidos criam raízes.","Hábitos em cultivo",[]],
+ personagem:["🪞","Minha personagem","Acompanhe sua evolução, atributos e experiência.","Ficha da guardiã",["Nível: Semente","Atributos: disciplina · criatividade · coragem · equilíbrio"]],
+ conquistas:["🏆","Coleção de conquistas","Cada avanço merece ser reconhecido.","Conquistas",["As conquistas serão conectadas ao Notion em uma próxima etapa."]],
  pergaminho:["📜","Pergaminho","Seu espaço de referências, ideias e conhecimentos.","Biblioteca",["Estudos e cursos","Referências importantes","Anotações e ideias para revisitar"]]
 };
-const taskList=document.getElementById('task-list');
-function renderTasks(){taskList.innerHTML='';sampleTasks.forEach((t,i)=>{const row=document.createElement('div');row.className='task'+(t.done?' done':'');row.innerHTML=`<button class="check ${t.done?'done':''}" aria-label="Concluir tarefa">${t.done?'✓':''}</button><div class="task-info"><strong></strong><small></small></div><span class="xp">+${t.xp} XP</span>`;row.querySelector('strong').textContent=t.name;row.querySelector('small').textContent=t.meta;row.querySelector('button').onclick=()=>{t.done=!t.done;renderTasks();toast(t.done?'Flor concluída nesta prévia!':'Tarefa reaberta.');};taskList.append(row)});document.getElementById('remaining').textContent=sampleTasks.filter(t=>!t.done).length}
+function prop(page,name){return page?.properties?.[name]}
+function title(page,name){return (prop(page,name)?.title||[]).map(x=>x.plain_text||x.text?.content||"").join("")}
+function select(page,name){return prop(page,name)?.select?.name||prop(page,name)?.status?.name||""}
+function multi(page,name){return (prop(page,name)?.multi_select||[]).map(x=>x.name)}
+function date(page,name){return prop(page,name)?.date?.start||""}
+function number(page,name){return prop(page,name)?.number??prop(page,name)?.formula?.number??prop(page,name)?.rollup?.number??0}
+function relationCount(page,name){return prop(page,name)?.relation?.length||0}
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2200)}
-function showView(view){document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===view));const home=view==='inicio';document.getElementById('home-view').style.display=home?'block':'none';document.getElementById('other-view').style.display=home?'none':'block';if(home){document.getElementById('page-title').textContent='O jardim desperta';document.getElementById('page-subtitle').textContent='Pequenos passos também fazem florescer grandes mudanças.';return}const p=pages[view];document.getElementById('page-title').textContent=p[1];document.getElementById('page-subtitle').textContent=p[2];document.getElementById('other-title').textContent=p[1];document.getElementById('other-copy').textContent=p[2];document.getElementById('other-icon').textContent=p[0];document.getElementById('other-heading').textContent=p[3];const box=document.getElementById('other-content');box.innerHTML='';p[4].forEach(item=>{const div=document.createElement('div');div.className='task';div.innerHTML='<span class="ritual-icon">✦</span><div class="task-info"><strong></strong></div>';div.querySelector('strong').textContent=item;box.append(div)})}
+async function load(resource){const r=await fetch(API+'/api/'+resource+'?page_size=100');if(!r.ok)throw new Error('Falha ao consultar '+resource);const j=await r.json();if(!j.ok)throw new Error('Resposta inválida de '+resource);return j.results||[]}
+function renderTasks(){
+ const box=document.getElementById('task-list');box.innerHTML='';
+ const open=tasks.filter(t=>select(t,'Status')!=='Done');
+ document.getElementById('remaining').textContent=open.length;
+ if(!tasks.length){box.textContent='Nenhuma tarefa encontrada no Notion.';return}
+ tasks.slice(0,12).forEach(t=>{
+  const status=select(t,'Status'), done=status==='Done';
+  const name=title(t,'Tarefa')||'Tarefa sem título';
+  const tags=multi(t,'Tags').join(' · ');
+  const row=document.createElement('div');row.className='task'+(done?' done':'');
+  row.innerHTML='<span class="check '+(done?'done':'')+'">'+(done?'✓':'')+'</span><div class="task-info"><strong></strong><small></small></div><span class="xp"></span>';
+  row.querySelector('strong').textContent=name;
+  row.querySelector('small').textContent=[tags, date(t,'Date')].filter(Boolean).join(' · ')||status||'Sem categoria';
+  row.querySelector('.xp').textContent='+'+number(t,'XP')+' XP';
+  box.append(row);
+ });
+}
+function renderAdventures(){
+ const box=document.getElementById('adventure-list');box.innerHTML='';
+ if(!adventures.length){box.textContent='Nenhuma aventura cadastrada no Notion.';return}
+ adventures.forEach(a=>{
+  const row=document.createElement('div');row.className='adventure';
+  row.innerHTML='<div class="adventure-icon">✦</div><div class="adventure-info"><strong></strong><small></small></div><span class="tag"></span>';
+  row.querySelector('strong').textContent=title(a,'Name')||'Aventura sem título';
+  row.querySelector('small').textContent=relationCount(a,'Receitas e Feitiços')+' etapas/receitas relacionadas · '+Math.round((number(a,'Progresso')||0)*100)+'%';
+  row.querySelector('.tag').textContent=select(a,'Status')||'Sem status';
+  box.append(row);
+ });
+}
+function renderRituals(){
+ const box=document.querySelector('#home-view .columns .panel:nth-child(2)');
+ if(!box)return;
+ const heading=box.querySelector('.panel-title');
+ box.querySelectorAll('.ritual').forEach(x=>x.remove());
+ const list=rituals;
+ if(!list.length){const empty=document.createElement('p');empty.style.cssText='font-size:12px;color:var(--muted)';empty.textContent='Nenhum ritual cadastrado no Notion.';heading.after(empty);return}
+ list.forEach(r=>{
+  const row=document.createElement('div');row.className='ritual';
+  row.innerHTML='<span class="ritual-icon">✦</span><span></span><span class="tag"></span>';
+  row.children[1].textContent=title(r,'Ritual')||'Ritual';
+  row.children[2].textContent=prop(r,'Frequência')?.select?.name||'';
+  heading.after(row);
+ });
+}
+function showView(view){
+ document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
+ const home=view==='inicio';document.getElementById('home-view').style.display=home?'block':'none';document.getElementById('other-view').style.display=home?'none':'block';
+ if(home){document.getElementById('page-title').textContent='O jardim desperta';document.getElementById('page-subtitle').textContent='Pequenos passos também fazem florescer grandes mudanças.';return}
+ const p=pages[view];document.getElementById('page-title').textContent=p[1];document.getElementById('page-subtitle').textContent=p[2];document.getElementById('other-title').textContent=p[1];document.getElementById('other-copy').textContent=p[2];document.getElementById('other-icon').textContent=p[0];document.getElementById('other-heading').textContent=p[3];
+ const box=document.getElementById('other-content');box.innerHTML='';
+ const data=view==='aventuras'?adventures:view==='rituais'?rituals:[];
+ if(data.length){
+  data.forEach(item=>{const div=document.createElement('div');div.className='task';div.innerHTML='<span class="ritual-icon">✦</span><div class="task-info"><strong></strong><small></small></div>';div.querySelector('strong').textContent=title(item,view==='aventuras'?'Name':'Ritual');div.querySelector('small').textContent=select(item,'Status')||prop(item,'Frequência')?.select?.name||'';box.append(div)});
+ }else p[4].forEach(item=>{const div=document.createElement('div');div.className='task';div.innerHTML='<span class="ritual-icon">✦</span><div class="task-info"><strong></strong></div>';div.querySelector('strong').textContent=item;box.append(div)});
+}
+async function refreshData(){
+ try{
+  [tasks,adventures,rituals,xpEntries]=await Promise.all([load('tasks'),load('adventures'),load('rituals'),load('xp')]);
+  renderTasks();renderAdventures();renderRituals();
+  document.querySelector('.stats .stat:nth-child(2) strong').textContent=xpEntries.reduce((sum,x)=>sum+(number(x,'XP')||0),0)+' XP';
+  document.querySelector('.stats .stat:nth-child(2) em').textContent='dados do Notion';
+  document.querySelector('.stats .stat:nth-child(4) strong').textContent=rituals.length;
+  document.querySelector('.stats .stat:nth-child(4) em').textContent='registros no Notion';
+ }catch(e){console.error(e);toast('Não foi possível carregar os dados do Notion.')}
+}
 document.getElementById('navigation').addEventListener('click',e=>{const b=e.target.closest('[data-view]');if(b)showView(b.dataset.view)});
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>showView(b.dataset.go));
-const modal=document.getElementById('modal');document.getElementById('add-task').onclick=()=>{modal.classList.add('open');document.getElementById('task-name').focus()};document.getElementById('cancel').onclick=()=>modal.classList.remove('open');
-document.getElementById('save').onclick=()=>{const input=document.getElementById('task-name');const name=input.value.trim();if(!name){input.focus();return}sampleTasks.push({name,meta:'Nova flor · criada nesta prévia',xp:5,done:false});renderTasks();input.value='';modal.classList.remove('open');toast('Flor adicionada à prévia. A gravação no Notion virá na integração.')}
+document.getElementById('add-task').onclick=()=>toast('A criação de tarefas será habilitada na próxima etapa.');
 document.getElementById('today').textContent=new Intl.DateTimeFormat('pt-BR',{weekday:'long',day:'2-digit',month:'long'}).format(new Date());
-renderTasks();
+renderTasks();refreshData();
 </script>
 </body>
 </html>
