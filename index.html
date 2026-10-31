@@ -187,6 +187,74 @@ main{position:relative}
 @media(min-width:700px){aside{background-blend-mode:soft-light}.brand{margin-bottom:4px}.nav-btn{padding:12px 14px}.hero{min-height:205px}}
 @media(max-width:699px){aside{background:#eae5d7f5;backdrop-filter:blur(12px)}.hero{min-height:164px}.hero:after{right:0;letter-spacing:.35em}.brand-mark{display:none}}
 
+
+/* Ateliê criativo — arte 2D, formas sólidas e paleta pastel */
+body{
+ background:#f4f0e5!important;
+ background-image:none!important;
+}
+aside{
+ background:#e9e2cf!important;
+ background-image:none!important;
+}
+.hero{
+ background:#71866a!important;
+ background-image:linear-gradient(115deg,#526b50,#71866a)!important;
+ border:2px solid #829477;
+ box-shadow:0 8px 0 #d9dfce,0 13px 26px #554c4510;
+}
+.hero:before{
+ content:"";position:absolute;right:115px;bottom:-42px;width:150px;height:150px;
+ border-radius:48% 52% 50% 50%;background:#a9b69a;opacity:.7;z-index:0;
+}
+.hero:after{
+ content:"✦";position:absolute;right:36px;top:22px;font:34px Lora,serif;
+ color:#f3df9c;letter-spacing:0;transform:rotate(12deg);
+ text-shadow:-42px 48px 0 #d9b8a7, -75px -2px 0 #d6c879;
+}
+.hero-copy{z-index:2}
+.hero-mascot{position:relative;z-index:2}
+main{
+ background-image:
+ radial-gradient(ellipse at 96% 5%,#d9b8a755 0 5%,transparent 5.5%),
+ radial-gradient(ellipse at 4% 36%,#b9a8ce44 0 4%,transparent 4.5%);
+ background-repeat:no-repeat;
+}
+.stat,.panel{
+ border:1.5px solid #ded6c4;
+ box-shadow:0 4px 0 #e8e1d1,0 9px 20px #554c4508;
+}
+.stat{border-radius:18px}
+.stat:after{width:54px;height:54px;border:5px solid #d6c87955;border-radius:50%;right:-24px;top:-24px}
+.stat:nth-child(1){background:#fffdf7}
+.stat:nth-child(2){background:#f4f0e5}
+.stat:nth-child(3){background:#edf1e8}
+.stat:nth-child(4){background:#f5eae5}
+.panel{background:#fffdf7}
+.nav-btn.active{background:#f7f3e8;border:1.5px solid #cbd5c2;box-shadow:0 3px 0 #dce3d5}
+.brand-mark{background:#f5e9df;border:2px solid #d9b8a7;box-shadow:0 3px 0 #d7c5b3}
+.ritual-icon,.adventure-icon{
+ border:1.5px solid #d9d4c4;
+ box-shadow:0 3px 0 #e9e2cf;
+}
+.ritual-icon{background:#e8eee2}
+.adventure-icon{background:#f3e7df}
+.task:hover{background:#f5f1e7}
+.check{border:2px solid #a9b69a}
+.progress{background:#e9e2cf;border:1px solid #ded6c4}
+.progress span{background:#a9b69a;box-shadow:none}
+.tag{background:#e9eee4;border:1px solid #d4dfcd;color:#526b50}
+.view-filter span{background:#f1e8e2;border:1px solid #e6d3c9}
+.metric{background:#edf1e8;border:1.5px solid #d7dfd0}
+.adventure-detail{background:#f5f1e7;border-left:3px solid #d6c879}
+.stage-status{background:#e9eee4}
+.footer:before{content:"✿  ✧  ❀";font-size:20px;color:#a9b69a}
+@media(max-width:699px){
+ main{background-image:radial-gradient(ellipse at 95% 2%,#d9b8a755 0 6%,transparent 6.5%)}
+ .hero:before{right:55px;width:100px;height:100px;bottom:-35px}
+ .hero:after{right:14px;top:12px;font-size:25px;text-shadow:-28px 32px 0 #d9b8a7,-52px -1px 0 #d6c879}
+}
+
 </style>
 </head>
 <body>
