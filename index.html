@@ -255,6 +255,25 @@ main{
  .hero:after{right:14px;top:12px;font-size:25px;text-shadow:-28px 32px 0 #d9b8a7,-52px -1px 0 #d6c879}
 }
 
+
+/* Revisão do ateliê: amarelo solar, superfícies planas e sem sombras/contornos */
+:root{--sun:#f2d36b;--gold:#bd922e;--linen:#fff9e8;--paper:#f8edc9;--earth:#5c5142;--moss:#7c8652}
+body{background:#fff9e8!important;background-image:none!important}
+aside{background:#f7e8ad!important;border:0!important}
+.hero{background:#e8c85e!important;background-image:none!important;border:0!important;box-shadow:none!important;color:#5c5142}
+.hero p{color:#5c5142!important}.hero:before{background:#f6df91!important;opacity:.65}.hero:after{color:#fff4c8!important}
+.stat,.panel,.metric,.reward-card,.shop-summary{box-shadow:none!important;border:0!important;outline:0!important}
+.stat{background:#fff1bf!important}.stat:nth-child(2){background:#f8e5a0!important}.stat:nth-child(3){background:#f5edc9!important}.stat:nth-child(4){background:#f9e7b7!important}
+.panel{background:#fffdf5!important}.nav-btn.active{background:#fff4c9!important;border:0!important;box-shadow:none!important}
+.task,.ritual,.adventure,.view-card,.stage-row{border:0!important;border-bottom:0!important}
+.task:hover,.view-card:hover,.adventure-open:hover{background:#fff8df!important}
+.tag{border:0!important;background:#f6e9b9!important}.ritual-icon,.adventure-icon{border:0!important;box-shadow:none!important;background:#f8edc9!important}
+.progress{border:0!important;background:#f1e6c4!important}.progress span{background:#d9b64e!important;box-shadow:none!important}
+main{background-image:none!important}.topbar:after,.section-head h3:before,.view-card h4:before{display:none!important}
+.brand-mark{border:0!important;box-shadow:none!important;background:#fff4c9!important}
+.reward-summary{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.shop-summary{background:#f7e8ad;padding:18px;border-radius:16px;margin-bottom:14px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.shop-summary strong{font:600 23px Lora,serif;color:#80621e}.shop-summary span{font-size:12px;align-self:center}
+.reward-card{display:flex;align-items:center;gap:14px;padding:16px 10px;background:#fff8df;border-radius:16px;margin:10px 0}.reward-art{width:48px;height:48px;border-radius:14px;background:#f3df91;display:grid;place-items:center;font-size:24px;color:#9c7929;flex:none}.reward-copy{flex:1;min-width:0}.reward-copy h4{font:600 16px Lora,serif;margin:0 0 4px}.reward-copy p,.reward-copy small{font-size:11px;color:#837b70;margin:0}.reward-cost{font-size:13px;color:#9c7929;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -267,6 +286,7 @@ main{
   <button class="nav-btn" data-view="rituais"><span>🌱</span> Rituais do Jardim</button>
   <button class="nav-btn" data-view="personagem"><span>🪞</span> Minha personagem</button>
   <button class="nav-btn" data-view="conquistas"><span>🏆</span> Conquistas</button>
+  <button class="nav-btn" data-view="loja"><span>🎁</span> Loja de recompensas</button>
   <button class="nav-btn" data-view="pergaminho"><span>📜</span> Pergaminho</button>
  </nav></div>
  <div class="aside-note">“A vida floresce quando cuidamos, um pouquinho por dia, daquilo que importa.”</div>
@@ -274,7 +294,7 @@ main{
 <main>
  <div class="topbar"><div><div class="eyebrow">Seu espaço de cultivo</div><h2 id="page-title">O jardim desperta</h2><div class="subtitle" id="page-subtitle">Pequenos passos também fazem florescer grandes mudanças.</div></div><div class="date-pill" id="today"></div></div>
  <section id="home-view">
-  <div class="hero"><div class="hero-copy"><h3>Bom dia, Guardiã do Jardim ☀️</h3><p>Este é um novo dia para cuidar dos seus planos, cultivar bons hábitos e avançar no seu próprio ritmo. Escolha uma pequena coisa para fazer florescer.</p></div><svg class="ghost-mascot hero-mascot" viewBox="0 0 120 140" role="img" aria-label="Fantasminha guardião do jardim"><path class="ghost-body" d="M18 116V62C18 31 37 10 61 10s43 21 43 52v54c-8-8-15-8-22 0-7-8-15-8-22 0-7-8-15-8-22 0-7-8-13-8-20 0Z"/><ellipse class="ghost-eye" cx="47" cy="62" rx="4" ry="6"/><ellipse class="ghost-eye" cx="76" cy="62" rx="4" ry="6"/><ellipse class="ghost-cheek" cx="35" cy="76" rx="7" ry="4"/><ellipse class="ghost-cheek" cx="88" cy="76" rx="7" ry="4"/><path d="M54 79q7 7 14 0" fill="none" stroke="#554c45" stroke-width="2.5" stroke-linecap="round"/><path class="ghost-leaf" d="M69 15q-2-13 12-13 0 12-12 13Zm-2 1q-13-8-19 1 10 7 19-1Z"/></svg></div>
+  <div class="hero"><div class="hero-copy"><h3 id="greeting">Olá, Guardiã do Jardim ☀️</h3><p>Este é um novo dia para cuidar dos seus planos, cultivar bons hábitos e avançar no seu próprio ritmo. Escolha uma pequena coisa para fazer florescer.</p></div><svg class="ghost-mascot hero-mascot" viewBox="0 0 120 140" role="img" aria-label="Fantasminha guardião do jardim"><path class="ghost-body" d="M18 116V62C18 31 37 10 61 10s43 21 43 52v54c-8-8-15-8-22 0-7-8-15-8-22 0-7-8-15-8-22 0-7-8-13-8-20 0Z"/><ellipse class="ghost-eye" cx="47" cy="62" rx="4" ry="6"/><ellipse class="ghost-eye" cx="76" cy="62" rx="4" ry="6"/><ellipse class="ghost-cheek" cx="35" cy="76" rx="7" ry="4"/><ellipse class="ghost-cheek" cx="88" cy="76" rx="7" ry="4"/><path d="M54 79q7 7 14 0" fill="none" stroke="#554c45" stroke-width="2.5" stroke-linecap="round"/><path class="ghost-leaf" d="M69 15q-2-13 12-13 0 12-12 13Zm-2 1q-13-8-19 1 10 7 19-1Z"/></svg></div>
   <div class="stats">
    <div class="stat"><small>Flores para hoje</small><strong id="remaining">3</strong><em>tarefas em aberto</em></div>
    <div class="stat"><small>Experiência acumulada</small><strong>0 XP</strong><em>saldo demonstrativo</em></div>
@@ -311,7 +331,7 @@ main{
 <script>
 
 const API='https://herbario-notion-api.antuneseloisa135.workers.dev';
-let tasks=[], adventures=[], rituals=[], xpEntries=[], recipes=[];
+let tasks=[], adventures=[], rituals=[], xpEntries=[], recipes=[], rewards=[];
 const localToday=()=>{const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')};
 const recipeTitle=p=>{for(const [k,v] of Object.entries(p.properties||{})){if(v.type==='title')return (v.title||[]).map(x=>x.plain_text||'').join('')}return 'Etapa sem título'};
 const pages={
@@ -319,7 +339,8 @@ const pages={
  rituais:["🌱","Rituais do Jardim","Pequenos cuidados repetidos criam raízes.","Hábitos em cultivo",[]],
  personagem:["🪞","Minha personagem","Acompanhe sua evolução, atributos e experiência.","Ficha da guardiã",["Nível: Semente","Atributos: disciplina · criatividade · coragem · equilíbrio"]],
  conquistas:["🏆","Coleção de conquistas","Cada avanço merece ser reconhecido.","Conquistas",["As conquistas serão conectadas ao Notion em uma próxima etapa."]],
- pergaminho:["📜","Pergaminho","Seu espaço de referências, ideias e conhecimentos.","Biblioteca",["Estudos e cursos","Referências importantes","Anotações e ideias para revisitar"]]
+ pergaminho:["📜","Pergaminho","Seu espaço de referências, ideias e conhecimentos.","Biblioteca",["Estudos e cursos","Referências importantes","Anotações e ideias para revisitar"]],
+ loja:["🎁","Loja de Recompensas","Troque a experiência acumulada por pequenas alegrias e recompensas reais.","Recompensas disponíveis",[]]
 };
 function prop(page,name){return page?.properties?.[name]}
 function title(page,name){return (prop(page,name)?.title||[]).map(x=>x.plain_text||x.text?.content||"").join("")}
@@ -367,6 +388,7 @@ function renderRituals(){
  });
 }
 function totalXP(){return xpEntries.reduce((sum,x)=>sum+(number(x,'XP')||0),0)}
+function renderShop(box){const xp=totalXP(),available=rewards.filter(r=>select(r,'Status')==='Disponível');const intro=document.createElement('div');intro.className='shop-summary';intro.innerHTML='<strong></strong><span></span>';intro.querySelector('strong').textContent=xp+' XP disponíveis';intro.querySelector('span').textContent=available.length+' recompensas na vitrine';box.append(intro);if(!rewards.length){const empty=document.createElement('div');empty.className='empty-state';empty.textContent='A loja está vazia por enquanto. Cadastre suas recompensas na base Loja de Recompensas do Notion e elas aparecerão aqui.';box.append(empty);return}rewards.forEach(r=>{const card=document.createElement('article');card.className='reward-card';const cost=number(r,'Custo em XP'),status=select(r,'Status')||'Sem status';card.innerHTML='<div class="reward-art">✦</div><div class="reward-copy"><h4></h4><p></p><small></small></div><strong class="reward-cost"></strong>';card.querySelector('h4').textContent=title(r,'Recompensa')||'Recompensa';card.querySelector('p').textContent=[prop(r,'Categoria')?.select?.name,status].filter(Boolean).join(' · ');card.querySelector('small').textContent=cost<=xp&&status==='Disponível'?'Você já pode resgatar pelo Notion.':cost+' XP para desbloquear';card.querySelector('.reward-cost').textContent=cost+' XP';box.append(card)})}
 function levelInfo(xp){const levels=[['Semente',0],['Broto',100],['Muda',250],['Floração',500],['Árvore',900],['Bosque',1500]];let current=levels[0],next=levels[1];for(let i=0;i<levels.length;i++){if(xp>=levels[i][1]){current=levels[i];next=levels[i+1]||null}}const pct=next?Math.min(100,Math.round((xp-current[1])/(next[1]-current[1])*100)):100;return{name:current[0],next:next?next[0]:'Nível máximo',pct,remaining:next?Math.max(0,next[1]-xp):0}}
 function renderRitualView(box){
  if(!rituals.length){box.innerHTML='<div class="empty-state">Seu jardim ainda não tem rituais cadastrados no Notion.</div>';return}
@@ -382,11 +404,11 @@ function showView(view){
  const p=pages[view];if(!p)return;
  document.getElementById('page-title').textContent=p[1];document.getElementById('page-subtitle').textContent=p[2];document.getElementById('other-title').textContent=p[1];document.getElementById('other-copy').textContent=p[2];document.getElementById('other-icon').textContent=p[0];document.getElementById('other-heading').textContent=p[3];
  const box=document.getElementById('other-content');box.innerHTML='';
- if(view==='aventuras')renderAdventures(box);else if(view==='rituais')renderRitualView(box);else if(view==='personagem')renderCharacter(box);else if(view==='conquistas')renderAchievements(box);else if(view==='pergaminho')renderPergaminho(box);
+ if(view==='aventuras')renderAdventures(box);else if(view==='rituais')renderRitualView(box);else if(view==='personagem')renderCharacter(box);else if(view==='conquistas')renderAchievements(box);else if(view==='pergaminho')renderPergaminho(box);else if(view==='loja')renderShop(box);
 }
 async function refreshData(){
  try{
-  [tasks,adventures,rituals,xpEntries,recipes]=await Promise.all([load('tasks'),load('adventures'),load('rituals'),load('xp'),load('recipes')]);
+  [tasks,adventures,rituals,xpEntries,recipes,rewards]=await Promise.all([load('tasks'),load('adventures'),load('rituals'),load('xp'),load('recipes'),load('rewards')]);
   renderTasks();renderAdventures();renderRituals();
   document.querySelector('.stats .stat:nth-child(2) strong').textContent=totalXP()+' XP';
   document.querySelector('.stats .stat:nth-child(3) strong').textContent=levelInfo(totalXP()).name;
@@ -399,6 +421,8 @@ async function refreshData(){
 document.getElementById('navigation').addEventListener('click',e=>{const b=e.target.closest('[data-view]');if(b)showView(b.dataset.view)});
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>showView(b.dataset.go));
 document.getElementById('add-task').onclick=()=>toast('A criação de tarefas será habilitada na próxima etapa.');
+function updateGreeting(){const hour=new Date().getHours();const greeting=hour<12?'Bom dia':hour<18?'Boa tarde':'Boa noite';document.getElementById('greeting').textContent=greeting+', Guardiã do Jardim ☀️'}
+updateGreeting();
 document.getElementById('today').textContent=new Intl.DateTimeFormat('pt-BR',{weekday:'long',day:'2-digit',month:'long'}).format(new Date());
 renderTasks();refreshData();
 </script>
