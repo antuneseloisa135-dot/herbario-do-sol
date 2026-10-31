@@ -333,7 +333,7 @@ main{background:none!important}
     <div class="ritual"><span class="ritual-icon">💧</span><span>Beber água</span><span class="tag">Diário</span></div>
     <div class="ritual"><span class="ritual-icon">📖</span><span>Momento de estudo</span><span class="tag">Diário</span></div>
     <div class="ritual"><span class="ritual-icon">🧘</span><span>Cuidar de mim</span><span class="tag">Diário</span></div>
-    <div style="margin-top:19px"><div class="panel-title"><h4>✨ Próximo florescer</h4><small style="font-size:10px;color:var(--muted)">Nível 2 · Broto</small></div><div class="progress"><span></span></div><small style="font-size:10px;color:var(--muted)">Progresso ilustrativo — conectado ao XP depois.</small></div>
+    <div style="margin-top:19px"><div class="panel-title"><h4>✨ Próximo florescer</h4><small style="font-size:10px;color:var(--muted)">Nível 2 · Broto</small></div><div class="progress"><span id="home-xp-progress"></span></div><small id="home-xp-caption" style="font-size:10px;color:var(--muted)">Carregando sua próxima conquista...</small></div>
    </div>
   </div>
   <div class="section-head"><div><h3>Aventuras em andamento</h3><p>Projetos maiores, divididos em etapas possíveis.</p></div><button class="text-btn" data-go="aventuras">Ver aventuras →</button></div>
@@ -443,6 +443,11 @@ async function refreshData(){
   document.querySelector('.stats .stat:nth-child(2) em').textContent='dados do Notion';
   document.querySelector('.stats .stat:nth-child(4) strong').textContent=rituals.length;
   document.querySelector('.stats .stat:nth-child(4) em').textContent='registros no Notion';
+  const level=levelInfo(totalXP());
+  const homeProgress=document.getElementById('home-xp-progress');
+  const homeCaption=document.getElementById('home-xp-caption');
+  if(homeProgress)homeProgress.style.width=level.pct+'%';
+  if(homeCaption)homeCaption.textContent=level.remaining?level.pct+'% até '+level.next+' · faltam '+level.remaining+' XP':'Você alcançou o último nível cadastrado.';
  }catch(e){console.error(e);toast('Não foi possível carregar os dados do Notion.')}
 }
 document.getElementById('navigation').addEventListener('click',e=>{const b=e.target.closest('[data-view]');if(b)showView(b.dataset.view)});
