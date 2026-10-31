@@ -274,6 +274,31 @@ main{background-image:none!important}.topbar:after,.section-head h3:before,.view
 .reward-summary{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .shop-summary{background:#f7e8ad;padding:18px;border-radius:16px;margin-bottom:14px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.shop-summary strong{font:600 23px Lora,serif;color:#80621e}.shop-summary span{font-size:12px;align-self:center}
 .reward-card{display:flex;align-items:center;gap:14px;padding:16px 10px;background:#fff8df;border-radius:16px;margin:10px 0}.reward-art{width:48px;height:48px;border-radius:14px;background:#f3df91;display:grid;place-items:center;font-size:24px;color:#9c7929;flex:none}.reward-copy{flex:1;min-width:0}.reward-copy h4{font:600 16px Lora,serif;margin:0 0 4px}.reward-copy p,.reward-copy small{font-size:11px;color:#837b70;margin:0}.reward-cost{font-size:13px;color:#9c7929;white-space:nowrap}
+
+/* Equilíbrio cromático: amarelo como acento, não como fundo dominante */
+:root{--linen:#f5f1e7;--paper:#eee8d8;--earth:#5c5142;--moss:#71836a;--sage:#b9c5ad;--gold:#bd963f;--sun:#efd77f;--white:#fffdf7;--muted:#837b70}
+body{background:#f5f1e7!important;background-image:none!important}
+aside{background:#e9eee4!important;border:0!important}
+main{background:none!important}
+.hero{background:#e7eddf!important;background-image:none!important;color:#4f5d48!important;border:0!important;box-shadow:none!important}
+.hero h3,.hero p{color:#4f5d48!important;text-shadow:none!important}
+.hero:before{display:none!important;content:none!important}
+.hero:after{content:"✦   ✧"!important;color:#d3b85f!important;text-shadow:none!important;opacity:.8}
+.hero-mascot{filter:none!important}
+.stat,.panel,.metric,.reward-card,.shop-summary{box-shadow:none!important;border:0!important;outline:0!important}
+.stat{background:#fffdf7!important}
+.stat:nth-child(2){background:#f3eee2!important}
+.stat:nth-child(3){background:#edf1e8!important}
+.stat:nth-child(4){background:#f5eae5!important}
+.panel{background:#fffdf7!important}
+.nav-btn.active{background:#f2e7bd!important;border:0!important;box-shadow:none!important}
+.ritual-icon,.adventure-icon{box-shadow:none!important;border:0!important}
+.ritual-icon{background:#e8eee2!important}.adventure-icon{background:#f3e7df!important}
+.metric{background:#edf1e8!important}
+.tag{background:#e9eee4!important;border:0!important;color:#526b50!important}
+.reward-card{background:#f6f0df!important}
+.shop-summary{background:#f2e7bd!important}
+@media(max-width:699px){.hero:after{right:10px;top:12px;font-size:22px}}
 </style>
 </head>
 <body>
