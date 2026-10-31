@@ -408,7 +408,9 @@ function showView(view){
 }
 async function refreshData(){
  try{
-  [tasks,adventures,rituals,xpEntries,recipes,rewards]=await Promise.all([load('tasks'),load('adventures'),load('rituals'),load('xp'),load('recipes'),load('rewards')]);
+  [tasks,adventures,rituals,xpEntries,recipes]=await Promise.all([load('tasks'),load('adventures'),load('rituals'),load('xp'),load('recipes')]);
+  // A loja é opcional até a rota /api/rewards ser publicada no Worker.
+  rewards=await load('rewards').catch(err=>{console.warn('Loja ainda não disponível no integrador:',err);return []});
   renderTasks();renderAdventures();renderRituals();
   document.querySelector('.stats .stat:nth-child(2) strong').textContent=totalXP()+' XP';
   document.querySelector('.stats .stat:nth-child(3) strong').textContent=levelInfo(totalXP()).name;
