@@ -299,44 +299,78 @@ main{background:none!important}
 .reward-card{background:#f6f0df!important}
 .shop-summary{background:#f2e7bd!important}
 @media(max-width:699px){.hero:after{right:10px;top:12px;font-size:22px}}
+
+/* Identidade consolidada · Herbário do Sol */
+:root{--linen:#f5f1e7;--paper:#eee8d8;--earth:#5c5142;--moss:#71836a;--sage:#b9c5ad;--gold:#bd963f;--sun:#efd77f;--white:#fffdf7;--muted:#837b70}
+body{background:var(--linen)!important;color:var(--earth)}
+aside{background:#e9eee4!important}
+.brand h1{letter-spacing:-.045em}
+.brand p{line-height:1.55;max-width:185px}
+.nav-label{font-weight:700;letter-spacing:.13em}
+.nav-btn{font-weight:600;color:#665d50}
+.nav-btn.active{background:#f5f1e7!important;color:#526b50!important;border:1px solid #d9dfd1!important}
+.hero{background:#e8eee2!important;border:1px solid #dce4d5!important;border-radius:22px!important;box-shadow:none!important;color:#4f5d48!important}
+.hero h3,.hero p{color:#4f5d48!important;text-shadow:none!important}
+.hero p{line-height:1.75}
+.hero:before{display:block!important;background:radial-gradient(circle,#f2df9a 0 18%,transparent 19%)!important;opacity:.38!important;right:12%;bottom:-45px;width:170px;height:170px;border-radius:50%}
+.hero:after{content:"✦  ✧  ✦"!important;color:#bd963f!important;right:7%;top:18px;font-size:20px;letter-spacing:.5em}
+.hero-mascot{filter:none!important}
+.stat,.panel{box-shadow:none!important;border:1px solid #e5dece!important}
+.stat{background:#fffdf7!important;border-radius:17px}
+.stat:nth-child(2){background:#f4efe3!important}.stat:nth-child(3){background:#edf1e8!important}.stat:nth-child(4){background:#f5eae5!important}
+.stat strong{color:var(--moss)}
+.panel{background:#fffdf7!important;border-radius:18px}
+.section-head h3{color:#5c5142}
+.section-head h3:before{display:inline-block!important;width:17px;height:2px;background:#bd963f;content:""!important}
+.task{border-bottom:1px solid #eee9de!important}
+.task:hover{background:#f8f5ec}
+.ritual-icon,.adventure-icon{box-shadow:none!important;border:1px solid #e5dece!important}
+.ritual-icon{background:#e9eee4!important}.adventure-icon{background:#f5eae5!important}
+.tag{background:#e9eee4!important;color:#526b50!important;border:0!important}
+.progress{background:#eee8d8!important;border:0!important}
+.progress span{background:linear-gradient(90deg,#8ea47d,#bd963f)!important;box-shadow:none!important}
+.shop-summary{background:#f2e7bd!important}
+.reward-card{background:#f7f3e8!important}
+.footer{color:#8e8577}
+@media(max-width:699px){aside{background:#e9eee4f5!important}.hero{min-height:168px}.hero:before{right:42px;width:110px;height:110px}.hero:after{right:8px;letter-spacing:.2em}}
 </style>
 </head>
 <body>
 <div class="shell">
 <aside>
  <div class="brand"><div class="brand-mark"><svg class="ghost-mascot" viewBox="0 0 120 140" role="img" aria-label="Fantasminha do Herbário"><path class="ghost-body" d="M18 116V62C18 31 37 10 61 10s43 21 43 52v54c-8-8-15-8-22 0-7-8-15-8-22 0-7-8-15-8-22 0-7-8-13-8-20 0Z"/><ellipse class="ghost-eye" cx="47" cy="62" rx="4" ry="6"/><ellipse class="ghost-eye" cx="76" cy="62" rx="4" ry="6"/><ellipse class="ghost-cheek" cx="35" cy="76" rx="7" ry="4"/><ellipse class="ghost-cheek" cx="88" cy="76" rx="7" ry="4"/><path d="M54 79q7 7 14 0" fill="none" stroke="#554c45" stroke-width="2.5" stroke-linecap="round"/><path class="ghost-leaf" d="M69 15q-2-13 12-13 0 12-12 13Zm-2 1q-13-8-19 1 10 7 19-1Z"/></svg></div><h1>Herbário do Sol</h1><p>UM PEQUENO UNIVERSO PARA CULTIVAR A PRÓPRIA VIDA</p></div>
- <div><div class="nav-label">Meu universo</div><nav id="navigation">
-  <button class="nav-btn active" data-view="inicio"><span>☀️</span> Jardim do dia</button>
-  <button class="nav-btn" data-view="aventuras"><span>🧭</span> Aventuras</button>
-  <button class="nav-btn" data-view="rituais"><span>🌱</span> Rituais do Jardim</button>
-  <button class="nav-btn" data-view="personagem"><span>🪞</span> Minha personagem</button>
-  <button class="nav-btn" data-view="conquistas"><span>🏆</span> Conquistas</button>
-  <button class="nav-btn" data-view="loja"><span>🎁</span> Loja de recompensas</button>
-  <button class="nav-btn" data-view="pergaminho"><span>📜</span> Pergaminho</button>
+ <div><div class="nav-label">Caminhos do Herbário</div><nav id="navigation">
+  <button class="nav-btn active" data-view="inicio"><span>☀️</span> Clareira do Dia</button>
+  <button class="nav-btn" data-view="aventuras"><span>🧭</span> Jornadas</button>
+  <button class="nav-btn" data-view="rituais"><span>🌱</span> Cultivos</button>
+  <button class="nav-btn" data-view="personagem"><span>🪞</span> Guardiã</button>
+  <button class="nav-btn" data-view="conquistas"><span>🏆</span> Flores Raras</button>
+  <button class="nav-btn" data-view="loja"><span>🎁</span> Relicário</button>
+  <button class="nav-btn" data-view="pergaminho"><span>📜</span> Caderno de Campo</button>
  </nav></div>
  <div class="aside-note">“A vida floresce quando cuidamos, um pouquinho por dia, daquilo que importa.”</div>
 </aside>
 <main>
- <div class="topbar"><div><div class="eyebrow">Seu espaço de cultivo</div><h2 id="page-title">O jardim desperta</h2><div class="subtitle" id="page-subtitle">Pequenos passos também fazem florescer grandes mudanças.</div></div><div class="date-pill" id="today"></div></div>
+ <div class="topbar"><div><div class="eyebrow">Um pequeno universo para cultivar a própria vida</div><h2 id="page-title">A Clareira do Dia</h2><div class="subtitle" id="page-subtitle">Pequenos passos também fazem florescer grandes mudanças.</div></div><div class="date-pill" id="today"></div></div>
  <section id="home-view">
-  <div class="hero"><div class="hero-copy"><h3 id="greeting">Olá, Guardiã do Jardim ☀️</h3><p>Este é um novo dia para cuidar dos seus planos, cultivar bons hábitos e avançar no seu próprio ritmo. Escolha uma pequena coisa para fazer florescer.</p></div><svg class="ghost-mascot hero-mascot" viewBox="0 0 120 140" role="img" aria-label="Fantasminha guardião do jardim"><path class="ghost-body" d="M18 116V62C18 31 37 10 61 10s43 21 43 52v54c-8-8-15-8-22 0-7-8-15-8-22 0-7-8-15-8-22 0-7-8-13-8-20 0Z"/><ellipse class="ghost-eye" cx="47" cy="62" rx="4" ry="6"/><ellipse class="ghost-eye" cx="76" cy="62" rx="4" ry="6"/><ellipse class="ghost-cheek" cx="35" cy="76" rx="7" ry="4"/><ellipse class="ghost-cheek" cx="88" cy="76" rx="7" ry="4"/><path d="M54 79q7 7 14 0" fill="none" stroke="#554c45" stroke-width="2.5" stroke-linecap="round"/><path class="ghost-leaf" d="M69 15q-2-13 12-13 0 12-12 13Zm-2 1q-13-8-19 1 10 7 19-1Z"/></svg></div>
+  <div class="hero"><div class="hero-copy"><h3 id="greeting">Boas-vindas à Clareira, Guardiã</h3><p>Este é um novo dia para cuidar dos seus planos, cultivar bons hábitos e avançar no seu próprio ritmo. Escolha uma pequena coisa para fazer florescer.</p></div><svg class="ghost-mascot hero-mascot" viewBox="0 0 120 140" role="img" aria-label="Fantasminha guardião do jardim"><path class="ghost-body" d="M18 116V62C18 31 37 10 61 10s43 21 43 52v54c-8-8-15-8-22 0-7-8-15-8-22 0-7-8-15-8-22 0-7-8-13-8-20 0Z"/><ellipse class="ghost-eye" cx="47" cy="62" rx="4" ry="6"/><ellipse class="ghost-eye" cx="76" cy="62" rx="4" ry="6"/><ellipse class="ghost-cheek" cx="35" cy="76" rx="7" ry="4"/><ellipse class="ghost-cheek" cx="88" cy="76" rx="7" ry="4"/><path d="M54 79q7 7 14 0" fill="none" stroke="#554c45" stroke-width="2.5" stroke-linecap="round"/><path class="ghost-leaf" d="M69 15q-2-13 12-13 0 12-12 13Zm-2 1q-13-8-19 1 10 7 19-1Z"/></svg></div>
   <div class="stats">
-   <div class="stat"><small>Flores para hoje</small><strong id="remaining">3</strong><em>tarefas em aberto</em></div>
-   <div class="stat"><small>Experiência acumulada</small><strong>0 XP</strong><em>saldo demonstrativo</em></div>
+   <div class="stat"><small>Flores de hoje</small><strong id="remaining">3</strong><em>tarefas em aberto</em></div>
+   <div class="stat"><small>Essência solar</small><strong>0 XP</strong><em>saldo demonstrativo</em></div>
    <div class="stat"><small>Nível atual</small><strong>Semente</strong><em>primeiros brotos</em></div>
-   <div class="stat"><small>Rituais ativos</small><strong>3</strong><em>hábitos em cultivo</em></div>
+   <div class="stat"><small>Cultivos ativos</small><strong>3</strong><em>hábitos em cultivo</em></div>
   </div>
-  <div class="section-head"><div><h3>O que floresce hoje</h3><p>Suas tarefas e pequenos compromissos.</p></div><button class="text-btn" id="add-task">＋ Nova flor</button></div>
+  <div class="section-head"><div><h3>O que pede cuidado hoje</h3><p>Pequenos passos que merecem um lugar no seu dia.</p></div><button class="text-btn" id="add-task">＋ Semear tarefa</button></div>
   <div class="columns">
-   <div class="panel"><div class="panel-title"><h4>🌷 Flores do Dia</h4><span class="tag">Hoje</span></div><div id="task-list"></div></div>
-   <div class="panel"><div class="panel-title"><h4>🌿 Rituais do Jardim</h4><span class="tag">Cultivo</span></div>
+   <div class="panel"><div class="panel-title"><h4>✿ Flores de Hoje</h4><span class="tag">Hoje</span></div><div id="task-list"></div></div>
+   <div class="panel"><div class="panel-title"><h4>❧ Pequenos Cultivos</h4><span class="tag">Cultivo</span></div>
     <div class="ritual"><span class="ritual-icon">💧</span><span>Beber água</span><span class="tag">Diário</span></div>
     <div class="ritual"><span class="ritual-icon">📖</span><span>Momento de estudo</span><span class="tag">Diário</span></div>
     <div class="ritual"><span class="ritual-icon">🧘</span><span>Cuidar de mim</span><span class="tag">Diário</span></div>
-    <div style="margin-top:19px"><div class="panel-title"><h4>✨ Próximo florescer</h4><small style="font-size:10px;color:var(--muted)">Nível 2 · Broto</small></div><div class="progress"><span id="home-xp-progress"></span></div><small id="home-xp-caption" style="font-size:10px;color:var(--muted)">Carregando sua próxima conquista...</small></div>
+    <div style="margin-top:19px"><div class="panel-title"><h4>✧ Próxima evolução</h4><small style="font-size:10px;color:var(--muted)">Nível 2 · Broto</small></div><div class="progress"><span id="home-xp-progress"></span></div><small id="home-xp-caption" style="font-size:10px;color:var(--muted)">Carregando sua próxima conquista...</small></div>
    </div>
   </div>
-  <div class="section-head"><div><h3>Aventuras em andamento</h3><p>Projetos maiores, divididos em etapas possíveis.</p></div><button class="text-btn" data-go="aventuras">Ver aventuras →</button></div>
+  <div class="section-head"><div><h3>Jornadas em curso</h3><p>Grandes sonhos, cultivados em pequenas etapas.</p></div><button class="text-btn" data-go="aventuras">Explorar jornadas →</button></div>
   <div class="panel" id="adventure-list">
    <div class="adventure"><div class="adventure-icon">📖</div><div class="adventure-info"><strong>Livro: Não Anjo</strong><small>Diagnóstico · Revisão · Preparação · Publicação</small></div><span class="tag">Em andamento</span></div>
    <div class="adventure"><div class="adventure-icon">🌻</div><div class="adventure-info"><strong>Glow Up Carreira</strong><small>Projeto de desenvolvimento profissional</small></div><span class="tag">Planejado</span></div>
@@ -351,7 +385,7 @@ main{background:none!important}
  <div class="footer">Feito de pequenos começos, cuidado e luz. ✦</div>
 </main>
 </div>
-<div class="modal-backdrop" id="modal"><div class="modal"><h3>Plantar uma nova flor</h3><label for="task-name" style="font-size:12px;color:var(--muted)">Nome da tarefa</label><input id="task-name" placeholder="O que você deseja cultivar hoje?"><div class="modal-actions"><button class="secondary" id="cancel">Cancelar</button><button class="primary" id="save">Adicionar flor</button></div></div></div>
+<div class="modal-backdrop" id="modal"><div class="modal"><h3>Semear uma nova tarefa</h3><label for="task-name" style="font-size:12px;color:var(--muted)">Nome da tarefa</label><input id="task-name" placeholder="O que você deseja cultivar hoje?"><div class="modal-actions"><button class="secondary" id="cancel">Cancelar</button><button class="primary" id="save">Semear tarefa</button></div></div></div>
 <div class="toast" id="toast"></div>
 <script>
 
@@ -360,12 +394,12 @@ let tasks=[], adventures=[], rituals=[], xpEntries=[], recipes=[], rewards=[];
 const localToday=()=>{const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')};
 const recipeTitle=p=>{for(const [k,v] of Object.entries(p.properties||{})){if(v.type==='title')return (v.title||[]).map(x=>x.plain_text||'').join('')}return 'Etapa sem título'};
 const pages={
- aventuras:["🧭","Aventuras em andamento","Projetos que ganham vida quando são divididos em etapas.","Suas aventuras",[]],
- rituais:["🌱","Rituais do Jardim","Pequenos cuidados repetidos criam raízes.","Hábitos em cultivo",[]],
- personagem:["🪞","Minha personagem","Acompanhe sua evolução, atributos e experiência.","Ficha da guardiã",["Nível: Semente","Atributos: disciplina · criatividade · coragem · equilíbrio"]],
+ aventuras:["🧭","Jornadas em curso","Projetos que ganham vida quando são divididos em etapas.","Suas aventuras",[]],
+ rituais:["🌱","Pequenos Cultivos","Cuidados que, repetidos com carinho, criam raízes.","Seus cultivos",[]],
+ personagem:["🪞","A Guardiã","Acompanhe sua evolução, sua essência e os caminhos que já percorreu.","Seu retrato no Herbário",["Nível: Semente","Atributos: disciplina · criatividade · coragem · equilíbrio"]],
  conquistas:["🏆","Coleção de conquistas","Cada avanço merece ser reconhecido.","Conquistas",["As conquistas serão conectadas ao Notion em uma próxima etapa."]],
  pergaminho:["📜","Pergaminho","Seu espaço de referências, ideias e conhecimentos.","Biblioteca",["Estudos e cursos","Referências importantes","Anotações e ideias para revisitar"]],
- loja:["🎁","Loja de Recompensas","Troque a experiência acumulada por pequenas alegrias e recompensas reais.","Recompensas disponíveis",[]]
+ loja:["🗝️","Relicário","Pequenas recompensas para celebrar o caminho percorrido.","Tesouros disponíveis",[]]
 };
 function prop(page,name){return page?.properties?.[name]}
 function title(page,name){return (prop(page,name)?.title||[]).map(x=>x.plain_text||x.text?.content||"").join("")}
@@ -425,7 +459,7 @@ function renderPergaminho(box){box.innerHTML='<div class="view-card"><h4>Bibliot
 function showView(view){
  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
  const home=view==='inicio';document.getElementById('home-view').style.display=home?'block':'none';document.getElementById('other-view').style.display=home?'none':'block';
- if(home){document.getElementById('page-title').textContent='O jardim desperta';document.getElementById('page-subtitle').textContent='Pequenos passos também fazem florescer grandes mudanças.';return}
+ if(home){document.getElementById('page-title').textContent='A Clareira do Dia';document.getElementById('page-subtitle').textContent='Cada pequeno cuidado abre caminho para algo bonito.';return}
  const p=pages[view];if(!p)return;
  document.getElementById('page-title').textContent=p[1];document.getElementById('page-subtitle').textContent=p[2];document.getElementById('other-title').textContent=p[1];document.getElementById('other-copy').textContent=p[2];document.getElementById('other-icon').textContent=p[0];document.getElementById('other-heading').textContent=p[3];
  const box=document.getElementById('other-content');box.innerHTML='';
@@ -453,7 +487,7 @@ async function refreshData(){
 document.getElementById('navigation').addEventListener('click',e=>{const b=e.target.closest('[data-view]');if(b)showView(b.dataset.view)});
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>showView(b.dataset.go));
 document.getElementById('add-task').onclick=()=>toast('A criação de tarefas será habilitada na próxima etapa.');
-function updateGreeting(){const hour=new Date().getHours();const greeting=hour<12?'Bom dia':hour<18?'Boa tarde':'Boa noite';document.getElementById('greeting').textContent=greeting+', Guardiã do Jardim ☀️'}
+function updateGreeting(){const hour=new Date().getHours();const greeting=hour<12?'Bom dia':hour<18?'Boa tarde':'Boa noite';document.getElementById('greeting').textContent=greeting+', Guardiã ☀️'}
 updateGreeting();
 document.getElementById('today').textContent=new Intl.DateTimeFormat('pt-BR',{weekday:'long',day:'2-digit',month:'long'}).format(new Date());
 renderTasks();refreshData();
