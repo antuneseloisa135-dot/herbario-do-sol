@@ -3,7 +3,9 @@ const SOURCES = {
   adventures: "d8cc22d8-14ca-47aa-8cd9-8e4468b59663",
   rituals: "e0136886-667e-4ff1-ade1-2a013b659624",
   xp: "a66ec5a7-5475-4bba-ab4f-a185f94826fa",
-  recipes: "65b7cffb-e2ee-4fa7-be45-f94132ecd273"
+  recipes: "65b7cffb-e2ee-4fa7-be45-f94132ecd273",
+  achievements: "bf7b4e1b-dcbc-4589-8cae-975d84743233",
+  rewards: "c18976a8-043a-4bbc-a3ea-4c9ff7e00765"
 };
 const SITE_ORIGIN = "https://herbario-do-sol.pages.dev";
 const NOTION_VERSION = "2025-09-03";
@@ -64,42 +66,29 @@ const notionWrite = async (env, path, method, body) => {
   return data;
 };
 
-// Cloudflare Access is the identity gate. Configure an Access application for this
-// Worker hostname and set ACCESS_TEAM_DOMAIN + ACCESS_AUD as Worker variables.
-let accessKeysCache;
-let accessKeysAt = 0;
-async function verifyAccess(request, env) {
-  const assertion = request.headers.get("Cf-Access-Jwt-Assertion");
-  if (!assertion || !env.ACCESS_TEAM_DOMAIN || !env.ACCESS_AUD) return false;
-  const parts = assertion.split(".");
-  if (parts.length !== 3) return false;
-  let header, claims;
-  try {
-    header = JSON.parse(atob(parts[0].replace(/-/g, "+").replace(/_/g, "/")));
-    claims = JSON.parse(atob(parts[1].replace(/-/g, "+").replace(/_/g, "/")));
-  } catch { return false; }
-  const issuer = "https://" + env.ACCESS_TEAM_DOMAIN.replace(/^https?:\/\//, "").replace(/\/$/, "");
-  const now = Math.floor(Date.now() / 1000);
-  if (claims.iss !== issuer || !(Array.isArray(claims.aud) ? claims.aud.includes(env.ACCESS_AUD) : claims.aud === env.ACCESS_AUD)) return false;
-  if (!claims.exp || claims.exp < now || (claims.nbf && claims.nbf > now + 60)) return false;
-  if (header.alg !== "RS256" || !header.kid) return false;
-  if (!accessKeysCache || Date.now() - accessKeysAt > 10 * 60 * 1000) {
-    const r = await fetch(issuer + "/cdn-cgi/access/certs");
-    if (!r.ok) return false;
-    accessKeysCache = await r.json();
-    accessKeysAt = Date.now();
-  }
-  const jwk = accessKeysCache.keys?.find(k => k.kid === header.kid);
-  if (!jwk) return false;
-  try {
-    const key = await crypto.subtle.importKey("jwk", jwk, { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" }, false, ["verify"]);
-    const decode = s => Uint8Array.from(atob(s.replace(/-/g, "+").replace(/_/g, "/")), c => c.charCodeAt(0));
-    return await crypto.subtle.verify("RSASSA-PKCS1-v1_5", key, decode(parts[2]), new TextEncoder().encode(parts[0] + "." + parts[1]));
-  } catch { return false; }
-}
-async function requireWriteAccess(request, env) {
+// Valida cada gravação no servidor. O segredo permanece apenas no Worker.
+async function requireWriteAccess(request, env, expectedAction, token) {
   if (request.headers.get("Origin") !== SITE_ORIGIN) return false;
-  return verifyAccess(request, env);
+  if (!env.TURNSTILE_SECRET || typeof token !== "string" || token.length === 0 || token.length > 2048) return false;
+  const params = new URLSearchParams({ secret: env.TURNSTILE_SECRET, response: token });
+  const remoteIp = request.headers.get("CF-Connecting-IP");
+  if (remoteIp) params.set("remoteip", remoteIp);
+  let result;
+  try {
+    const response = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: params,
+      signal: AbortSignal.timeout(10000)
+    });
+    if (!response.ok) return false;
+    result = await response.json();
+  } catch {
+    return false;
+  }
+  return result?.success === true
+    && result.action === expectedAction
+    && result.hostname === "herbario-do-sol.pages.dev";
 }
 const difficultyXP = { "Leve": 5, "Média": 10, "Difícil": 15 };
 
@@ -148,7 +137,71 @@ async function syncTaskXP(env) {
   return { scannedTasks: tasks.length, scannedLedgerEntries: ledger.length, created };
 }
 
+const signedLedgerValue = entry => {
+  const operation = getSelect(entry, "Operação"), amount = getNumber(entry, "XP");
+  if (operation === "Entrada") return Math.abs(amount);
+  if (operation === "Estorno") return -Math.abs(amount);
+  return amount;
+};
+const notionRead = async (env, path) => {
+  const r = await fetch("https://api.notion.com/v1/" + path, { headers: notionHeaders(env.NOTION_TOKEN) });
+  const data = await r.json();
+  if (!r.ok) { const error = new Error(data.message || "Falha ao consultar o Notion"); error.status = r.status; error.code = data.code; throw error; }
+  return data;
+};
+async function syncAchievementUnlocks(env) {
+  const [tasks, adventures, recipes, ledger, achievements] = await Promise.all([
+    getPages(env, SOURCES.tasks), getPages(env, SOURCES.adventures), getPages(env, SOURCES.recipes),
+    getPages(env, SOURCES.xp), getPages(env, SOURCES.achievements)
+  ]);
+  const done = tasks.filter(p => ["Colhido", "Done"].includes(getSelect(p, "Status")));
+  const earned = ledger.reduce((sum, entry) => getSelect(entry, "Tipo") === "Resgate" ? sum : sum + signedLedgerValue(entry), 0);
+  const criteria = {
+    "Primeiro broto": done.length >= 1,
+    "Mãos à obra": done.length >= 10,
+    "Passo de gigante": done.some(p => getSelect(p, "Dificuldade") === "Difícil"),
+    "Jardim florescendo": earned >= 100,
+    "Uma etapa vencida": recipes.some(p => getSelect(p, "Status") === "Done"),
+    "Grande aventura": adventures.some(p => getSelect(p, "Status") === "Done")
+  };
+  const unlocked=[];
+  for (const item of achievements) {
+    const name=getTitle(item,"Conquista");
+    if (!criteria[name] || item.properties?.Desbloqueada?.checkbox === true) continue;
+    await notionWrite(env,"pages/"+item.id,"PATCH",{properties:{"Desbloqueada":{checkbox:true},"Data":{date:{start:today()}}}});
+    unlocked.push(name);
+  }
+  return {checked:achievements.length,unlocked,completedTasks:done.length,earnedXP:earned};
+}
+async function redeemReward(env,rewardId) {
+  if (!/^[a-f0-9-]{32,36}$/i.test(rewardId)) { const e=new Error("ID da recompensa inválido.");e.status=400;throw e; }
+  const reward=await notionRead(env,"pages/"+rewardId);
+  const parent=reward.parent?.data_source_id||reward.parent?.database_id||"";
+  if (![SOURCES.rewards,"96ef2e58-c084-45e3-941b-1bad9922f538"].map(normId).includes(normId(parent))) { const e=new Error("Esta página não pertence à Feira do Sol.");e.status=404;throw e; }
+  const name=getTitle(reward,"Recompensa")||"Recompensa", cost=getNumber(reward,"Custo em XP"), status=getSelect(reward,"Status");
+  if (!(cost>0)) { const e=new Error("Esta recompensa ainda não possui um custo válido em XP.");e.status=400;throw e; }
+  const ledger=await getPages(env,SOURCES.xp);
+  const existing=ledger.find(entry=>getSelect(entry,"Tipo")==="Resgate"&&normId(getText(entry,"ID da origem"))===normId(rewardId));
+  if (existing) {
+    if (status!=="Resgatada") await notionWrite(env,"pages/"+rewardId,"PATCH",{properties:{"Status":{select:{name:"Resgatada"}},"Data do resgate":{date:{start:today()}}}});
+    return {reward:name,cost,alreadyProcessed:true};
+  }
+  if(status!=="Disponível"){const e=new Error(status==="Resgatada"?"Esta recompensa já foi resgatada.":"Esta recompensa não está disponível para resgate.");e.status=409;throw e;}
+  const balance=ledger.reduce((sum,entry)=>sum+signedLedgerValue(entry),0);
+  if(balance<cost){const e=new Error("Saldo insuficiente. Faltam "+(cost-balance)+" XP para este resgate.");e.status=409;throw e;}
+  await notionWrite(env,"pages","POST",{parent:{type:"data_source_id",data_source_id:SOURCES.xp},properties:{
+    "Movimento":{title:[{text:{content:("Resgate · "+name).slice(0,2000)}}]},
+    "Origem":{rich_text:[{text:{content:name.slice(0,2000)}}]},
+    "ID da origem":{rich_text:[{text:{content:rewardId}}]},
+    "Operação":{select:{name:"Estorno"}},"Tipo":{select:{name:"Resgate"}},
+    "XP":{number:cost},"Data":{date:{start:today()}}
+  }});
+  await notionWrite(env,"pages/"+rewardId,"PATCH",{properties:{"Status":{select:{name:"Resgatada"}},"Data do resgate":{date:{start:today()}}}});
+  return {reward:name,cost,balance:balance-cost,alreadyProcessed:false};
+}
+
 let syncPromise;
+let achievementSyncPromise;
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -157,7 +210,7 @@ export default {
     if (!env.NOTION_TOKEN) return json({ ok: false, error: "NOTION_TOKEN não configurado" }, 500);
     try {
       if (request.method === "GET" && url.pathname === "/health") {
-        return json({ ok: true, service: "herbario-notion-api-dev", writeProtection: "Cloudflare Access JWT" });
+        return json({ ok: true, service: "herbario-notion-api-dev", writeProtection: "Cloudflare Turnstile" });
       }
       if (request.method === "GET" && url.pathname === "/notion/status") {
         const r = await fetch("https://api.notion.com/v1/users/me", { headers: notionHeaders(env.NOTION_TOKEN) });
@@ -187,11 +240,39 @@ export default {
         return json({ ok: true, resource, results: data.results || [], has_more: !!data.has_more, next_cursor: data.next_cursor || null });
       }
       if ((request.method === "POST" || request.method === "PATCH") && url.pathname.startsWith("/write/")) {
-        if (!await requireWriteAccess(request, env)) return json({ ok: false, error: "Acesso de gravação não autorizado. Entre pelo acesso protegido do Herbário." }, 401);
-        const payload = await request.json();
+        let payload;
+        try {
+          payload = await request.json();
+        } catch {
+          return json({ ok: false, error: "Envie um JSON válido." }, 400);
+        }
+        let expectedAction = "notion_write";
+        if (request.method === "POST" && routePath === "/api/tasks") expectedAction = "create_task";
+        else if (request.method === "PATCH" && routePath.startsWith("/api/tasks/")) expectedAction = "toggle_task";
+        else if (request.method === "POST" && routePath === "/api/sync-xp") expectedAction = "sync_xp";
+        else if (request.method === "POST" && routePath === "/api/sync-achievements") expectedAction = "sync_achievements";
+        else if (request.method === "POST" && routePath.startsWith("/api/redeem-reward/")) expectedAction = "redeem_reward";
+        if (!await requireWriteAccess(request, env, expectedAction, payload?.turnstileToken)) {
+          return json({ ok: false, error: "Verificação de segurança não autorizada. Tente novamente." }, 403);
+        }
+        if (payload && typeof payload === "object") delete payload.turnstileToken;
         if (routePath === "/api/sync-xp" && request.method === "POST") {
-          if (!syncPromise) syncPromise = syncTaskXP(env).finally(() => { syncPromise = null; });
+          if (!syncPromise) {
+            syncPromise = (async () => {
+              const xp = await syncTaskXP(env);
+              const achievements = await syncAchievementUnlocks(env);
+              return { ...xp, achievements };
+            })().finally(() => { syncPromise = null; });
+          }
           return json({ ok: true, result: await syncPromise });
+        }
+        if (routePath === "/api/sync-achievements" && request.method === "POST") {
+          if (!achievementSyncPromise) achievementSyncPromise = syncAchievementUnlocks(env).finally(() => { achievementSyncPromise = null; });
+          return json({ ok: true, result: await achievementSyncPromise });
+        }
+        if (routePath.startsWith("/api/redeem-reward/") && request.method === "POST") {
+          const rewardId = routePath.slice("/api/redeem-reward/".length);
+          return json({ ok: true, result: await redeemReward(env, rewardId) });
         }
         const parts = routePath.split("/").filter(Boolean);
         if (parts[0] !== "api" || !Object.prototype.hasOwnProperty.call(SOURCES, parts[1])) return json({ ok: false, error: "Recurso não encontrado" }, 404);
