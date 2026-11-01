@@ -341,6 +341,7 @@ export default {
         else if (request.method === "POST" && routePath === "/api/sync-achievements") expectedAction = "sync_achievements";
         else if (request.method === "POST" && routePath.startsWith("/api/redeem-reward/")) expectedAction = "redeem_reward";
         else if (request.method === "POST" && routePath.startsWith("/api/claim-exclusive-reward/")) expectedAction = "claim_exclusive_reward";
+        else if (request.method === "PATCH" && routePath.startsWith("/api/adventures/")) expectedAction = "start_journey";
         if (!await requireWriteAccess(request, env, expectedAction, payload?.turnstileToken)) {
           return json({ ok: false, error: "Verificação de segurança não autorizada. Tente novamente." }, 403);
         }
@@ -375,6 +376,14 @@ export default {
         if (routePath.startsWith("/api/redeem-reward/") && request.method === "POST") {
           const rewardId = routePath.slice("/api/redeem-reward/".length);
           return json({ ok: true, result: await redeemReward(env, rewardId) });
+        }
+        if (request.method === "PATCH" && routePath.startsWith("/api/adventures/")) {
+          const adventureId = routePath.slice("/api/adventures/".length);
+          if (!/^[a-f0-9-]{32,36}$/i.test(adventureId)) return json({ ok:false, error:"ID de jornada inválido." },400);
+          const current = await notionRead(env,"pages/"+adventureId);
+          if (normId(current.parent?.data_source_id||"") !== normId(SOURCES.adventures)) return json({ ok:false,error:"Jornada não encontrada." },404);
+          if (getDate(current,"Iniciada em")) return json({ ok:false,error:"Esta jornada já foi iniciada." },409);
+          if (!payload?.properties?.["Iniciada em"]?.date?.start || !payload?.properties?.["Prazo final"]?.date?.start) return json({ ok:false,error:"Informe a data de início e o prazo final." },400);
         }
         const parts = routePath.split("/").filter(Boolean);
         if (parts[0] !== "api" || !Object.prototype.hasOwnProperty.call(SOURCES, parts[1])) return json({ ok: false, error: "Recurso não encontrado" }, 404);
