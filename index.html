@@ -1109,6 +1109,9 @@ async function refreshData(){
    if(homeProgress)homeProgress.style.width=level.pct+'%';
    if(homeCaption)homeCaption.textContent=level.remaining?level.pct+'% até '+level.next+' · faltam '+level.remaining+' XP':'Você alcançou o último nível cadastrado.';
    const activeView=document.querySelector('.nav-btn.active')?.dataset.view,other=document.getElementById('other-content');
+   // Se Aventuras foi aberta enquanto os dados ainda carregavam, atualiza a tela
+   // depois que a lista de recompensas exclusivas chega do Notion.
+   if(activeView==='aventuras')renderAdventures(other);
    if(activeView==='loja')renderShop(other);
    if(activeView==='conquistas')renderAchievements(other);
   }catch(e){console.error(e);toast('Não foi possível carregar os dados do Notion.')}
