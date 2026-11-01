@@ -775,6 +775,56 @@ function renderRitualView(box){
  rituals.forEach(r=>{const card=document.createElement('div');card.className='view-card';card.innerHTML='<h4></h4><div class="view-filter"><span class="tag"></span><span class="tag"></span><span class="tag"></span></div><p></p>';card.querySelector('h4').textContent=title(r,'Ritual')||'Ritual';const tags=card.querySelectorAll('.tag');tags[0].textContent=prop(r,'Área')?.select?.name||'Área não definida';tags[1].textContent=prop(r,'Frequência')?.select?.name||'Frequência não definida';tags[2].textContent=prop(r,'Ativo')?.checkbox?'Ativo':'Pausado';const chosen=multi(r,'Dia');card.querySelector('p').textContent=chosen.length?'Dias: '+chosen.join(' · '):'Dias ainda não definidos';box.append(card)});
 }
 function renderCharacter(box){const xp=earnedXP(),balance=totalXP(),level=levelInfo(xp);box.innerHTML='<div class="metric-grid"><div class="metric"><strong>'+xp+' XP</strong><small>Experiência conquistada</small></div><div class="metric"><strong>'+balance+' XP</strong><small>Saldo disponível para resgates</small></div><div class="metric"><strong>'+level.name+'</strong><small>Nível atual</small></div></div><div class="view-card"><h4>Próximo florescer: '+level.next+'</h4><div class="progress"><span style="width:'+level.pct+'%"></span></div><p>'+level.pct+'% do caminho · '+(level.remaining?level.remaining+' XP para avançar':'Você alcançou o último nível cadastrado!')+'</p></div><div class="view-card"><h4>Seu cultivo</h4><p>Continue registrando suas tarefas e experiências no Notion. Os atributos pessoais poderão ser conectados quando definirmos como deseja acompanhá-los.</p></div>'}
+
+const ACHIEVEMENT_ORDER=['Primeiro broto','Mãos à obra','Passo de gigante','Jardim florescendo','Uma etapa vencida','Grande aventura'];
+function achievementIllustration(name){
+  const accessory={
+    'Primeiro broto':'<ellipse cx="70" cy="119" rx="30" ry="7" fill="#9b7047"/><path d="M70 116V92m0 12q-18-17-23-7 7 13 23 7m0-8q17-17 23-7-7 13-23 7" fill="#8ca96f" stroke="#668357" stroke-width="2"/>',
+    'Mãos à obra':'<path d="M106 52l-7 39m-7-43l14 4-8 19-13-4Z" fill="#c79a59" stroke="#80603d" stroke-width="2"/><path d="M94 90l-5 15" stroke="#79563e" stroke-width="6" stroke-linecap="round"/><path d="M33 117q8-15 18-4t19 4" fill="none" stroke="#bd963f" stroke-width="3"/>',
+    'Passo de gigante':'<path d="M25 119q19-17 35-10t28-1q12 0 26 11Z" fill="#a6a08b" stroke="#807866" stroke-width="2"/><path d="M107 44l4 10 11 1-8 7 2 11-9-6-9 6 2-11-8-7 11-1Z" fill="#efc85c" stroke="#b58b35" stroke-width="2"/>',
+    'Jardim florescendo':'<path d="M38 45q-10-17 2-19 10 1 8 12 4-18 16-12 7 10-8 19 15-11 23-1-1 14-20 10" fill="#c7a1c7" stroke="#9b789d" stroke-width="1.5"/><circle cx="48" cy="28" r="5" fill="#efc56d"/><circle cx="94" cy="32" r="8" fill="#d98578"/><circle cx="94" cy="32" r="3" fill="#f3d27a"/><circle cx="68" cy="25" r="6" fill="#e4b7a5"/>',
+    'Uma etapa vencida':'<path d="M39 105q15-9 31 1 15-10 31-1v23q-16-9-31 1-16-10-31-1Z" fill="#c58b59" stroke="#845d3e" stroke-width="2"/><path d="M70 107v22m-25-20q10-2 19 3m13-3q10-5 19-3" stroke="#f8e8bd" stroke-width="2" fill="none"/><path d="M70 110l3 5 6 1-5 4 1 6-5-3-5 3 1-6-5-4 6-1Z" fill="#f0c65d"/>',
+    'Grande aventura':'<path d="M31 72q-15-8-17 9l4 34q12 8 24-1V77Z" fill="#b78e62" stroke="#80603d" stroke-width="2"/><path d="M104 100a15 15 0 1 0 30 0 15 15 0 0 0-30 0Z" fill="#efcf77" stroke="#aa833c" stroke-width="2"/><path d="M119 87v13l-7 7m7-7 7-7" stroke="#8d744b" stroke-width="2" fill="none"/>'
+  }[name]||'';
+  return '<svg viewBox="0 0 140 145" role="img" aria-label="Insígnia do Herbário"><circle cx="70" cy="72" r="65" fill="#f5edcf" stroke="#bd963f" stroke-width="3"/><circle cx="70" cy="72" r="58" fill="none" stroke="#d9c58d" stroke-width="1.5" stroke-dasharray="2 4"/><path d="M18 104q12-10 18 2m-9-14q15-2 14 10m70 0q10-12 18-2m-12-9q-1-12 12-10" fill="none" stroke="#78906a" stroke-width="3" stroke-linecap="round"/><path d="M30 112q-7-18-1-25 10 8 1 25m79 0q7-18 1-25-10 8-1 25" fill="#a8b98f" stroke="#718766" stroke-width="1.5"/><path d="M28 122V65c0-27 17-43 42-43s42 16 42 43v57q-8-8-16 0-9-8-17 0-9-8-17 0-8-8-17 0-9-8-17 0Z" fill="#fffdf7" stroke="#e2d8c1" stroke-width="2"/><ellipse cx="56" cy="76" rx="3.8" ry="5.4" fill="#554c45"/><ellipse cx="84" cy="76" rx="3.8" ry="5.4" fill="#554c45"/><ellipse cx="45" cy="88" rx="6" ry="3.5" fill="#e7b7a9"/><ellipse cx="95" cy="88" rx="6" ry="3.5" fill="#e7b7a9"/><path d="M64 91q6 6 12 0" fill="none" stroke="#554c45" stroke-width="2" stroke-linecap="round"/><path d="M70 25q-1-12-12-15-8 4 12 15Zm0 0q6-14 18-12 4 8-18 12Z" fill="#8ca96f" stroke="#526b50" stroke-width="1.5"/>'+accessory+'</svg>';
+}
+function renderAchievements(box){
+  box.innerHTML='';
+  const unlocked=achievements.filter(a=>prop(a,'Desbloqueada')?.checkbox===true).length;
+  const summary=document.createElement('div');summary.className='achievement-summary';
+  const heading=document.createElement('strong');heading.textContent=unlocked+' de '+achievements.length+' insígnias conquistadas';
+  const description=document.createElement('span');description.textContent='Cada símbolo guarda uma história do que você já cultivou.';
+  const progress=document.createElement('div');progress.className='achievement-progress';
+  const fill=document.createElement('span');fill.style.width=(achievements.length?unlocked/achievements.length*100:0)+'%';progress.append(fill);
+  summary.append(heading,description,progress);box.append(summary);
+  const grid=document.createElement('div');grid.className='achievement-grid';
+  const sorted=achievements.slice().sort((a,b)=>ACHIEVEMENT_ORDER.indexOf(title(a,'Conquista'))-ACHIEVEMENT_ORDER.indexOf(title(b,'Conquista')));
+  sorted.forEach(item=>{
+    const name=title(item,'Conquista')||'Conquista',done=prop(item,'Desbloqueada')?.checkbox===true;
+    const card=document.createElement('article');card.className='achievement-card '+(done?'unlocked':'locked');
+    const art=document.createElement('div');art.className='achievement-art';art.innerHTML=achievementIllustration(name);
+    const copy=document.createElement('div');copy.className='achievement-copy';
+    const titleEl=document.createElement('h4');titleEl.textContent=name;
+    const category=document.createElement('span');category.className='achievement-category';category.textContent=select(item,'Categoria')||'Conquista';
+    const requirement=document.createElement('p');requirement.textContent=richText(item,'Requisito')||'Um novo marco está esperando por você.';
+    const state=document.createElement('small'),when=date(item,'Data');
+    state.textContent=done?'Conquistada'+(when?' em '+new Intl.DateTimeFormat('pt-BR').format(new Date(when+'T12:00:00')):''):'Ainda por conquistar';
+    copy.append(titleEl,category,requirement,state);card.append(art,copy);grid.append(card);
+  });
+  if(!achievements.length){const empty=document.createElement('div');empty.className='empty-state';empty.textContent='Não foi possível carregar suas insígnias. Confira a conexão da base Conquistas no Notion.';box.append(empty)}
+  else box.append(grid);
+}
+async function syncAchievementsFromServer(){
+  try{
+    const result=await protectedWrite('/write/api/sync-achievements','POST',{},'sync_achievements');
+    achievements=await load('achievements');
+    const box=document.getElementById('other-content');
+    if(document.querySelector('.nav-btn.active')?.dataset.view==='conquistas')renderAchievements(box);
+    const names=result.result?.unlocked||[];if(names.length)toast('Nova insígnia conquistada: '+names.join(', ')+'!');
+  }catch(error){console.warn('Não foi possível atualizar as conquistas agora:',error);toast(error.message||'Não foi possível conferir as conquistas.')}
+}
+function renderPergaminho(box){box.innerHTML='<div class="view-card"><h4>Biblioteca do jardim</h4><p>Seu acervo de conhecimentos, receitas e feitiços para consultar e cultivar suas jornadas.</p></div><div class="view-card"><h4>Receitas e Feitiços</h4><p>'+recipes.length+' registros encontrados na coleção Receitas e Feitiços.</p></div>'}
+
 function showView(view){
  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
  const home=view==='inicio';document.getElementById('home-view').style.display=home?'block':'none';document.getElementById('other-view').style.display=home?'none':'block';
