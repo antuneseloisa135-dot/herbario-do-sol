@@ -741,9 +741,9 @@ const JOURNEY_ART={
 const JOURNEY_COLORS=['#d9b8a7','#b9a8ce','#d6c879','#a9b69a','#d6a98f','#b8c7d8','#c6a58d','#d8c4e8','#e0cf91','#b7c8b0','#c9b2a5','#c4b5d7'];
 function journeyProgress(a){
  const rel=prop(a,'Receitas e Feitiços')?.relation||[],stages=rel.map(x=>recipes.find(r=>r.id===x.id)).filter(Boolean);
- let total=0,done=0;
- stages.forEach(stage=>{const ids=prop(stage,'Flores do Dia')?.relation||[];ids.forEach(id=>{const task=tasks.find(t=>t.id===id.id);if(task){total++;if(select(task,'Status')==='Colhido')done++}})});
- return {stages,total,done,pct:total?Math.round(done/total*100):0,complete:rel.length>0&&stages.length===rel.length&&total>0&&done===total};
+ let total=0,done=0,valid=rel.length>0&&stages.length===rel.length;
+ stages.forEach(stage=>{const ids=prop(stage,'Flores do Dia')?.relation||[];if(!ids.length)valid=false;let found=0;ids.forEach(id=>{const task=tasks.find(t=>t.id===id.id);if(task){found++;total++;if(select(task,'Status')==='Colhido')done++}});if(found!==ids.length)valid=false});
+ return {stages,total,done,pct:total?Math.round(done/total*100):0,complete:valid&&total>0&&done===total};
 }
 function svgJourney(name,index){
  const art=JOURNEY_ART[name]||['leaf','<path d="M70 92C30 68 40 28 70 20c30 8 40 48 0 72Z"/><path d="M70 88V28" class="line"/>'];
