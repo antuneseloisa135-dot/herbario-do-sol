@@ -1,0 +1,8 @@
+name = "herbario-notion-api-dev"
+main = "src/index.js"
+compatibility_date = "2026-10-31"
+workers_dev = true
+preview_urls = false
+
+# Configure secrets/vars in the development Worker environment:
+# NOTION_TOKEN (secret), ACCESS_TEAM_DOMAIN, ACCESS_AUD.
