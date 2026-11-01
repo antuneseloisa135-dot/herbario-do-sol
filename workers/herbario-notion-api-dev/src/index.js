@@ -260,7 +260,13 @@ export default {
           if (!syncPromise) {
             syncPromise = (async () => {
               const xp = await syncTaskXP(env);
-              const achievements = await syncAchievementUnlocks(env);
+              let achievements = null;
+              try {
+                achievements = await syncAchievementUnlocks(env);
+              } catch (achievementError) {
+                console.warn("XP sincronizado; a verificação de conquistas ficou pendente:", achievementError);
+                achievements = { checked: false, unlocked: [], warning: "Não foi possível consultar a base de conquistas nesta sincronização." };
+              }
               return { ...xp, achievements };
             })().finally(() => { syncPromise = null; });
           }
