@@ -28,7 +28,7 @@ h2{font:600 clamp(28px,4vw,40px) Lora,serif;margin:6px 0;color:var(--earth)}
 .subtitle{color:var(--muted);font-size:13px}.date-pill{background:var(--white);border:1px solid var(--line);border-radius:30px;padding:10px 15px;font-size:12px;color:var(--muted)}
 .hero{background:linear-gradient(115deg,#526b50,#71866a);color:#fffdf7;border-radius:22px;padding:27px 30px;display:flex;justify-content:space-between;align-items:center;gap:20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
 .hero:after{content:"✿";position:absolute;right:23%;top:-40px;font-size:170px;color:#ffffff10;transform:rotate(-18deg)}
-.hero h3{font:500 22px Lora,serif;margin:0}.hero p{font-size:13px;line-height:1.5;color:#edf0e7;margin:0;max-width:490px}.hero-mark{font-size:62px;opacity:.9;z-index:1}
+.hero h3{font:500 22px Lora,serif;margin:0 0 7px}.hero p{font-size:13px;line-height:1.5;color:#edf0e7;margin:0;max-width:490px}.greeting-copy{position:relative;z-index:1}.ghost-mascot{width:112px;min-width:112px;align-self:center;z-index:1}.ghost-mascot svg{display:block;width:100%;height:auto;filter:drop-shadow(0 5px 5px #263b251c)}.hero-mark{font-size:62px;opacity:.9;z-index:1}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin:18px 0 27px}
 .stat,.panel{background:var(--white);border:1px solid var(--line);border-radius:17px;box-shadow:var(--shadow)}
 .stat{padding:16px 18px}.stat small{color:var(--muted);font-size:11px}.stat strong{display:block;font:600 25px Lora,serif;margin-top:6px;color:var(--moss)}.stat em{font-style:normal;font-size:11px;color:var(--muted)}
@@ -45,7 +45,7 @@ h2{font:600 clamp(28px,4vw,40px) Lora,serif;margin:6px 0;color:var(--earth)}
 .modal-backdrop{position:fixed;inset:0;background:#29271f77;display:none;align-items:center;justify-content:center;padding:18px}.modal-backdrop.open{display:flex}.modal{background:var(--white);padding:24px;border-radius:18px;width:min(420px,100%);box-shadow:0 20px 70px #0003}.modal h3{font:600 21px Lora,serif;margin:0 0 15px}.modal input{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff;margin:8px 0 14px}.modal-actions{display:flex;justify-content:flex-end;gap:8px}.primary,.secondary{border:0;border-radius:10px;padding:10px 14px;font-size:12px;font-weight:700}.primary{background:var(--moss);color:white}.secondary{background:#eee9de;color:var(--earth)}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--earth);color:white;padding:11px 16px;border-radius:20px;font-size:12px;opacity:0;pointer-events:none;transition:.25s}.toast.show{opacity:1}
 @media(max-width:900px){.shell{grid-template-columns:1fr}aside{padding:9px 10px;position:fixed;left:0;right:0;bottom:0;top:auto;z-index:10;border-right:0;border-top:1px solid var(--line);background:#eae5d7;padding-bottom:calc(9px + env(safe-area-inset-bottom))}.brand{display:none}nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}.nav-label,.aside-note{display:none}.nav-btn{white-space:normal;justify-content:center;flex-direction:column;gap:3px;padding:7px 2px;font-size:9px;line-height:1.1;text-align:center;min-width:0}.nav-btn span:first-child{width:18px;min-width:18px;height:18px;font-size:16px}}
-@media(max-width:680px){main{padding:18px 14px calc(125px + env(safe-area-inset-bottom))}.topbar{align-items:flex-start}.date-pill{font-size:10px}.hero{padding:18px 19px}.hero-mark{font-size:34px}.hero h3{font-size:20px}.hero p{font-size:12px}.stats{grid-template-columns:repeat(2,1fr);gap:9px}.stat{padding:13px}.stat strong{font-size:22px}.columns{grid-template-columns:1fr}.section-head{margin-top:23px}.topbar{margin-bottom:18px}.subtitle{font-size:12px;line-height:1.45}.date-pill{max-width:120px;text-align:center}.footer{font-size:10px;line-height:1.5}.page-content{padding:8px 15px}}
+@media(max-width:680px){main{padding:18px 14px calc(125px + env(safe-area-inset-bottom))}.topbar{align-items:flex-start}.date-pill{font-size:10px}.hero{padding:18px 19px}.ghost-mascot{width:82px;min-width:82px}.hero h3{font-size:20px}.hero p{font-size:12px}.stats{grid-template-columns:repeat(2,1fr);gap:9px}.stat{padding:13px}.stat strong{font-size:22px}.columns{grid-template-columns:1fr}.section-head{margin-top:23px}.topbar{margin-bottom:18px}.subtitle{font-size:12px;line-height:1.45}.date-pill{max-width:120px;text-align:center}.footer{font-size:10px;line-height:1.5}.page-content{padding:8px 15px}}
 </style>
 </head>
 <body>
@@ -66,7 +66,14 @@ h2{font:600 clamp(28px,4vw,40px) Lora,serif;margin:6px 0;color:var(--earth)}
 <main>
  <div class="topbar"><div><div class="eyebrow">Seu espaço de cultivo</div><h2 id="page-title">O jardim desperta</h2><div class="subtitle" id="page-subtitle">Pequenos passos também fazem florescer grandes mudanças.</div></div><div class="date-pill" id="today"></div></div>
  <section id="home-view">
-  <div class="hero home-greeting"><div><h3 id="daily-greeting">Um passo de cada vez.</h3><p id="daily-message">Hoje também é uma oportunidade de florescer.</p></div><div class="hero-mark" aria-hidden="true">✳</div></div>
+  <div class="hero home-greeting"><div class="greeting-copy"><h3 id="daily-greeting">Bom dia, Guardião.</h3><p id="daily-message">Que hoje tenha espaço para florescer.</p></div><div class="ghost-mascot" role="img" aria-label="Fantasminha do Herbário do Sol"><svg viewBox="0 0 180 190" xmlns="http://www.w3.org/2000/svg">
+ <path d="M38 151c-3-12-5-28-4-49C36 54 55 23 91 20c37-3 59 26 61 68 1 21-1 43-7 63-2 7-8 9-14 5l-14-10-14 13c-5 5-11 5-16 0l-14-13-14 12c-7 5-17 2-20-7Z" fill="#f7f0df" stroke="#e6ddca" stroke-width="3"/>
+ <ellipse cx="70" cy="91" rx="5" ry="7" fill="#51483f"/><ellipse cx="111" cy="91" rx="5" ry="7" fill="#51483f"/>
+ <ellipse cx="54" cy="108" rx="10" ry="5" fill="#e8aaa0" opacity=".75"/><ellipse cx="127" cy="108" rx="10" ry="5" fill="#e8aaa0" opacity=".75"/>
+ <path d="M84 109q7 8 14 0" fill="none" stroke="#8b665d" stroke-width="3" stroke-linecap="round"/>
+ <path d="M83 25c1-12 10-19 22-17-3 8-8 14-17 17 10-3 19 0 23 8-11 2-21 0-28-8Z" fill="#91a77e" stroke="#526b50" stroke-width="2" stroke-linejoin="round"/>
+ <path d="M100 17q8-8 16-6" fill="none" stroke="#526b50" stroke-width="2" stroke-linecap="round"/>
+ </svg></div></div>
   <div class="stats">
    <div class="stat"><small>Flores para hoje</small><strong id="remaining">3</strong><em>tarefas em aberto</em></div>
    <div class="stat"><small>Essência Solar</small><strong>—</strong><em>aguardando conexão com o Notion</em></div>
@@ -120,10 +127,12 @@ document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>showView(b.datas
 const modal=document.getElementById('modal');document.getElementById('add-task').onclick=()=>{modal.classList.add('open');document.getElementById('task-name').focus()};document.getElementById('cancel').onclick=()=>modal.classList.remove('open');
 document.getElementById('save').onclick=()=>{const input=document.getElementById('task-name');const name=input.value.trim();if(!name){input.focus();return}sampleTasks.push({name,meta:'Nova flor · criada nesta prévia',xp:5,done:false});renderTasks();input.value='';modal.classList.remove('open');toast('Adicionada apenas à prévia; ainda não salva no Notion.')}
 document.getElementById('today').textContent=new Intl.DateTimeFormat('pt-BR',{weekday:'long',day:'2-digit',month:'long'}).format(new Date());
-const greetings=[["Um passo de cada vez.","Hoje também é uma oportunidade de florescer."],["Cultive o que importa.","Pequenos cuidados constroem grandes mudanças."],["Seu ritmo também é progresso.","Escolha uma coisa e comece por ela."],["Mais um dia para florescer.","Faça espaço para o que faz bem."],["A constância cria raízes.","Um pequeno avanço já conta."],["Recomeçar também é crescer.","Retome de onde você está."],["Que hoje seja leve.","Cuide do essencial, sem pressa."]];
+const hour=new Date().getHours();
+const salutation=hour>=5&&hour<12?"Bom dia":hour>=12&&hour<18?"Boa tarde":"Boa noite";
+const greetings=["Que hoje tenha espaço para florescer.","Um pequeno passo já faz diferença.","Cultive o que importa, no seu ritmo.","Hoje é um bom dia para recomeçar.","Cuide do essencial, sem pressa.","A constância faz a vida florescer.","Que seu dia seja leve e gentil."];
 const dayIndex=Math.floor(Date.now()/86400000)%greetings.length;
-document.getElementById('daily-greeting').textContent=greetings[dayIndex][0];
-document.getElementById('daily-message').textContent=greetings[dayIndex][1];
+document.getElementById('daily-greeting').textContent=salutation+", Guardião.";
+document.getElementById('daily-message').textContent=greetings[dayIndex];
 renderTasks();
 </script>
 </body>
