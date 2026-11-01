@@ -102,7 +102,7 @@ function isItajaiBusinessDay(date) {
   const year=date.getUTCFullYear(), month=date.getUTCMonth()+1, day=date.getUTCDate();
   const weekday=date.getUTCDay();
   if(weekday===0||weekday===6)return false;
-  const fixed=new Set(["01-01","04-21","05-01","08-11","09-07","10-12","11-02","11-15","11-20","12-25"]);
+  const fixed=new Set(["01-01","04-21","05-01","09-07","10-12","11-02","11-15","11-20","12-25"]);
   const key=String(month).padStart(2,"0")+"-"+String(day).padStart(2,"0");
   if(fixed.has(key)||key==="06-15")return false;
   const easter=easterSunday(year);
