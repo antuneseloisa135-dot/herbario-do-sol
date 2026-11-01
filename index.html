@@ -427,10 +427,10 @@ async function load(resource){
 function renderTasks(){
  const box=document.getElementById('task-list');box.innerHTML='';
  const todays=tasks.filter(t=>(date(t,'Date')||'').slice(0,10)===localToday());
- const open=todays.filter(t=>select(t,'Status')!=='Done');
+ const open=todays.filter(t=>!['Done','Colhido'].includes(select(t,'Status')));
  document.getElementById('remaining').textContent=open.length;
  if(!todays.length){box.innerHTML='<div class="empty-state"><span>Nenhuma flor agendada para hoje. Que tal aproveitar o espaço para respirar ou planejar o próximo passo?</span></div>';return}
- todays.forEach(t=>{const status=select(t,'Status'),done=status==='Done',name=title(t,'Tarefa')||'Tarefa sem título',tags=multi(t,'Tags').join(' · ');const row=document.createElement('div');row.className='task'+(done?' done':'');row.innerHTML='<span class="check '+(done?'done':'')+'" aria-label="'+(done?'Concluída':'Pendente')+'"></span><div class="task-info"><strong></strong><small></small></div><span class="xp"></span>';row.querySelector('strong').textContent=name;row.querySelector('small').textContent=[tags,status].filter(Boolean).join(' · ')||'Sem categoria';row.querySelector('.xp').textContent='+'+number(t,'XP')+' XP';box.append(row)});
+ todays.forEach(t=>{const status=select(t,'Status'),done=['Done','Colhido'].includes(status),name=title(t,'Tarefa')||'Tarefa sem título',tags=multi(t,'Tags').join(' · ');const row=document.createElement('div');row.className='task'+(done?' done':'');row.innerHTML='<span class="check '+(done?'done':'')+'" aria-label="'+(done?'Concluída':'Pendente')+'"></span><div class="task-info"><strong></strong><small></small></div><span class="xp"></span>';row.querySelector('strong').textContent=name;row.querySelector('small').textContent=[tags,status].filter(Boolean).join(' · ')||'Sem categoria';row.querySelector('.xp').textContent='+'+number(t,'XP')+' XP';box.append(row)});
 }
 function renderAdventures(target){
  const box=target||document.getElementById('adventure-list');box.innerHTML='';
