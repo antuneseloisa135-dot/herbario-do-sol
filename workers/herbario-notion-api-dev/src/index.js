@@ -123,8 +123,7 @@ async function syncTaskXP(env) {
     const originId = normId(task.id);
     const status = getSelect(task, "Status");
     const difficulty = getSelect(task, "Dificuldade");
-    const isCompleted = status === "Done" || status === "Colhido";
-    const desired = isCompleted ? (difficultyXP[difficulty] || 0) : 0;
+    const desired = status === "Colhido" ? (difficultyXP[difficulty] || 0) : 0;
     const current = byOrigin.get(originId) || 0;
     const delta = desired - current;
     if (Math.abs(delta) < 0.000001) continue;
