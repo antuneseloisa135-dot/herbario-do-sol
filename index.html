@@ -585,6 +585,14 @@ aside{background:#e4eadf!important}
 .home-journey-state{color:var(--moss)!important}
 .home-journey-note{font-size:11px;color:var(--muted);text-align:center;margin:12px 0 0}
 @media(max-width:520px){.home-journey-grid{grid-template-columns:minmax(0,1fr)}}
+
+.journey-start{border:0;border-radius:999px;padding:10px 18px;background:#78866a;color:#fff;font:600 12px inherit;cursor:pointer}
+.journey-start:disabled{opacity:.55;cursor:wait}
+.journey-deadline-note,.journey-deadline small{display:block;font-size:10px;color:var(--muted);margin-top:5px}
+.journey-deadline{display:grid;gap:4px;padding:9px 11px;border-radius:12px;background:#edf0e7;color:#56664e}
+.journey-deadline strong{font-size:10px;font-weight:600;line-height:1.4}
+.journey-deadline.is-near{background:#fbf0d8;color:#8a6428}
+.journey-deadline.is-overdue{background:#f7e4df;color:#9b5146}
 </style>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" defer></script>
 <link rel="manifest" href="/manifest.webmanifest">
@@ -753,6 +761,44 @@ const JOURNEY_ART={
  'Ser uma Pessoa com Mais Repertório':['star','<path d="m70 18 12 27 30 3-23 20 7 29-26-16-26 16 7-29-23-20 30-3Z"/><circle cx="70" cy="58" r="8" class="line"/>']
 };
 const JOURNEY_COLORS=['#d9b8a7','#b9a8ce','#d6c879','#a9b69a','#d6a98f','#b8c7d8','#c6a58d','#d8c4e8','#e0cf91','#b7c8b0','#c9b2a5','#c4b5d7'];
+function addThreeMonths(date){
+ const result=new Date(date.getFullYear(),date.getMonth(),date.getDate());
+ const day=result.getDate();result.setMonth(result.getMonth()+3);
+ if(result.getDate()<day)result.setDate(0);
+ return result;
+}
+function localISODate(date){
+ return [date.getFullYear(),String(date.getMonth()+1).padStart(2,'0'),String(date.getDate()).padStart(2,'0')].join('-');
+}
+function formatJourneyDate(value){
+ if(!value)return '';
+ const d=new Date(value+'T12:00:00');
+ return new Intl.DateTimeFormat('pt-BR').format(d);
+}
+function journeyDeadline(a){
+ const started=prop(a,'Iniciada em')?.date?.start||'';
+ const deadline=prop(a,'Prazo final')?.date?.start||'';
+ if(!started)return {started:'',deadline:'',days:null,state:'not-started'};
+ const end=deadline||localISODate(addThreeMonths(new Date(started+'T12:00:00')));
+ const todayDate=new Date();todayDate.setHours(0,0,0,0);
+ const endDate=new Date(end+'T12:00:00');endDate.setHours(0,0,0,0);
+ const days=Math.ceil((endDate-todayDate)/86400000);
+ return {started,deadline:end,days,state:days<0?'overdue':days<=14?'near':'active'};
+}
+async function startJourney(adventure,button){
+ if(button.disabled)return;
+ const today=localISODate(new Date()),deadline=localISODate(addThreeMonths(new Date(today+'T12:00:00')));
+ button.disabled=true;
+ try{
+  await protectedWrite('/write/api/adventures/'+encodeURIComponent(adventure.id),'PATCH',{
+   Status:{status:{name:'In progress'}},
+   'Iniciada em':{date:{start:today}},
+   'Prazo final':{date:{start:deadline}}
+  },'start_journey');
+  await refreshData();showView('aventuras');
+  toast('Jornada iniciada! Seu prazo de três meses já está contando.');
+ }catch(error){button.disabled=false;toast(error.message||'Não foi possível iniciar a jornada.')}
+}
 function journeyProgress(a){
  const rel=prop(a,'Receitas e Feitiços')?.relation||[],stages=rel.map(x=>recipes.find(r=>r.id===x.id)).filter(Boolean);
  let total=0,done=0,valid=rel.length>0&&stages.length===rel.length;
@@ -829,6 +875,16 @@ function renderAdventures(target){
   p.stages.forEach((stage,i)=>{const ids=prop(stage,'Flores do Dia')?.relation||[],stageDone=ids.length>0&&ids.every(x=>tasks.find(t=>t.id===x.id)&&select(tasks.find(t=>t.id===x.id),'Status')==='Colhido');const row=document.createElement('div');row.className='journey-stage';row.innerHTML='<span class="stage-index"></span><span class="stage-label"></span><span class="stage-mark"></span>';row.querySelector('.stage-index').textContent=String(i+1).padStart(2,'0');row.querySelector('.stage-label').textContent=recipeTitle(stage);row.querySelector('.stage-mark').textContent=stageDone?'Concluída':'Em cultivo';stageList.append(row)});
   const toggle=document.createElement('button');toggle.type='button';toggle.className='journey-toggle';toggle.textContent='Ver etapas';toggle.addEventListener('click',()=>{stageList.hidden=!stageList.hidden;toggle.textContent=stageList.hidden?'Ver etapas':'Ocultar etapas'});
   const actions=document.createElement('div');actions.className='journey-actions';
+  const timing=journeyDeadline(a);
+  if(!timing.started&&select(a,'Status')!=='Done'){
+   const start=document.createElement('button');start.type='button';start.className='journey-start';start.textContent='Iniciar jornada';start.addEventListener('click',()=>{if(window.confirm('Iniciar "'+name+'"? A partir de hoje começa a contar o prazo de três meses.'))startJourney(a,start)});actions.append(start);
+   const note=document.createElement('small');note.className='journey-deadline-note';note.textContent='Prazo de 3 meses a partir do início';actions.append(note);
+  }else if(timing.started){
+   const deadlineInfo=document.createElement('div');deadlineInfo.className='journey-deadline '+(timing.state==='overdue'?'is-overdue':timing.state==='near'?'is-near':'');
+   const dates=document.createElement('strong');dates.textContent='Iniciada em '+formatJourneyDate(timing.started)+' · prazo até '+formatJourneyDate(timing.deadline);
+   const remaining=document.createElement('small');remaining.textContent=timing.days<0?'Prazo encerrado há '+Math.abs(timing.days)+' dias':timing.days===0?'Último dia do prazo':timing.days+' dias restantes';
+   deadlineInfo.append(dates,remaining);actions.append(deadlineInfo);
+  }
   if(p.complete){
    const claim=document.createElement('button');claim.type='button';claim.className='journey-claim';claim.textContent='Escolher recompensa';claim.disabled=exclusiveRewards.some(r=>select(r,'Status')==='Resgatada'&&(prop(r,'Jornada')?.relation||[]).some(x=>x.id===a.id));
    claim.addEventListener('click',()=>openExclusiveRewardPicker(a));actions.append(claim);
