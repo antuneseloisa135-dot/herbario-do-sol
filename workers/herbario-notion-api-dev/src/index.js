@@ -25,7 +25,7 @@ const notionHeaders = token => ({
   "Content-Type": "application/json"
 });
 const normId = value => String(value || "").replace(/-/g, "").toLowerCase();
-const today = () => new Date().toISOString().slice(0, 10);
+const today = () => new Intl.DateTimeFormat("en-CA", { timeZone: "America/Sao_Paulo", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
 const getTitle = (page, key) => (page.properties?.[key]?.title || []).map(x => x.plain_text || x.text?.content || "").join("");
 const getSelect = (page, key) => page.properties?.[key]?.select?.name || page.properties?.[key]?.status?.name || "";
 const getNumber = (page, key) => {
@@ -91,6 +91,44 @@ async function requireWriteAccess(request, env, expectedAction, token) {
     && result.hostname === "herbario-do-sol.pages.dev";
 }
 const difficultyXP = { "Leve": 5, "Média": 10, "Difícil": 15 };
+
+function easterSunday(year) {
+  const a=year%19,b=Math.floor(year/100),c=year%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3);
+  const h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451);
+  const month=Math.floor((h+l-7*m+114)/31),day=((h+l-7*m+114)%31)+1;
+  return new Date(Date.UTC(year,month-1,day));
+}
+function isItajaiBusinessDay(date) {
+  const year=date.getUTCFullYear(), month=date.getUTCMonth()+1, day=date.getUTCDate();
+  const weekday=date.getUTCDay();
+  if(weekday===0||weekday===6)return false;
+  const fixed=new Set(["01-01","04-21","05-01","08-11","09-07","10-12","11-02","11-15","11-20","12-25"]);
+  const key=String(month).padStart(2,"0")+"-"+String(day).padStart(2,"0");
+  if(fixed.has(key)||key==="06-15")return false;
+  const easter=easterSunday(year);
+  const goodFriday=new Date(easter);goodFriday.setUTCDate(goodFriday.getUTCDate()-2);
+  const corpusChristi=new Date(easter);corpusChristi.setUTCDate(corpusChristi.getUTCDate()+60);
+  const same=(d)=>d.getUTCFullYear()===year&&d.getUTCMonth()===date.getUTCMonth()&&d.getUTCDate()===day;
+  return !same(goodFriday)&&!same(corpusChristi);
+}
+function nextItajaiBusinessDay(dateString) {
+  const date=new Date(dateString+"T12:00:00Z");
+  if(Number.isNaN(date.getTime()))throw new Error("Data de tarefa inválida.");
+  do{date.setUTCDate(date.getUTCDate()+1)}while(!isItajaiBusinessDay(date));
+  return date.toISOString().slice(0,10);
+}
+async function rescheduleOverdueTasks(env) {
+  const tasks=await getPages(env,SOURCES.tasks), currentDay=today(), moved=[];
+  for(const task of tasks){
+    const status=getSelect(task,"Status"), scheduled=(getDate(task,"Date")||"").slice(0,10);
+    if(!scheduled||scheduled>=currentDay||!["Not started","In progress"].includes(status))continue;
+    const nextDate=nextItajaiBusinessDay(currentDay);
+    await notionWrite(env,"pages/"+task.id,"PATCH",{properties:{"Date":{date:{start:nextDate}}}});
+    moved.push({id:task.id,from:scheduled,to:nextDate});
+  }
+  return {checked:tasks.length,rescheduled:moved.length,tasks:moved,date:currentDay};
+}
+
 
 async function syncTaskXP(env) {
   const [tasks, ledger] = await Promise.all([
@@ -250,12 +288,16 @@ export default {
         if (request.method === "POST" && routePath === "/api/tasks") expectedAction = "create_task";
         else if (request.method === "PATCH" && routePath.startsWith("/api/tasks/")) expectedAction = "toggle_task";
         else if (request.method === "POST" && routePath === "/api/sync-xp") expectedAction = "sync_xp";
+        else if (request.method === "POST" && routePath === "/api/reschedule-overdue") expectedAction = "reschedule_overdue";
         else if (request.method === "POST" && routePath === "/api/sync-achievements") expectedAction = "sync_achievements";
         else if (request.method === "POST" && routePath.startsWith("/api/redeem-reward/")) expectedAction = "redeem_reward";
         if (!await requireWriteAccess(request, env, expectedAction, payload?.turnstileToken)) {
           return json({ ok: false, error: "Verificação de segurança não autorizada. Tente novamente." }, 403);
         }
         if (payload && typeof payload === "object") delete payload.turnstileToken;
+        if (routePath === "/api/reschedule-overdue" && request.method === "POST") {
+          return json({ ok: true, result: await rescheduleOverdueTasks(env) });
+        }
         if (routePath === "/api/sync-xp" && request.method === "POST") {
           if (!syncPromise) {
             syncPromise = (async () => {
