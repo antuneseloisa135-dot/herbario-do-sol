@@ -478,6 +478,40 @@ aside{background:#e4eadf!important}
  .date-pill{width:108px;max-width:108px;font-size:9px;padding:8px 7px;overflow-wrap:anywhere}
 }
 
+
+/* Jornadas e recompensas exclusivas · ilustração vetorial chapada */
+.journey-intro{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:20px;margin-bottom:18px;background:#edf1e8;border-radius:18px}
+.journey-intro span,.exclusive-head span{font-size:10px;letter-spacing:.16em;font-weight:700;color:#8b794d}
+.journey-intro h3,.exclusive-head h3{font:600 23px Lora,serif;margin:6px 0;color:#5c5142}
+.journey-intro p,.exclusive-head p{font-size:12px;line-height:1.5;color:#837b70;margin:0;max-width:520px}
+.journey-count{flex:none;padding:10px 13px;border-radius:14px;background:#fffdf7;color:#526b50;font-weight:700;font-size:12px}
+.journey-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.journey-card{background:#fffdf7;border-radius:17px;overflow:hidden;display:grid;grid-template-columns:110px minmax(0,1fr);column-gap:14px;padding:12px;border:1px solid #e5decd;align-items:center}
+.journey-cover{height:112px;border-radius:13px;background:var(--journey-color);display:grid;place-items:center;grid-row:span 2}
+.journey-cover svg{width:100%;height:100%}
+.journey-copy{min-width:0}.journey-copy h3{font:600 16px Lora,serif;margin:0 0 5px;color:#5c5142}.journey-copy p{font-size:10px;color:#837b70;margin:0 0 8px}
+.journey-progress{height:7px;border-radius:10px;background:#eee9de;overflow:hidden}.journey-progress span{display:block;height:100%;background:#8da17b;border-radius:10px}
+.journey-copy small{display:block;font-size:10px;color:#837b70;margin-top:6px}
+.journey-toggle{grid-column:2;border:0;background:transparent;color:#526b50;font-size:11px;font-weight:700;text-align:left;padding:8px 0}
+.journey-stages{grid-column:1/-1;padding:8px 4px}.journey-stages[hidden]{display:none}
+.journey-stage{display:flex;gap:9px;padding:8px 0;border-bottom:1px dashed #e5decd;font-size:11px;align-items:center}
+.journey-stage:last-child{border:0}.stage-index{color:#bd963f;font-family:Lora,serif}.stage-label{flex:1}.stage-mark{font-size:10px;color:#71866a}
+.journey-actions{grid-column:1/-1;border-top:1px solid #eee9de;padding-top:10px;margin-top:4px}
+.journey-claim{width:100%;border:0;border-radius:10px;padding:11px;background:#526b50;color:white;font-weight:700;font-size:12px}
+.journey-claim:disabled{opacity:.45}.journey-locked{font-size:11px;color:#9a8c75}
+.journey-card.is-complete{border-color:#a9b69a}
+.exclusive-reward-section{margin-top:30px;padding-top:22px;border-top:1px solid #ded6c4}
+.exclusive-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.exclusive-head strong{font-size:11px;background:#edf1e8;color:#526b50;border-radius:18px;padding:8px 11px;white-space:nowrap}
+.exclusive-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
+.exclusive-card{background:#fffdf7;border-radius:14px;overflow:hidden;padding:9px;border:1px solid #e5decd;min-width:0}
+.exclusive-art{height:100px;border-radius:10px;background:var(--reward-color);display:grid;place-items:center}
+.exclusive-art svg{width:100%;height:100%}
+.exclusive-card h4{font:600 12px Lora,serif;margin:9px 2px 4px;color:#5c5142}
+.exclusive-card small{display:block;font-size:9px;color:#837b70;margin:0 2px 3px;line-height:1.4}
+.exclusive-card.redeemed{opacity:.62}.exclusive-card.redeemed .exclusive-art{filter:grayscale(.6)}
+@media(max-width:699px){.journey-intro{align-items:flex-start;padding:15px}.journey-intro h3,.exclusive-head h3{font-size:20px}.journey-grid{grid-template-columns:1fr;gap:10px}.journey-card{grid-template-columns:88px minmax(0,1fr);gap:10px}.journey-cover{height:96px}.exclusive-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.exclusive-art{height:88px}}
+
 </style>
 <style>
 #task-list .check{padding:0;display:grid;place-items:center;cursor:pointer}
@@ -616,7 +650,7 @@ aside{background:#e4eadf!important}
 <script>
 
 const API='https://herbario-notion-api-dev.antuneseloisa135.workers.dev';
-let tasks=[], adventures=[], rituals=[], xpEntries=[], recipes=[], rewards=[], achievements=[];
+let tasks=[], adventures=[], rituals=[], xpEntries=[], recipes=[], rewards=[], achievements=[], exclusiveRewards=[];
 let shopSection='vitrine';
 let pendingReward=null;
 const localToday=()=>{const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')};
@@ -689,18 +723,102 @@ function renderTasks(){
  appendGroup('Em cultivo',open);
  appendGroup('Colhidas hoje',completed);
 }
+const JOURNEY_ART={
+ 'Publicar o Não Anjo':['book','<path d="M34 28q18-8 36 2v50q-18-10-36-2Z"/><path d="M70 30q18-10 36-2v50q-18-8-36 2Z"/><path d="M70 30v50" class="line"/><path d="M48 43h12m-12 9h12m22-9h12m-12 9h12" class="line"/>'],
+ 'Glow Up Carreira':['sunrise','<circle cx="70" cy="43" r="17"/><path d="M31 83h78M42 72l-9 11m55-11 9 11M70 18V9m-30 9-7-7m67 7 7-7" class="line"/>'],
+ 'Cofrinho de R$ 3.000':['coin','<path d="M37 47q0-16 33-16t33 16v31q0 15-33 15T37 78Z"/><path d="M37 47q0 15 33 15t33-15M61 22h18M70 15v14" class="line"/><circle cx="70" cy="48" r="11" class="line"/>'],
+ 'Rosto de Boneca':['flower','<circle cx="70" cy="57" r="16"/><path d="M70 28c-8-19-29-11-21 5-19-7-27 14-8 21-16 12-2 30 14 20 1 20 23 22 30 4 15 12 31-6 18-19 18-8 7-29-12-23 1-20-20-24-21-8Z"/><circle cx="64" cy="55" r="2" class="line"/><circle cx="76" cy="55" r="2" class="line"/>'],
+ 'Bumbum na Nuca':['leaf','<path d="M70 91C28 68 36 28 70 22c34 6 42 46 0 69Z"/><path d="M70 88V30m0 28q-20-20-29-12m29 25q20-20 29-12" class="line"/>'],
+ 'Uma Rotina Mais Saudável':['heart','<path d="M70 91 31 55C8 28 43 12 70 39c27-27 62-11 39 16Z"/><path d="M25 95h90M70 13V4" class="line"/>'],
+ 'Associação Revivendo':['hands','<path d="M31 62q-12-13 0-24l16 12 10-9q13-9 25 3l17 16-23 25q-7 7-15 0Z"/><path d="m47 50 18 17q7 7 14 0m-24-8 13 13q7 7 14 0m-4-34 12-8 18 17" class="line"/>'],
+ 'Iniciar uma Nova Faculdade':['cap','<path d="m22 47 48-23 48 23-48 23Z"/><path d="M42 58v18q28 18 56 0V58m20-11v28" class="line"/>'],
+ 'Recap de Pendências':['checklist','<rect x="40" y="20" width="60" height="78" rx="8"/><path d="M53 42l5 5 9-11m-14 27 5 5 9-11m-9 23h28" class="line"/>'],
+ 'Expandir Laços e Conexões':['network','<circle cx="70" cy="54" r="12"/><circle cx="35" cy="30" r="9"/><circle cx="105" cy="30" r="9"/><circle cx="35" cy="86" r="9"/><circle cx="105" cy="86" r="9"/><path d="m60 47-18-12m28 7 28-12M60 62 42 80m28-14 28 14" class="line"/>'],
+ 'Aprender Mais Sobre Técnicas de Terapia':['mind','<path d="M70 91V48m0 18q-30 2-28-24 20-5 28 17m0-2q2-32 29-30 2 25-29 30Z"/><path d="M44 93h52" class="line"/>'],
+ 'Ser uma Pessoa com Mais Repertório':['star','<path d="m70 18 12 27 30 3-23 20 7 29-26-16-26 16 7-29-23-20 30-3Z"/><circle cx="70" cy="58" r="8" class="line"/>']
+};
+const JOURNEY_COLORS=['#d9b8a7','#b9a8ce','#d6c879','#a9b69a','#d6a98f','#b8c7d8','#c6a58d','#d8c4e8','#e0cf91','#b7c8b0','#c9b2a5','#c4b5d7'];
+function journeyProgress(a){
+ const rel=prop(a,'Receitas e Feitiços')?.relation||[],stages=rel.map(x=>recipes.find(r=>r.id===x.id)).filter(Boolean);
+ let total=0,done=0;
+ stages.forEach(stage=>{const ids=prop(stage,'Flores do Dia')?.relation||[];ids.forEach(id=>{const task=tasks.find(t=>t.id===id.id);if(task){total++;if(select(task,'Status')==='Colhido')done++}})});
+ return {stages,total,done,pct:total?Math.round(done/total*100):0,complete:rel.length>0&&stages.length===rel.length&&total>0&&done===total};
+}
+function svgJourney(name,index){
+ const art=JOURNEY_ART[name]||['leaf','<path d="M70 92C30 68 40 28 70 20c30 8 40 48 0 72Z"/><path d="M70 88V28" class="line"/>'];
+ return '<svg viewBox="0 0 140 120" aria-hidden="true"><path d="M70 12c32 0 55 21 55 49s-23 48-55 48S15 89 15 61 38 12 70 12Z" fill="#fffdf766"/><g fill="none" stroke="#6c7654" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">'+art[1]+'</g></svg>';
+}
+function rewardIllustration(name){
+ const art={
+ 'Fazer uma tatuagem':'<path d="m46 75 34-34 15 15-34 34Z"/><path d="m74 47 8-8 15 15-8 8" class="line"/><path d="M43 91q-9 8-15 3" class="line"/>',
+ 'Roupas novas':'<path d="m48 32 22 10 22-10 20 17-13 15-9-7v37H50V57l-9 7-13-15Z"/>',
+ 'Três livros novos':'<path d="M33 35h63v18H33Z"/><path d="M39 55h63v18H39Z"/><path d="M45 75h63v18H45Z"/>',
+ 'Cafeteria':'<path d="M35 43h58v36q0 15-16 15H51q-16 0-16-15Z"/><path d="M93 51h12q18 0 10 18-4 9-22 8M48 32q-8-9 0-17m20 17q-8-9 0-17m20 17q-8-9 0-17" class="line"/>',
+ 'Spa Plus':'<path d="M70 91q-30-18-25-42 5-16 25-4 20-12 25 4 5 24-25 42Z"/><path d="M70 39V20m-15 5q15-12 30 0" class="line"/>',
+ 'Maratonar série':'<rect x="29" y="29" width="82" height="58" rx="8"/><path d="m60 45 25 13-25 14Z" class="line"/>',
+ 'Bolsa e mochila':'<path d="M37 47h66v47H37Z"/><path d="M51 47V36q0-17 19-17t19 17v11m-52 0q-3-19 14-19m46 19q3-19-14-19" class="line"/>',
+ 'Assinatura do Cloud':'<path d="M42 82q-18 0-18-17 0-16 18-17 8-28 36-20 17 4 19 21 20 0 20 17 0 16-19 16Z"/><path d="M70 47v30m-12-12 12 12 12-12" class="line"/>',
+ 'Acessórios':'<circle cx="70" cy="62" r="23"/><path d="M70 39V23m-8 0h16m-8 39 1 1" class="line"/>',
+ 'Seis itens da Shein':'<path d="M32 42h76v48H32Z"/><path d="M48 42V30h44v12M48 58h44m-44 14h30" class="line"/>',
+ 'Produtos naturais':'<path d="M70 94C34 72 40 30 70 20c30 10 36 52 0 74Z"/><path d="M70 88V29m0 27q-19-17-28-9m28 24q19-17 28-9" class="line"/>',
+ 'Kit de artesanato':'<path d="M33 43h74v51H33Z"/><path d="m47 43 12-17h22l12 17M49 59l42 0m-42 14h27" class="line"/>'
+ };
+ return '<svg viewBox="0 0 140 120" aria-hidden="true"><g fill="#fffdf7aa" stroke="#6b604f" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">'+(art[name]||'<circle cx="70" cy="60" r="30"/>')+'</g></svg>';
+}
 function renderAdventures(target){
  const box=target||document.getElementById('adventure-list');box.innerHTML='';
- if(!adventures.length){box.textContent='Nenhuma aventura cadastrada no Notion.';return}
- adventures.forEach(a=>{
-  const row=document.createElement('button');row.type='button';row.className='adventure adventure-open';row.style.cssText='width:100%;border:0;background:transparent;text-align:left;color:inherit;cursor:pointer';
-  row.innerHTML='<span class="adventure-icon"><img alt="" src="https://api.iconify.design/ph/plant-duotone.svg?color=%23526b50" width="25" height="25"></span><span class="adventure-info"><strong></strong><small></small></span><span class="tag">Ver receitas e feitiços⌄</span>';
-  row.querySelector('strong').textContent=title(a,'Name')||'Aventura sem título';
-  const related=prop(a,'Receitas e Feitiços')?.relation||[];row.querySelector('small').textContent=related.length+' receitas e feitiços vinculados · '+Math.round((number(a,'Progresso')||0)*100)+'% concluído';
-  const detail=document.createElement('div');detail.className='adventure-detail';detail.hidden=true;const stages=related.map(rel=>recipes.find(r=>r.id===rel.id)).filter(Boolean);
-  if(stages.length){stages.forEach((stage,i)=>{const item=document.createElement('div');item.className='stage-row';item.innerHTML='<span class="stage-number"></span><span class="stage-name"></span><span class="stage-status"></span>';item.querySelector('.stage-number').textContent=String(i+1).padStart(2,'0');item.querySelector('.stage-name').textContent=recipeTitle(stage);item.querySelector('.stage-status').textContent=select(stage,'Status')||'Receita ou feitiço';detail.append(item)})}else detail.textContent=related.length?'As receitas e feitiços estão vinculados, mas não foi possível carregar seus detalhes.':'Esta jornada ainda não tem receitas e feitiços vinculados.';
-  row.addEventListener('click',()=>{detail.hidden=!detail.hidden;row.querySelector('.tag').textContent=detail.hidden?'Ver receitas e feitiços⌄':'Ocultar receitas e feitiços⌃'});box.append(row,detail);
+ if(!adventures.length){box.textContent='Nenhuma jornada cadastrada no Notion.';return}
+ const intro=document.createElement('div');intro.className='journey-intro';intro.innerHTML='<div><span>O CICLO DE TRÊS MESES</span><h3>Doze caminhos, uma nova versão de você.</h3><p>Cada jornada é construída por etapas e flores. Quando todas forem colhidas, você libera uma recompensa exclusiva.</p></div><div class="journey-count"></div>';intro.querySelector('.journey-count').textContent=adventures.length+' / 12 jornadas';box.append(intro);
+ const grid=document.createElement('div');grid.className='journey-grid';
+ adventures.forEach((a,index)=>{
+  const name=title(a,'Name')||'Jornada sem título',p=journeyProgress(a),card=document.createElement('article');card.className='journey-card'+(p.complete?' is-complete':'');card.style.setProperty('--journey-color',JOURNEY_COLORS[index%JOURNEY_COLORS.length]);
+  const cover=document.createElement('div');cover.className='journey-cover';cover.innerHTML=svgJourney(name,index);
+  const copy=document.createElement('div');copy.className='journey-copy';
+  const heading=document.createElement('h3');heading.textContent=name;
+  const meta=document.createElement('p');meta.textContent=p.stages.length+' etapas · '+p.done+'/'+p.total+' flores colhidas';
+  const bar=document.createElement('div');bar.className='journey-progress';bar.innerHTML='<span></span>';bar.firstChild.style.width=p.pct+'%';
+  const pct=document.createElement('small');pct.textContent=p.complete?'Jornada concluída':p.total?p.pct+'% cultivado':'Adicione etapas e flores pelo Notion';
+  copy.append(heading,meta,bar,pct);
+  const stageList=document.createElement('div');stageList.className='journey-stages';
+  p.stages.forEach((stage,i)=>{const ids=prop(stage,'Flores do Dia')?.relation||[],stageDone=ids.length>0&&ids.every(x=>tasks.find(t=>t.id===x.id)&&select(tasks.find(t=>t.id===x.id),'Status')==='Colhido');const row=document.createElement('div');row.className='journey-stage';row.innerHTML='<span class="stage-index"></span><span class="stage-label"></span><span class="stage-mark"></span>';row.querySelector('.stage-index').textContent=String(i+1).padStart(2,'0');row.querySelector('.stage-label').textContent=recipeTitle(stage);row.querySelector('.stage-mark').textContent=stageDone?'Concluída':'Em cultivo';stageList.append(row)});
+  const toggle=document.createElement('button');toggle.type='button';toggle.className='journey-toggle';toggle.textContent='Ver etapas';toggle.addEventListener('click',()=>{stageList.hidden=!stageList.hidden;toggle.textContent=stageList.hidden?'Ver etapas':'Ocultar etapas'});
+  const actions=document.createElement('div');actions.className='journey-actions';
+  if(p.complete){
+   const claim=document.createElement('button');claim.type='button';claim.className='journey-claim';claim.textContent='Escolher recompensa';claim.disabled=exclusiveRewards.some(r=>select(r,'Status')==='Resgatada'&&(prop(r,'Jornada')?.relation||[]).some(x=>x.id===a.id));
+   claim.addEventListener('click',()=>openExclusiveRewardPicker(a));actions.append(claim);
+  }else{const lock=document.createElement('span');lock.className='journey-locked';lock.textContent='Recompensa bloqueada';actions.append(lock)}
+  card.append(cover,copy,toggle,stageList,actions);grid.append(card);
  });
+ box.append(grid);
+ const rewardSection=document.createElement('section');rewardSection.className='exclusive-reward-section';rewardSection.innerHTML='<div class="exclusive-head"><div><span>BAÚ DO CICLO</span><h3>Recompensas exclusivas</h3><p>Uma escolha por jornada concluída. Cada prêmio só pode ser resgatado uma vez.</p></div><strong></strong></div>';
+ rewardSection.querySelector('strong').textContent=exclusiveRewards.filter(r=>select(r,'Status')==='Disponível').length+' disponíveis';
+ const rewardGrid=document.createElement('div');rewardGrid.className='exclusive-grid';
+ exclusiveRewards.forEach((r,i)=>{
+  const name=title(r,'Recompensa'),colors=['#d9b8a7','#b9a8ce','#a9b69a','#d6c879','#e4b99e','#b7c8d8','#c6a58d','#d8c4e8','#d9b8a7','#b9a8ce','#a9b69a','#d6c879'];
+  const card=document.createElement('article');card.className='exclusive-card'+(select(r,'Status')==='Resgatada'?' redeemed':'');card.style.setProperty('--reward-color',colors[i%colors.length]);
+  const art=document.createElement('div');art.className='exclusive-art';art.innerHTML=rewardIllustration(name);
+  const h=document.createElement('h4');h.textContent=name;
+  const status=document.createElement('small');status.textContent=select(r,'Status')==='Resgatada'?'Escolhida':'Disponível após concluir uma jornada';
+  card.append(art,h,status);rewardGrid.append(card);
+ });
+ rewardSection.append(rewardGrid);box.append(rewardSection);
+}
+function openExclusiveRewardPicker(adventure){
+ const available=exclusiveRewards.filter(r=>select(r,'Status')==='Disponível');
+ if(!available.length){toast('Todas as recompensas exclusivas já foram escolhidas.');return}
+ const options=available.map((r,i)=>(i+1)+'. '+title(r,'Recompensa')).join('\n');
+ const choice=window.prompt('Jornada concluída! Escolha uma recompensa digitando o número:\n\n'+options);
+ if(choice===null)return;
+ const index=Number(choice)-1,reward=available[index];
+ if(!reward){toast('Escolha inválida. Tente novamente.');return}
+ if(!window.confirm('Vincular "'+title(reward,'Recompensa')+'" à jornada "'+title(adventure,'Name')+'"? Esta escolha não poderá ser desfeita.'))return;
+ claimExclusiveReward(reward,adventure);
+}
+async function claimExclusiveReward(reward,adventure){
+ try{
+  await protectedWrite('/write/api/claim-exclusive-reward/'+encodeURIComponent(reward.id),'POST',{adventureId:adventure.id},'claim_exclusive_reward');
+  await refreshData();showView('aventuras');toast('Recompensa exclusiva conquistada!');
+ }catch(error){toast(error.message||'Não foi possível liberar a recompensa.')}
 }
 function renderRituals(){
  const box=document.querySelector('#home-view .columns .panel:nth-child(2)');
@@ -840,9 +958,10 @@ function showView(view){
 async function refreshData(){
   try{
    [tasks,adventures,rituals,xpEntries,recipes]=await Promise.all([load('tasks'),load('adventures'),load('rituals'),load('xp'),load('recipes')]);
-   [rewards,achievements]=await Promise.all([
+   [rewards,achievements,exclusiveRewards]=await Promise.all([
     load('rewards').catch(err=>{console.warn('Feira do Sol indisponível:',err);return []}),
-    load('achievements').catch(err=>{console.warn('Conquistas indisponíveis:',err);return []})
+    load('achievements').catch(err=>{console.warn('Conquistas indisponíveis:',err);return []}),
+    load('exclusive_rewards').catch(err=>{console.warn('Recompensas exclusivas indisponíveis:',err);return []})
    ]);
    renderTasks();renderAdventures();renderRituals();
    document.getElementById('essence-total').textContent=totalXP()+' ES';
@@ -862,8 +981,8 @@ async function refreshData(){
 document.getElementById('navigation').addEventListener('click',e=>{const b=e.target.closest('[data-view]');if(b)showView(b.dataset.view)});
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>showView(b.dataset.go));
 const TURNSTILE_SITEKEY='0x4AAAAAAFva0ZVGmY_UU-4C';
-const turnstileWidgets={create_task:null,toggle_task:null,sync_xp:null,sync_achievements:null,redeem_reward:null,reschedule_overdue:null};
-const turnstilePending={create_task:null,toggle_task:null,sync_xp:null,sync_achievements:null,redeem_reward:null,reschedule_overdue:null};
+const turnstileWidgets={create_task:null,toggle_task:null,sync_xp:null,sync_achievements:null,redeem_reward:null,reschedule_overdue:null,claim_exclusive_reward:null};
+const turnstilePending={create_task:null,toggle_task:null,sync_xp:null,sync_achievements:null,redeem_reward:null,reschedule_overdue:null,claim_exclusive_reward:null};
 const PREVIOUS_STATUS_KEY='herbario-task-status-before-colhido';
 const VALID_TASK_STATUSES=new Set(['Not started','In progress','Abandonado','Done']);
 
