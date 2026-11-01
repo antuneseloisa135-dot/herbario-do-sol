@@ -840,7 +840,7 @@ function rewardIllustration(name){
 }
 function renderHomeAdventures(){
  const box=document.getElementById('adventure-list');if(!box)return;box.innerHTML='';
- if(!adventures.length){box.textContent='Nenhuma jornada cadastrada no Notion.';return}
+ if(!adventures.length){const empty=document.createElement('div');empty.className='empty-state';empty.textContent='Nenhuma jornada cadastrada no Notion no momento. As recompensas exclusivas continuam visíveis abaixo.';box.append(empty)}
  const preview=document.createElement('div');preview.className='home-journey-grid';
  adventures.slice(0,4).forEach((a,index)=>{
   const name=title(a,'Name')||'Jornada sem título',p=journeyProgress(a);
