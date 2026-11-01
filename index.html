@@ -571,6 +571,20 @@ aside{background:#e4eadf!important}
  .reward-action{padding:8px 9px;font-size:9px}
 }
 
+
+/* Clareira: prévia enxuta das jornadas, com uma insígnia ilustrada por caminho */
+.home-journey-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.home-journey-card{display:flex;align-items:center;gap:12px;min-width:0;padding:12px;border-radius:15px;background:#fffaf0;border:1.5px solid #e5dcc7}
+.home-journey-icon{width:58px;height:58px;flex:none;display:grid;place-items:center;border-radius:16px;background:var(--journey-color,#e9eee4);padding:5px}
+.home-journey-icon svg{width:100%;height:100%;display:block}
+.home-journey-copy{flex:1;min-width:0;display:grid;gap:4px}
+.home-journey-copy strong{font:600 13px Lora,serif;line-height:1.3}
+.home-journey-copy small{font-size:10px;color:var(--muted);line-height:1.35}
+.home-journey-progress{height:6px;border-radius:10px;background:#e9e2cf;overflow:hidden;margin:2px 0}
+.home-journey-progress span{display:block;height:100%;background:#a9b69a;border-radius:10px}
+.home-journey-state{color:var(--moss)!important}
+.home-journey-note{font-size:11px;color:var(--muted);text-align:center;margin:12px 0 0}
+@media(max-width:520px){.home-journey-grid{grid-template-columns:minmax(0,1fr)}}
 </style>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" defer></script>
 <link rel="manifest" href="/manifest.webmanifest">
@@ -613,7 +627,7 @@ aside{background:#e4eadf!important}
     <div style="margin-top:19px"><div class="panel-title"><h4>✧ Próxima evolução</h4><small style="font-size:10px;color:var(--muted)">Nível 2 · Broto</small></div><div class="progress"><span id="home-xp-progress"></span></div><small id="home-xp-caption" style="font-size:10px;color:var(--muted)">Carregando sua próxima conquista...</small></div>
    </div>
   </div>
-  <div class="section-head"><div><h3>Jornadas em curso</h3><p>Grandes sonhos, cultivados em pequenas etapas.</p></div><button class="text-btn" data-go="aventuras">Explorar jornadas →</button></div>
+  <div class="section-head"><div><h3>Jornadas em curso</h3><p>Grandes sonhos, cultivados em pequenas etapas.</p></div><button class="text-btn" data-go="aventuras">Ver todas as aventuras →</button></div>
   <div class="panel" id="adventure-list">
    <p class="loading-note" style="font-size:12px;color:var(--muted)">Carregando suas jornadas do Notion...</p>
   </div>
@@ -766,8 +780,27 @@ function rewardIllustration(name){
  };
  return '<svg viewBox="0 0 140 120" aria-hidden="true"><g fill="#fffdf7aa" stroke="#6b604f" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">'+(art[name]||'<circle cx="70" cy="60" r="30"/>')+'</g></svg>';
 }
+function renderHomeAdventures(){
+ const box=document.getElementById('adventure-list');if(!box)return;box.innerHTML='';
+ if(!adventures.length){box.textContent='Nenhuma jornada cadastrada no Notion.';return}
+ const preview=document.createElement('div');preview.className='home-journey-grid';
+ adventures.slice(0,4).forEach((a,index)=>{
+  const name=title(a,'Name')||'Jornada sem título',p=journeyProgress(a);
+  const card=document.createElement('article');card.className='home-journey-card';card.style.setProperty('--journey-color',JOURNEY_COLORS[index%JOURNEY_COLORS.length]);
+  const art=document.createElement('div');art.className='home-journey-icon';art.innerHTML=svgJourney(name,index);
+  const copy=document.createElement('div');copy.className='home-journey-copy';
+  const heading=document.createElement('strong');heading.textContent=name;
+  const detail=document.createElement('small');detail.textContent=p.stages.length+' etapas · '+p.done+'/'+p.total+' flores colhidas';
+  const bar=document.createElement('div');bar.className='home-journey-progress';bar.innerHTML='<span></span>';bar.firstChild.style.width=p.pct+'%';
+  const state=document.createElement('small');state.className='home-journey-state';state.textContent=p.complete?'Jornada concluída':p.total?p.pct+'% cultivado':'Comece adicionando etapas e flores';
+  copy.append(heading,detail,bar,state);card.append(art,copy);preview.append(card);
+ });
+ box.append(preview);
+ if(adventures.length>4){const note=document.createElement('p');note.className='home-journey-note';note.textContent='Mais '+(adventures.length-4)+' aventuras esperam por você.';box.append(note)}
+}
 function renderAdventures(target){
- const box=target||document.getElementById('adventure-list');box.innerHTML='';
+ if(!target){renderHomeAdventures();return}
+ const box=target;box.innerHTML='';
  if(!adventures.length){box.textContent='Nenhuma jornada cadastrada no Notion.';return}
  const intro=document.createElement('div');intro.className='journey-intro';intro.innerHTML='<div><span>O CICLO DE TRÊS MESES</span><h3>Doze caminhos, uma nova versão de você.</h3><p>Cada jornada é construída por etapas e flores. Quando todas forem colhidas, você libera uma recompensa exclusiva.</p></div><div class="journey-count"></div>';intro.querySelector('.journey-count').textContent=adventures.length+' / 12 jornadas';box.append(intro);
  const grid=document.createElement('div');grid.className='journey-grid';
