@@ -611,6 +611,7 @@ aside{background:#e4eadf!important}
  <div class="modal-actions"><button class="secondary" id="cancel">Cancelar</button><button class="primary" id="save">Semear tarefa</button></div>
 </div></div>
 <div id="turnstile-toggle_task" style="position:fixed;bottom:64px;left:50%;transform:translateX(-50%);z-index:1200" aria-live="polite"></div>
+<div id="turnstile-reschedule_overdue" style="position:fixed;bottom:64px;left:50%;transform:translateX(-50%);z-index:1200" aria-live="polite"></div>
 <div id="turnstile-sync_xp" style="position:fixed;bottom:64px;left:50%;transform:translateX(-50%);z-index:1200" aria-live="polite"></div>
 <div id="turnstile-sync_achievements" style="position:fixed;bottom:64px;left:50%;transform:translateX(-50%);z-index:1200" aria-live="polite"></div>
 <div id="turnstile-redeem_reward" style="position:fixed;bottom:64px;left:50%;transform:translateX(-50%);z-index:1200" aria-live="polite"></div>
@@ -865,8 +866,8 @@ async function refreshData(){
 document.getElementById('navigation').addEventListener('click',e=>{const b=e.target.closest('[data-view]');if(b)showView(b.dataset.view)});
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>showView(b.dataset.go));
 const TURNSTILE_SITEKEY='0x4AAAAAAFva0ZVGmY_UU-4C';
-const turnstileWidgets={create_task:null,toggle_task:null,sync_xp:null,sync_achievements:null,redeem_reward:null};
-const turnstilePending={create_task:null,toggle_task:null,sync_xp:null,sync_achievements:null,redeem_reward:null};
+const turnstileWidgets={create_task:null,toggle_task:null,sync_xp:null,sync_achievements:null,redeem_reward:null,reschedule_overdue:null};
+const turnstilePending={create_task:null,toggle_task:null,sync_xp:null,sync_achievements:null,redeem_reward:null,reschedule_overdue:null};
 const PREVIOUS_STATUS_KEY='herbario-task-status-before-colhido';
 const VALID_TASK_STATUSES=new Set(['Not started','In progress','Abandonado','Done']);
 
@@ -941,6 +942,20 @@ async function protectedWrite(path,method,properties,action){
   if(!response.ok||!result?.ok)throw new Error(result?.error||'Não foi possível salvar no Notion.');
   return result;
  }finally{resetTurnstile(action)}
+}
+let overdueCheckDone=false;
+async function rescheduleOverdueTasksOnOpen(){
+ if(overdueCheckDone)return;
+ overdueCheckDone=true;
+ try{
+  const result=await protectedWrite('/write/api/reschedule-overdue','POST',{},'reschedule_overdue');
+  const count=result?.result?.rescheduled||0;
+  if(count)toast(count===1?'Uma tarefa foi reagendada para o próximo dia útil.':count+' tarefas foram reagendadas para o próximo dia útil.');
+ }catch(error){
+  overdueCheckDone=false;
+  console.error('Não foi possível reagendar tarefas pendentes:',error);
+  toast('Não foi possível verificar o reagendamento automático. Tente atualizar o Herbário.');
+ }
 }
 function readPreviousTaskStatus(taskId){
  try{const saved=JSON.parse(localStorage.getItem(PREVIOUS_STATUS_KEY)||'{}');const status=saved[taskId];return VALID_TASK_STATUSES.has(status)?status:'Not started'}
@@ -1028,7 +1043,7 @@ async function createTask(){
 function updateGreeting(){const hour=new Date().getHours();const greeting=hour<12?'Bom dia':hour<18?'Boa tarde':'Boa noite';document.getElementById('greeting').textContent=greeting+', Guardiã.';const messages=['Que hoje tenha espaço para florescer.','Um pequeno passo já faz diferença.','Cultive o que importa, no seu ritmo.','Hoje é um bom dia para recomeçar.','Cuide do essencial, sem pressa.','A constância faz a vida florescer.','Que seu dia seja leve e gentil.'];document.getElementById('greeting-message').textContent=messages[Math.floor(Date.now()/86400000)%messages.length];}
 updateGreeting();
 document.getElementById('today').textContent=new Intl.DateTimeFormat('pt-BR',{weekday:'long',day:'2-digit',month:'long'}).format(new Date());
-renderTasks();refreshData();
+renderTasks();rescheduleOverdueTasksOnOpen().finally(refreshData);
 </script>
 </body>
 </html>
