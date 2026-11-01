@@ -252,6 +252,7 @@ async function claimExclusiveReward(env, rewardId, adventureId) {
   if(!journey){const e=new Error("Jornada não encontrada.");e.status=404;throw e;}
   const alreadyUsed=rewards.some(r=>normId(r.id)!==normId(rewardId)&&((r.properties?.["Jornada"]?.relation||[]).some(x=>normId(x.id)===normId(adventureId))));
   if(alreadyUsed){const e=new Error("Esta jornada já liberou uma recompensa exclusiva.");e.status=409;throw e;}
+  await notionWrite(env,"pages/"+adventureId,"PATCH",{properties:{"Status":{status:{name:"Done"}}}});
   await notionWrite(env,"pages/"+rewardId,"PATCH",{properties:{
     "Status":{select:{name:"Resgatada"}},
     "Jornada":{relation:[{id:adventureId}]},
