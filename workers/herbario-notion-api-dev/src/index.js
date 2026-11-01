@@ -5,7 +5,8 @@ const SOURCES = {
   xp: "a66ec5a7-5475-4bba-ab4f-a185f94826fa",
   recipes: "65b7cffb-e2ee-4fa7-be45-f94132ecd273",
   achievements: "bf7b4e1b-dcbc-4589-8cae-975d84743233",
-  rewards: "c18976a8-043a-4bbc-a3ea-4c9ff7e00765"
+  rewards: "c18976a8-043a-4bbc-a3ea-4c9ff7e00765",
+  exclusive_rewards: "4a7ab75d-bf5b-4903-93d1-ebdac369ce28"
 };
 const SITE_ORIGIN = "https://herbario-do-sol.pages.dev";
 const NOTION_VERSION = "2025-09-03";
@@ -212,6 +213,52 @@ async function syncAchievementUnlocks(env) {
   }
   return {checked:achievements.length,unlocked,completedTasks:done.length,earnedXP:earned};
 }
+async function evaluateAdventureCompletion(env, adventureId) {
+  if (!/^[a-f0-9-]{32,36}$/i.test(adventureId)) { const e=new Error("ID da jornada inválido.");e.status=400;throw e; }
+  const [adventure, recipes, tasks] = await Promise.all([
+    notionRead(env,"pages/"+adventureId),
+    getPages(env,SOURCES.recipes),
+    getPages(env,SOURCES.tasks)
+  ]);
+  if (normId(adventure.parent?.data_source_id||"") !== normId(SOURCES.adventures)) { const e=new Error("Jornada não encontrada.");e.status=404;throw e; }
+  const relatedRecipes = adventure.properties?.["Receitas e Feitiços"]?.relation || [];
+  if (!relatedRecipes.length) return { complete:false, reason:"Adicione etapas à jornada antes de concluí-la.", stages:0, tasks:0 };
+  const recipeIds = new Set(relatedRecipes.map(x=>normId(x.id)));
+  const journeyRecipes = recipes.filter(r=>recipeIds.has(normId(r.id)));
+  if (journeyRecipes.length !== relatedRecipes.length) return { complete:false, reason:"Não foi possível carregar todas as etapas vinculadas.", stages:journeyRecipes.length, tasks:0 };
+  let totalTasks=0, harvestedTasks=0;
+  for (const recipe of journeyRecipes) {
+    const linked = recipe.properties?.["Flores do Dia"]?.relation || [];
+    if (!linked.length) return { complete:false, reason:"Cada etapa precisa ter ao menos uma flor vinculada.", stages:journeyRecipes.length, tasks:totalTasks };
+    const linkedIds = new Set(linked.map(x=>normId(x.id)));
+    const stageTasks = tasks.filter(t=>linkedIds.has(normId(t.id)));
+    if (stageTasks.length !== linked.length) return { complete:false, reason:"Não foi possível carregar todas as flores de uma etapa.", stages:journeyRecipes.length, tasks:totalTasks };
+    totalTasks += stageTasks.length;
+    harvestedTasks += stageTasks.filter(t=>getSelect(t,"Status")==="Colhido").length;
+    if (stageTasks.some(t=>getSelect(t,"Status")!=="Colhido")) return { complete:false, reason:"Ainda existem flores que precisam ser colhidas.", stages:journeyRecipes.length, tasks:totalTasks, harvestedTasks };
+  }
+  return { complete:true, stages:journeyRecipes.length, tasks:totalTasks, harvestedTasks };
+}
+async function claimExclusiveReward(env, rewardId, adventureId) {
+  if (!/^[a-f0-9-]{32,36}$/i.test(rewardId)) { const e=new Error("ID da recompensa inválido.");e.status=400;throw e; }
+  const reward=await notionRead(env,"pages/"+rewardId);
+  if (normId(reward.parent?.data_source_id||"") !== normId(SOURCES.exclusive_rewards)) { const e=new Error("Esta recompensa não pertence ao Baú das Jornadas.");e.status=404;throw e; }
+  const status=getSelect(reward,"Status");
+  if(status!=="Disponível"){const e=new Error("Esta recompensa já foi escolhida.");e.status=409;throw e;}
+  const check=await evaluateAdventureCompletion(env,adventureId);
+  if(!check.complete){const e=new Error(check.reason||"Conclua todas as etapas e flores antes de escolher uma recompensa.");e.status=409;throw e;}
+  const [adventures,rewards]=await Promise.all([getPages(env,SOURCES.adventures),getPages(env,SOURCES.exclusive_rewards)]);
+  const journey=adventures.find(a=>normId(a.id)===normId(adventureId));
+  if(!journey){const e=new Error("Jornada não encontrada.");e.status=404;throw e;}
+  const alreadyUsed=rewards.some(r=>normId(r.id)!==normId(rewardId)&&((r.properties?.["Jornada"]?.relation||[]).some(x=>normId(x.id)===normId(adventureId))));
+  if(alreadyUsed){const e=new Error("Esta jornada já liberou uma recompensa exclusiva.");e.status=409;throw e;}
+  await notionWrite(env,"pages/"+rewardId,"PATCH",{properties:{
+    "Status":{select:{name:"Resgatada"}},
+    "Jornada":{relation:[{id:adventureId}]},
+    "Data do resgate":{date:{start:today()}}
+  }});
+  return {reward:getTitle(reward,"Recompensa"),adventure:getTitle(journey,"Name"),...check};
+}
 async function redeemReward(env,rewardId) {
   if (!/^[a-f0-9-]{32,36}$/i.test(rewardId)) { const e=new Error("ID da recompensa inválido.");e.status=400;throw e; }
   const reward=await notionRead(env,"pages/"+rewardId);
@@ -292,6 +339,7 @@ export default {
         else if (request.method === "POST" && routePath === "/api/reschedule-overdue") expectedAction = "reschedule_overdue";
         else if (request.method === "POST" && routePath === "/api/sync-achievements") expectedAction = "sync_achievements";
         else if (request.method === "POST" && routePath.startsWith("/api/redeem-reward/")) expectedAction = "redeem_reward";
+        else if (request.method === "POST" && routePath.startsWith("/api/claim-exclusive-reward/")) expectedAction = "claim_exclusive_reward";
         if (!await requireWriteAccess(request, env, expectedAction, payload?.turnstileToken)) {
           return json({ ok: false, error: "Verificação de segurança não autorizada. Tente novamente." }, 403);
         }
@@ -318,6 +366,10 @@ export default {
         if (routePath === "/api/sync-achievements" && request.method === "POST") {
           if (!achievementSyncPromise) achievementSyncPromise = syncAchievementUnlocks(env).finally(() => { achievementSyncPromise = null; });
           return json({ ok: true, result: await achievementSyncPromise });
+        }
+        if (routePath.startsWith("/api/claim-exclusive-reward/") && request.method === "POST") {
+          const rewardId = routePath.slice("/api/claim-exclusive-reward/".length);
+          return json({ ok: true, result: await claimExclusiveReward(env, rewardId, payload?.adventureId) });
         }
         if (routePath.startsWith("/api/redeem-reward/") && request.method === "POST") {
           const rewardId = routePath.slice("/api/redeem-reward/".length);
