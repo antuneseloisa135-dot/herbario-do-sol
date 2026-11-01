@@ -674,6 +674,7 @@ aside{background:#e4eadf!important}
 
 const API='https://herbario-notion-api-dev.antuneseloisa135.workers.dev';
 let tasks=[], adventures=[], rituals=[], xpEntries=[], recipes=[], rewards=[], achievements=[], exclusiveRewards=[];
+let exclusiveRewardsLoadFailed=false;
 let shopSection='vitrine';
 let pendingReward=null;
 const localToday=()=>{const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')};
@@ -859,7 +860,7 @@ function renderHomeAdventures(){
 function renderAdventures(target){
  if(!target){renderHomeAdventures();return}
  const box=target;box.innerHTML='';
- if(!adventures.length){box.textContent='Nenhuma jornada cadastrada no Notion.';return}
+ if(!adventures.length){const empty=document.createElement('div');empty.className='empty-state';empty.textContent='Nenhuma jornada cadastrada no Notion no momento. O Baú do Ciclo permanece disponível abaixo.';box.append(empty)}else{
  const intro=document.createElement('div');intro.className='journey-intro';intro.innerHTML='<div><span>O CICLO DE TRÊS MESES</span><h3>Doze caminhos, uma nova versão de você.</h3><p>Cada jornada é construída por etapas e flores. Quando todas forem colhidas, você libera uma recompensa exclusiva.</p></div><div class="journey-count"></div>';intro.querySelector('.journey-count').textContent=adventures.length+' / 12 jornadas';box.append(intro);
  const grid=document.createElement('div');grid.className='journey-grid';
  adventures.forEach((a,index)=>{
@@ -892,9 +893,11 @@ function renderAdventures(target){
   card.append(cover,copy,toggle,stageList,actions);grid.append(card);
  });
  box.append(grid);
+ }
  const rewardSection=document.createElement('section');rewardSection.className='exclusive-reward-section';rewardSection.innerHTML='<div class="exclusive-head"><div><span>BAÚ DO CICLO</span><h3>Recompensas exclusivas</h3><p>Uma escolha por jornada concluída. Cada prêmio só pode ser resgatado uma vez.</p></div><strong></strong></div>';
  rewardSection.querySelector('strong').textContent=exclusiveRewards.filter(r=>select(r,'Status')==='Disponível').length+' disponíveis';
  const rewardGrid=document.createElement('div');rewardGrid.className='exclusive-grid';
+ if(!exclusiveRewards.length){const empty=document.createElement('div');empty.className='empty-state';empty.textContent=exclusiveRewardsLoadFailed?'Não foi possível carregar as recompensas exclusivas agora. Atualize a página para tentar novamente.':'Nenhuma recompensa exclusiva cadastrada no Baú do Ciclo.';rewardGrid.append(empty)}
  exclusiveRewards.forEach((r,i)=>{
   const name=title(r,'Recompensa'),colors=['#d9b8a7','#b9a8ce','#a9b69a','#d6c879','#e4b99e','#b7c8d8','#c6a58d','#d8c4e8','#d9b8a7','#b9a8ce','#a9b69a','#d6c879'];
   const card=document.createElement('article');card.className='exclusive-card'+(select(r,'Status')==='Resgatada'?' redeemed':'');card.style.setProperty('--reward-color',colors[i%colors.length]);
@@ -1093,7 +1096,7 @@ async function refreshData(){
    [rewards,achievements,exclusiveRewards]=await Promise.all([
     load('rewards').catch(err=>{console.warn('Feira do Sol indisponível:',err);return []}),
     load('achievements').catch(err=>{console.warn('Conquistas indisponíveis:',err);return []}),
-    load('exclusive_rewards').catch(err=>{console.warn('Recompensas exclusivas indisponíveis:',err);return []})
+    load('exclusive_rewards').then(data=>{exclusiveRewardsLoadFailed=false;return data}).catch(err=>{exclusiveRewardsLoadFailed=true;console.warn('Recompensas exclusivas indisponíveis:',err);return []})
    ]);
    renderTasks();renderAdventures();renderRituals();
    document.getElementById('essence-total').textContent=totalXP()+' ES';
