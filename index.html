@@ -391,6 +391,66 @@ aside{background:#e9eee4!important}
  .columns{grid-template-columns:minmax(0,1.3fr) minmax(260px,.9fr);gap:15px}
 }
 @media(min-width:1100px){.shell{grid-template-columns:248px minmax(0,1fr)}aside{padding:28px 18px}.columns{grid-template-columns:1.35fr .85fr}}
+
+/* Direção de arte final · botânica mística, contraste e cartões sólidos */
+:root{
+ --linen:#f5f0e8;--paper:#ebe4d7;--earth:#403d39;--moss:#526b50;
+ --sage:#c5d1bb;--gold:#a77b35;--sun:#ead58b;--white:#fffdf9;
+ --muted:#716b63;--lav:#c9bddb;--pink:#dfc1b5;
+}
+body{background:#f5f0e8!important;color:#403d39!important}
+aside{background:#e4eadf!important}
+.brand h1{color:#425a43!important}
+.nav-btn{color:#49483f!important}
+.nav-btn.active{background:#fffdf9!important;border-color:#cbd7c4!important;color:#3f6044!important}
+.nav-btn.active:before{color:#a77b35!important}
+.hero{background:linear-gradient(120deg,#dce7d7,#e9e4ef)!important;border:1px solid #cbd7c4!important;border-radius:16px!important;color:#354b39!important}
+.hero h3,.hero p{color:#354b39!important}
+.hero:before{display:none!important;content:none!important}
+.hero:after{content:"✧  ✦  ❧"!important;color:#a77b35!important;right:7%;top:12px;font-size:22px;letter-spacing:.28em}
+.hero-mascot{filter:drop-shadow(0 5px 5px #344b3b20)!important}
+.stat,.panel,.metric,.reward-card,.shop-summary{
+ border:1px solid #ded7ca!important;box-shadow:0 3px 0 #e8e0d4!important;
+ border-radius:12px!important;overflow:visible!important
+}
+.stat:after,.panel:after{display:none!important;content:none!important}
+.stat{background:#fffdf9!important}
+.stat:nth-child(2){background:#f0ecf5!important}
+.stat:nth-child(3){background:#e8eee4!important}
+.stat:nth-child(4){background:#f5e9e4!important}
+.stat strong{color:#425e46!important}
+.panel{background:#fffdf9!important}
+.panel-title h4,.section-head h3,.view-card h4{color:#48463f!important}
+.section-head h3:before{background:#a77b35!important}
+.tag{background:#e7eee2!important;color:#405d43!important;border:1px solid #d2ddca!important}
+.ritual-icon{background:#e7eee2!important;border:1px solid #cbd8c5!important;box-shadow:none!important}
+.adventure-icon{background:#f1e9f3!important;border:1px solid #d9cce0!important;box-shadow:none!important}
+.task{border-bottom:1px solid #ece6dc!important;border-radius:0!important}
+.task:hover,.view-card:hover{background:#f7f3eb!important}
+.check{border-radius:50%!important;background:#fffdf9!important;border:2px solid #9eaf94!important}
+.check.done{background:#527650!important;border-color:#527650!important}
+.task.done strong{color:#77766d!important}
+.progress{background:#e8e2d8!important;border:0!important}
+.progress span{background:linear-gradient(90deg,#79956f,#b18a48)!important}
+.metric{background:#eaf0e6!important}
+.adventure-detail{background:#f2eff4!important;border-left:3px solid #b8a4c9!important;border-radius:0!important}
+.view-card{border-bottom:1px solid #e9e2d8!important;border-radius:0!important}
+.view-filter span{background:#f0eaf3!important;color:#5b4d68!important}
+.stage-status{background:#e6eee2!important;color:#405d43!important}
+.shop-summary{background:#f2e9c9!important}
+.reward-card{background:#f4eff5!important}
+.reward-art{background:#e7deef!important;color:#68577c!important;border-radius:10px!important}
+.footer{color:#6f7566!important;padding-top:26px!important}
+.footer:before{content:"❧  ✧  ♧  ✧  ❧"!important;color:#71866a!important;font-size:21px!important;letter-spacing:.22em}
+.footer:after{content:"🌿  ☽  🧪  ✦  🌱";display:block;margin-top:9px;color:#a77b35;font:16px Lora,serif;letter-spacing:.25em;opacity:.8}
+.section-head h3:after{content:"✧";font:13px Lora,serif;color:#a77b35;margin-left:2px}
+@media(max-width:699px){
+ aside{background:#e4eadff2!important}
+ .hero{background:linear-gradient(120deg,#dce7d7,#e9e4ef)!important}
+ .hero:after{right:8px;top:8px;font-size:17px}
+ .stat,.panel{border-radius:11px!important}
+}
+
 </style>
 </head>
 <body>
@@ -411,7 +471,7 @@ aside{background:#e9eee4!important}
 <main>
  <div class="topbar"><div><div class="eyebrow">Um pequeno universo para cultivar a própria vida</div><h2 id="page-title">A Clareira do Dia</h2><div class="subtitle" id="page-subtitle">Pequenos passos também fazem florescer grandes mudanças.</div></div><div class="date-pill" id="today"></div></div>
  <section id="home-view">
-  <div class="hero"><div class="hero-copy"><h3 id="greeting">Bom dia, Guardião.</h3><p id="greeting-message">Que hoje tenha espaço para florescer.</p></div><svg class="ghost-mascot hero-mascot" viewBox="0 0 120 140" role="img" aria-label="Fantasminha guardião do jardim"><path class="ghost-body" d="M18 116V62C18 31 37 10 61 10s43 21 43 52v54c-8-8-15-8-22 0-7-8-15-8-22 0-7-8-15-8-22 0-7-8-13-8-20 0Z"/><ellipse class="ghost-eye" cx="47" cy="62" rx="4" ry="6"/><ellipse class="ghost-eye" cx="76" cy="62" rx="4" ry="6"/><ellipse class="ghost-cheek" cx="35" cy="76" rx="7" ry="4"/><ellipse class="ghost-cheek" cx="88" cy="76" rx="7" ry="4"/><path d="M54 79q7 7 14 0" fill="none" stroke="#554c45" stroke-width="2.5" stroke-linecap="round"/><path class="ghost-leaf" d="M69 15q-2-13 12-13 0 12-12 13Zm-2 1q-13-8-19 1 10 7 19-1Z"/></svg></div>
+  <div class="hero"><div class="hero-copy"><h3 id="greeting">Bom dia, Guardiã.</h3><p id="greeting-message">Que hoje tenha espaço para florescer.</p></div><svg class="ghost-mascot hero-mascot" viewBox="0 0 120 140" role="img" aria-label="Fantasminha guardião do jardim"><path class="ghost-body" d="M18 116V62C18 31 37 10 61 10s43 21 43 52v54c-8-8-15-8-22 0-7-8-15-8-22 0-7-8-15-8-22 0-7-8-13-8-20 0Z"/><ellipse class="ghost-eye" cx="47" cy="62" rx="4" ry="6"/><ellipse class="ghost-eye" cx="76" cy="62" rx="4" ry="6"/><ellipse class="ghost-cheek" cx="35" cy="76" rx="7" ry="4"/><ellipse class="ghost-cheek" cx="88" cy="76" rx="7" ry="4"/><path d="M54 79q7 7 14 0" fill="none" stroke="#554c45" stroke-width="2.5" stroke-linecap="round"/><path class="ghost-leaf" d="M69 15q-2-13 12-13 0 12-12 13Zm-2 1q-13-8-19 1 10 7 19-1Z"/></svg></div>
   <div class="stats">
    <div class="stat"><small>Flores de hoje</small><strong id="remaining">3</strong><em>tarefas em aberto</em></div>
    <div class="stat"><small>Essência Solar</small><strong id="essence-total">—</strong><em id="essence-caption">carregando do Notion</em></div>
@@ -450,7 +510,7 @@ const recipeTitle=p=>{for(const [k,v] of Object.entries(p.properties||{})){if(v.
 const pages={
  aventuras:["🧭","Jornadas em curso","Projetos que ganham vida quando são divididos em etapas.","Suas aventuras",[]],
  rituais:["🌱","Pequenos Cultivos","Cuidados que, repetidos com carinho, criam raízes.","Seus cultivos",[]],
- personagem:["◎","Guardião","Acompanhe sua evolução, sua Essência Solar e os caminhos que já percorreu.","Seu retrato no Herbário",["Nível e atributos carregados do Notion."]],
+ personagem:["◎","Guardiã","Acompanhe sua evolução, sua Essência Solar e os caminhos que já percorreu.","Seu retrato no Herbário",["Nível e atributos carregados do Notion."]],
  conquistas:["🏆","Coleção de conquistas","Cada avanço merece ser reconhecido.","Conquistas",["As conquistas serão conectadas ao Notion em uma próxima etapa."]],
  pergaminho:["📜","Pergaminho","Seu espaço de referências, ideias e conhecimentos.","Biblioteca",["Estudos e cursos","Referências importantes","Anotações e ideias para revisitar"]],
  loja:["♧","Feira do Sol","Pequenas recompensas para celebrar o caminho percorrido.","Recompensas disponíveis",[]]
@@ -558,7 +618,7 @@ async function refreshData(){
 document.getElementById('navigation').addEventListener('click',e=>{const b=e.target.closest('[data-view]');if(b)showView(b.dataset.view)});
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>showView(b.dataset.go));
 document.getElementById('add-task').onclick=()=>toast('A criação de tarefas será habilitada na próxima etapa.');
-function updateGreeting(){const hour=new Date().getHours();const greeting=hour<12?'Bom dia':hour<18?'Boa tarde':'Boa noite';document.getElementById('greeting').textContent=greeting+', Guardião.';const messages=['Que hoje tenha espaço para florescer.','Um pequeno passo já faz diferença.','Cultive o que importa, no seu ritmo.','Hoje é um bom dia para recomeçar.','Cuide do essencial, sem pressa.','A constância faz a vida florescer.','Que seu dia seja leve e gentil.'];document.getElementById('greeting-message').textContent=messages[Math.floor(Date.now()/86400000)%messages.length];}
+function updateGreeting(){const hour=new Date().getHours();const greeting=hour<12?'Bom dia':hour<18?'Boa tarde':'Boa noite';document.getElementById('greeting').textContent=greeting+', Guardiã.';const messages=['Que hoje tenha espaço para florescer.','Um pequeno passo já faz diferença.','Cultive o que importa, no seu ritmo.','Hoje é um bom dia para recomeçar.','Cuide do essencial, sem pressa.','A constância faz a vida florescer.','Que seu dia seja leve e gentil.'];document.getElementById('greeting-message').textContent=messages[Math.floor(Date.now()/86400000)%messages.length];}
 updateGreeting();
 document.getElementById('today').textContent=new Intl.DateTimeFormat('pt-BR',{weekday:'long',day:'2-digit',month:'long'}).format(new Date());
 renderTasks();refreshData();
