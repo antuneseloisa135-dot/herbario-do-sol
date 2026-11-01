@@ -475,6 +475,12 @@ aside{background:#e4eadf!important}
 }
 
 </style>
+<style>
+#task-list .check{padding:0;display:grid;place-items:center;cursor:pointer}
+#task-list .check:disabled{opacity:.55;cursor:wait}
+.turnstile-slot{display:flex;justify-content:center}
+</style>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" defer></script>
 </head>
 <body>
 <div class="shell">
@@ -522,7 +528,8 @@ aside{background:#e4eadf!important}
  <div class="footer">Feito de pequenos começos, cuidado e luz. ✦</div>
 </main>
 </div>
-<div class="modal-backdrop" id="modal"><div class="modal"><h3>Semear uma nova tarefa</h3><label for="task-name" style="font-size:12px;color:var(--muted)">Nome da tarefa</label><input id="task-name" placeholder="O que você deseja cultivar hoje?"><div class="modal-actions"><button class="secondary" id="cancel">Cancelar</button><button class="primary" id="save">Semear tarefa</button></div></div></div>
+<div class="modal-backdrop" id="modal"><div class="modal"><h3>Semear uma nova tarefa</h3><label for="task-name" style="font-size:12px;color:var(--muted)">Nome da tarefa</label><input id="task-name" maxlength="2000" placeholder="O que você deseja cultivar hoje?"><div id="turnstile-create_task" class="turnstile-slot" aria-live="polite"></div><div class="modal-actions"><button class="secondary" id="cancel">Cancelar</button><button class="primary" id="save">Semear tarefa</button></div></div></div>
+<div id="turnstile-toggle_task" style="position:fixed;bottom:64px;left:50%;transform:translateX(-50%);z-index:1200" aria-live="polite"></div>
 <div class="toast" id="toast"></div>
 <script>
 
@@ -567,7 +574,17 @@ function renderTasks(){
  const open=todays.filter(t=>!['Done','Colhido'].includes(select(t,'Status')));
  document.getElementById('remaining').textContent=open.length;
  if(!todays.length){box.innerHTML='<div class="empty-state"><span>Nenhuma flor agendada para hoje. Que tal aproveitar o espaço para respirar ou planejar o próximo passo?</span></div>';return}
- todays.forEach(t=>{const status=select(t,'Status'),done=status==='Colhido',name=title(t,'Tarefa')||'Tarefa sem título',tags=multi(t,'Tags').join(' · ');const row=document.createElement('div');row.className='task'+(done?' done':'');row.innerHTML='<span class="check '+(done?'done':'')+'" aria-label="'+(done?'Concluída':'Pendente')+'"></span><div class="task-info"><strong></strong><small></small></div><span class="xp"></span>';row.querySelector('strong').textContent=name;row.querySelector('small').textContent=[tags,status].filter(Boolean).join(' · ')||'Sem categoria';row.querySelector('.xp').textContent='+'+number(t,'XP')+' ES';box.append(row)});
+ todays.forEach(t=>{
+  const status=select(t,'Status'),done=status==='Colhido',name=title(t,'Tarefa')||'Tarefa sem título',tags=multi(t,'Tags').join(' · ');
+  const row=document.createElement('div');row.className='task'+(done?' done':'');
+  row.innerHTML='<button type="button" class="check '+(done?'done':'')+'" aria-label="'+(done?'Restaurar status anterior':'Marcar como colhida')+'" title="'+(done?'Restaurar status anterior':'Marcar como colhida')+'"></button><div class="task-info"><strong></strong><small></small></div><span class="xp"></span>';
+  row.querySelector('strong').textContent=name;
+  row.querySelector('small').textContent=[tags,status].filter(Boolean).join(' · ')||'Sem categoria';
+  row.querySelector('.xp').textContent='+'+number(t,'XP')+' ES';
+  const check=row.querySelector('.check');
+  check.addEventListener('click',()=>toggleTask(t,check));
+  box.append(row);
+ });
 }
 function renderAdventures(target){
  const box=target||document.getElementById('adventure-list');box.innerHTML='';
@@ -640,7 +657,113 @@ async function refreshData(){
 }
 document.getElementById('navigation').addEventListener('click',e=>{const b=e.target.closest('[data-view]');if(b)showView(b.dataset.view)});
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>showView(b.dataset.go));
-document.getElementById('add-task').onclick=()=>toast('A criação de tarefas será habilitada na próxima etapa.');
+const TURNSTILE_SITEKEY='0x4AAAAAAFva0ZVGmY_UU-4C';
+const turnstileWidgets={create_task:null,toggle_task:null};
+const turnstilePending={create_task:null,toggle_task:null};
+const PREVIOUS_STATUS_KEY='herbario-task-status-before-colhido';
+const VALID_TASK_STATUSES=new Set(['Not started','In progress','Abandonado','Done']);
+
+function waitForTurnstile(){
+ if(window.turnstile)return Promise.resolve();
+ return new Promise((resolve,reject)=>{
+  const started=Date.now();
+  const check=()=>{
+   if(window.turnstile)return resolve();
+   if(Date.now()-started>12000)return reject(new Error('A verificação de segurança não carregou. Atualize a página e tente novamente.'));
+   setTimeout(check,100);
+  };
+  check();
+ });
+}
+function resetTurnstile(action){
+ const widgetId=turnstileWidgets[action];
+ if(widgetId&&window.turnstile)window.turnstile.reset(widgetId);
+}
+function failTurnstile(action,message){
+ const pending=turnstilePending[action];
+ if(pending){turnstilePending[action]=null;pending.reject(new Error(message))}
+ resetTurnstile(action);
+}
+async function getTurnstileToken(action){
+ await waitForTurnstile();
+ let widgetId=turnstileWidgets[action];
+ if(!widgetId){
+  widgetId=window.turnstile.render('#turnstile-'+action,{
+   sitekey:TURNSTILE_SITEKEY,action,execution:'execute',appearance:'interaction-only',
+   callback:token=>{const pending=turnstilePending[action];if(pending){turnstilePending[action]=null;pending.resolve(token)}},
+   'error-callback':()=>failTurnstile(action,'A verificação de segurança falhou. Tente novamente.'),
+   'expired-callback':()=>failTurnstile(action,'A verificação expirou. Tente novamente.'),
+   'timeout-callback':()=>failTurnstile(action,'A verificação demorou demais. Tente novamente.')
+  });
+  turnstileWidgets[action]=widgetId;
+ }
+ return new Promise((resolve,reject)=>{
+  turnstilePending[action]={resolve,reject};
+  try{window.turnstile.execute('#turnstile-'+action)}
+  catch(error){turnstilePending[action]=null;reject(error)}
+ });
+}
+async function protectedWrite(path,method,properties,action){
+ const token=await getTurnstileToken(action);
+ try{
+  const response=await fetch(API+path,{method,headers:{'Content-Type':'application/json'},body:JSON.stringify({properties,turnstileToken:token})});
+  const result=await response.json().catch(()=>null);
+  if(!response.ok||!result?.ok)throw new Error(result?.error||'Não foi possível salvar no Notion.');
+  return result;
+ }finally{resetTurnstile(action)}
+}
+function readPreviousTaskStatus(taskId){
+ try{const saved=JSON.parse(localStorage.getItem(PREVIOUS_STATUS_KEY)||'{}');const status=saved[taskId];return VALID_TASK_STATUSES.has(status)?status:'Not started'}
+ catch{return 'Not started'}
+}
+function writePreviousTaskStatus(taskId,status){
+ try{const saved=JSON.parse(localStorage.getItem(PREVIOUS_STATUS_KEY)||'{}');saved[taskId]=status;localStorage.setItem(PREVIOUS_STATUS_KEY,JSON.stringify(saved))}
+ catch{console.warn('Não foi possível guardar o status anterior neste navegador.')}
+}
+function clearPreviousTaskStatus(taskId){
+ try{const saved=JSON.parse(localStorage.getItem(PREVIOUS_STATUS_KEY)||'{}');delete saved[taskId];localStorage.setItem(PREVIOUS_STATUS_KEY,JSON.stringify(saved))}
+ catch{}
+}
+async function toggleTask(task,button){
+ if(button.disabled)return;
+ const currentStatus=select(task,'Status')||'Not started';
+ const isHarvested=currentStatus==='Colhido';
+ const nextStatus=isHarvested?readPreviousTaskStatus(task.id):currentStatus;
+ button.disabled=true;
+ try{
+  await protectedWrite('/write/api/tasks/'+encodeURIComponent(task.id),'PATCH',{Status:{status:{name:isHarvested?nextStatus:'Colhido'}}},'toggle_task');
+  if(isHarvested)clearPreviousTaskStatus(task.id);else writePreviousTaskStatus(task.id,currentStatus);
+  toast(isHarvested?'Status anterior restaurado.':'Tarefa colhida! Essência Solar atualizada.');
+  await refreshData();
+ }catch(error){
+  console.error(error);button.disabled=false;toast(error.message||'Não foi possível atualizar a tarefa.');
+ }
+}
+const taskModal=document.getElementById('modal');
+const taskNameInput=document.getElementById('task-name');
+const saveTaskButton=document.getElementById('save');
+function closeTaskModal(){taskModal.classList.remove('open')}
+document.getElementById('add-task').onclick=()=>{taskModal.classList.add('open');taskNameInput.focus()};
+document.getElementById('cancel').onclick=closeTaskModal;
+saveTaskButton.onclick=createTask;
+taskNameInput.addEventListener('keydown',event=>{if(event.key==='Enter')createTask()});
+async function createTask(){
+ const name=taskNameInput.value.trim();
+ if(!name){toast('Dê um nome para sua nova tarefa.');taskNameInput.focus();return}
+ if(saveTaskButton.disabled)return;
+ saveTaskButton.disabled=true;
+ try{
+  await protectedWrite('/write/api/tasks','POST',{
+   Tarefa:{title:[{text:{content:name}}]},
+   Date:{date:{start:localToday()}},
+   Status:{status:{name:'Not started'}}
+  },'create_task');
+  taskNameInput.value='';closeTaskModal();toast('Sua nova tarefa foi semeada!');
+  await refreshData();
+ }catch(error){
+  console.error(error);toast(error.message||'Não foi possível criar a tarefa.');
+ }finally{saveTaskButton.disabled=false}
+}
 function updateGreeting(){const hour=new Date().getHours();const greeting=hour<12?'Bom dia':hour<18?'Boa tarde':'Boa noite';document.getElementById('greeting').textContent=greeting+', Guardiã.';const messages=['Que hoje tenha espaço para florescer.','Um pequeno passo já faz diferença.','Cultive o que importa, no seu ritmo.','Hoje é um bom dia para recomeçar.','Cuide do essencial, sem pressa.','A constância faz a vida florescer.','Que seu dia seja leve e gentil.'];document.getElementById('greeting-message').textContent=messages[Math.floor(Date.now()/86400000)%messages.length];}
 updateGreeting();
 document.getElementById('today').textContent=new Intl.DateTimeFormat('pt-BR',{weekday:'long',day:'2-digit',month:'long'}).format(new Date());
