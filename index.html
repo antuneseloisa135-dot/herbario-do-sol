@@ -45,7 +45,8 @@ h2{font:600 clamp(28px,4vw,40px) Lora,serif;margin:6px 0;color:var(--earth)}
 .text-btn{border:0;background:transparent;color:var(--moss);font-weight:700;font-size:12px;padding:8px}
 .columns{display:grid;grid-template-columns:1.35fr .85fr;gap:16px}
 .panel{padding:19px}.panel-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px}.panel-title h4{font:600 16px Lora,serif;margin:0}.tag{font-size:10px;padding:5px 9px;border-radius:20px;background:#e9eee4;color:var(--moss)}
-.task{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #eee9de}.task:last-child{border:0}.check{width:19px;height:19px;border:1.5px solid #a9b69a;border-radius:6px;background:transparent;flex:none;color:white}.check.done{background:var(--moss);border-color:var(--moss)}.task-info{flex:1;min-width:0}.task-info strong{display:block;font-size:12px;font-weight:600}.task-info small{font-size:10px;color:var(--muted)}.task.done strong{text-decoration:line-through;color:#aaa397}.xp{font-size:10px;color:var(--gold);font-weight:700}
+.task{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #eee9de}
+.task-group-title{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:12px 7px 2px;border-bottom:1px solid var(--line);margin-top:5px}.task:last-child{border:0}.check{width:19px;height:19px;border:1.5px solid #a9b69a;border-radius:6px;background:transparent;flex:none;color:white}.check.done{background:var(--moss);border-color:var(--moss)}.task-info{flex:1;min-width:0}.task-info strong{display:block;font-size:12px;font-weight:600}.task-info small{font-size:10px;color:var(--muted)}.task.done strong{text-decoration:line-through;color:#aaa397}.xp{font-size:10px;color:var(--gold);font-weight:700}
 .ritual{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #eee9de;font-size:12px}.ritual:last-child{border:0}.ritual-icon{width:30px;height:30px;border-radius:10px;background:#f1eee3;display:grid;place-items:center}
 .progress{height:8px;background:#eee9de;border-radius:20px;overflow:hidden;margin:10px 0 7px}.progress span{display:block;height:100%;width:34%;background:var(--gold);border-radius:20px}
 .adventure{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid #eee9de}.adventure:last-child{border:0}.adventure-icon{font-size:22px;width:40px;height:40px;border-radius:13px;background:#f2eee3;display:grid;place-items:center}.adventure-info{flex:1}.adventure-info strong{font:600 13px Lora,serif}.adventure-info small{display:block;color:var(--muted);font-size:10px;margin-top:3px}
@@ -593,20 +594,37 @@ function renderTasks(){
  const box=document.getElementById('task-list');box.innerHTML='';
  const todays=tasks.filter(t=>(date(t,'Date')||'').slice(0,10)===localToday());
  const open=todays.filter(t=>!['Done','Colhido'].includes(select(t,'Status')));
+ const completed=todays.filter(t=>['Done','Colhido'].includes(select(t,'Status')));
  document.getElementById('remaining').textContent=open.length;
  if(!todays.length){box.innerHTML='<div class="empty-state"><span>Nenhuma flor agendada para hoje. Que tal aproveitar o espaço para respirar ou planejar o próximo passo?</span></div>';return}
- todays.forEach(t=>{
-  const status=select(t,'Status'),done=status==='Colhido',name=title(t,'Tarefa')||'Tarefa sem título',tags=multi(t,'Tags').join(' · ');
+ const appendTask=t=>{
+  const status=select(t,'Status'),done=status==='Colhido'||status==='Done',canRestore=status==='Colhido';
+  const name=title(t,'Tarefa')||'Tarefa sem título',tags=multi(t,'Tags').join(' · ');
   const difficulty=prop(t,'Dificuldade')?.select?.name||'Dificuldade não definida';
   const row=document.createElement('div');row.className='task'+(done?' done':'');
-  row.innerHTML='<button type="button" class="check '+(done?'done':'')+'" aria-label="'+(done?'Restaurar status anterior':'Marcar como colhida')+'" title="'+(done?'Restaurar status anterior':'Marcar como colhida')+'"></button><div class="task-info"><strong></strong><small></small></div><span class="xp"></span>';
+  const checkMarkup=canRestore
+   ? '<button type="button" class="check done" aria-label="Restaurar status anterior" title="Restaurar status anterior"></button>'
+   : status==='Done'
+    ? '<span class="check done" aria-label="Concluída" title="Concluída"></span>'
+    : '<button type="button" class="check" aria-label="Marcar como colhida" title="Marcar como colhida"></button>';
+  row.innerHTML=checkMarkup+'<div class="task-info"><strong></strong><small></small></div><span class="xp"></span>';
   row.querySelector('strong').textContent=name;
   row.querySelector('small').textContent=[tags,difficulty,status].filter(Boolean).join(' · ');
   row.querySelector('.xp').textContent='+'+number(t,'XP')+' ES';
-  const check=row.querySelector('.check');
-  check.addEventListener('click',()=>toggleTask(t,check));
+  const check=row.querySelector('button.check');
+  if(check)check.addEventListener('click',()=>toggleTask(t,check));
   box.append(row);
- });
+ };
+ const appendGroup=(label,list)=>{
+  if(!list.length)return;
+  const heading=document.createElement('div');
+  heading.className='task-group-title';
+  heading.textContent=label+' · '+list.length;
+  box.append(heading);
+  list.forEach(appendTask);
+ };
+ appendGroup('Em cultivo',open);
+ appendGroup('Colhidas hoje',completed);
 }
 function renderAdventures(target){
  const box=target||document.getElementById('adventure-list');box.innerHTML='';
