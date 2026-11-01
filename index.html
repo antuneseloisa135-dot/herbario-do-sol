@@ -483,6 +483,60 @@ aside{background:#e4eadf!important}
 #task-list .check{padding:0;display:grid;place-items:center;cursor:pointer}
 #task-list .check:disabled{opacity:.55;cursor:wait}
 .turnstile-slot{display:flex;justify-content:center}
+
+/* Feira do Sol e insígnias personalizadas */
+.achievement-summary{padding:20px;background:linear-gradient(120deg,#edf2e8,#f5efdc);border-radius:16px;margin-bottom:18px}
+.achievement-summary strong{display:block;font:600 20px Lora,serif;color:#526b50}
+.achievement-summary span{display:block;font-size:12px;color:var(--muted);margin-top:5px}
+.achievement-progress{height:8px;background:#dfe5d8;border-radius:20px;overflow:hidden;margin-top:14px}
+.achievement-progress span{display:block;height:100%;background:linear-gradient(90deg,#8fa77c,#c4a15a);border-radius:20px;transition:width .35s ease}
+.achievement-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.achievement-card{display:flex;align-items:center;gap:14px;background:#fffdf7;border:1px solid #e5dece;border-radius:16px;padding:13px;min-width:0}
+.achievement-art{width:112px;max-width:36%;flex:none;transition:transform .2s ease}
+.achievement-art svg{display:block;width:100%;height:auto;filter:drop-shadow(0 4px 4px #66594b12)}
+.achievement-card.locked .achievement-art svg{filter:grayscale(.72) opacity(.62)}
+.achievement-card.unlocked{background:linear-gradient(145deg,#fffdf7,#f3f1e3);border-color:#d9c58d}
+.achievement-card.unlocked .achievement-art{transform:rotate(-2deg)}
+.achievement-copy{min-width:0}
+.achievement-copy h4{font:600 16px Lora,serif;margin:0 0 6px;color:#5c5142}
+.achievement-category{display:inline-block;font-size:9px;letter-spacing:.07em;text-transform:uppercase;background:#e9eee4;color:#526b50;padding:5px 8px;border-radius:12px}
+.achievement-copy p{font-size:11px;line-height:1.45;color:#837b70;margin:8px 0}
+.achievement-copy small{display:block;font-size:10px;color:#8e805f}
+.achievement-card.locked .achievement-copy small{color:#928b80}
+.shop-summary{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:#f2e7bd;padding:18px;border-radius:16px;margin-bottom:14px}
+.shop-summary small{display:block;color:#80735b;font-size:11px}
+.shop-summary strong{display:block;font:600 28px Lora,serif;color:#80621e}
+.shop-summary span,.shop-earned{display:block;font-size:11px;color:#82765f;margin-top:4px}
+.shop-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px}
+.shop-tab{border:1px solid #e0d7c5;background:#fffdf7;color:#716858;border-radius:20px;padding:8px 14px;font-size:11px;font-weight:700}
+.shop-tab.active{background:#e9eee4;color:#526b50;border-color:#ccd7c5}
+.reward-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.reward-card{display:flex;align-items:center;gap:12px;padding:14px;background:#fffdf7;border:1px solid #e5dece;border-radius:16px;min-width:0}
+.reward-art{width:62px;height:62px;display:grid;place-items:center;flex:none;border-radius:16px;background:linear-gradient(145deg,#f4e9c9,#e8eee2);font-size:29px}
+.reward-copy{flex:1;min-width:0}
+.reward-copy h4{font:600 15px Lora,serif;margin:0 0 4px;color:#5c5142}
+.reward-copy p{font-size:10px;color:#71836a;margin:0 0 5px}
+.reward-copy small{font-size:10px;line-height:1.35;color:#837b70;display:block}
+.reward-side{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.reward-cost{font-size:12px;color:#9b7830;white-space:nowrap}
+.reward-action{border:0;border-radius:10px;background:#71866a;color:white;font-size:10px;font-weight:700;padding:9px 12px;white-space:nowrap}
+.reward-action:disabled{background:#e9e4d8;color:#958d7f;cursor:not-allowed}
+.reward-action:not(:disabled):hover{background:#526b50;transform:translateY(-1px)}
+.reward-action.muted{background:#eee9de;color:#837b70}
+#reward-modal .modal p{font-size:13px;line-height:1.6;color:#776f63;margin:0 0 18px}
+#reward-modal .eyebrow{margin-bottom:7px}
+@media(max-width:699px){
+ .achievement-grid{grid-template-columns:1fr;gap:10px}
+ .achievement-card{padding:11px;gap:12px}
+ .achievement-art{width:100px}
+ .reward-grid{grid-template-columns:1fr}
+ .reward-card{gap:10px;padding:12px}
+ .reward-art{width:54px;height:54px;font-size:25px}
+ .reward-copy h4{font-size:14px}
+ .reward-side{gap:7px}
+ .reward-action{padding:8px 9px;font-size:9px}
+}
+
 </style>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" defer></script>
 </head>
@@ -552,11 +606,16 @@ aside{background:#e4eadf!important}
 </div></div>
 <div id="turnstile-toggle_task" style="position:fixed;bottom:64px;left:50%;transform:translateX(-50%);z-index:1200" aria-live="polite"></div>
 <div id="turnstile-sync_xp" style="position:fixed;bottom:64px;left:50%;transform:translateX(-50%);z-index:1200" aria-live="polite"></div>
+<div id="turnstile-sync_achievements" style="position:fixed;bottom:64px;left:50%;transform:translateX(-50%);z-index:1200" aria-live="polite"></div>
+<div id="turnstile-redeem_reward" style="position:fixed;bottom:64px;left:50%;transform:translateX(-50%);z-index:1200" aria-live="polite"></div>
+<div class="modal-backdrop" id="reward-modal"><div class="modal"><div class="eyebrow">Feira do Sol</div><h3 id="reward-modal-title">Uma recompensa merece ser celebrada</h3><p id="reward-modal-copy"></p><div class="modal-actions"><button class="secondary" id="reward-modal-cancel">Voltar</button><button class="primary" id="reward-modal-confirm">Confirmar resgate</button></div></div></div>
 <div class="toast" id="toast"></div>
 <script>
 
 const API='https://herbario-notion-api-dev.antuneseloisa135.workers.dev';
-let tasks=[], adventures=[], rituals=[], xpEntries=[], recipes=[], rewards=[];
+let tasks=[], adventures=[], rituals=[], xpEntries=[], recipes=[], rewards=[], achievements=[];
+let shopSection='vitrine';
+let pendingReward=null;
 const localToday=()=>{const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')};
 const recipeTitle=p=>{for(const [k,v] of Object.entries(p.properties||{})){if(v.type==='title')return (v.title||[]).map(x=>x.plain_text||'').join('')}return 'Etapa sem título'};
 const pages={
@@ -573,6 +632,7 @@ function select(page,name){return prop(page,name)?.select?.name||prop(page,name)
 function multi(page,name){return (prop(page,name)?.multi_select||[]).map(x=>x.name)}
 function date(page,name){return prop(page,name)?.date?.start||""}
 function number(page,name){return prop(page,name)?.number??prop(page,name)?.formula?.number??prop(page,name)?.rollup?.number??0}
+function richText(page,name){return (prop(page,name)?.rich_text||[]).map(x=>x.plain_text||x.text?.content||"").join("")}
 function relationCount(page,name){return prop(page,name)?.relation?.length||0}
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2200)}
 async function load(resource){
@@ -654,19 +714,67 @@ function renderRituals(){
   heading.after(row);
  });
 }
-function totalXP(){
- // Somente tarefas Colhidas geram XP. "Done" identifica atividades antigas e não pontua.
- return tasks.reduce((sum,task)=>sum+(select(task,'Status')==='Colhido'?(number(task,'XP')||0):0),0);
+function earnedXP(){
+  if(!xpEntries.length)return tasks.reduce((sum,task)=>sum+(select(task,'Status')==='Colhido'?(number(task,'XP')||0):0),0);
+  return xpEntries.reduce((sum,entry)=>{
+    if(select(entry,'Tipo')==='Resgate')return sum;
+    const operation=select(entry,'Operação'),amount=number(entry,'XP');
+    return sum+(operation==='Entrada'?Math.abs(amount):operation==='Estorno'?-Math.abs(amount):amount);
+  },0);
 }
-function renderShop(box){const xp=totalXP(),available=rewards.filter(r=>select(r,'Status')==='Disponível');const intro=document.createElement('div');intro.className='shop-summary';intro.innerHTML='<strong></strong><span></span>';intro.querySelector('strong').textContent=xp+' XP disponíveis';intro.querySelector('span').textContent=available.length+' recompensas na vitrine';box.append(intro);if(!rewards.length){const empty=document.createElement('div');empty.className='empty-state';empty.textContent='A loja está vazia por enquanto. Cadastre suas recompensas na base Loja de Recompensas do Notion e elas aparecerão aqui.';box.append(empty);return}rewards.forEach(r=>{const card=document.createElement('article');card.className='reward-card';const cost=number(r,'Custo em XP'),status=select(r,'Status')||'Sem status';card.innerHTML='<div class="reward-art">✦</div><div class="reward-copy"><h4></h4><p></p><small></small></div><strong class="reward-cost"></strong>';card.querySelector('h4').textContent=title(r,'Recompensa')||'Recompensa';card.querySelector('p').textContent=[prop(r,'Categoria')?.select?.name,status].filter(Boolean).join(' · ');card.querySelector('small').textContent=cost<=xp&&status==='Disponível'?'Você já pode resgatar pelo Notion.':cost+' XP para desbloquear';card.querySelector('.reward-cost').textContent=cost+' XP';box.append(card)})}
+function spentXP(){return xpEntries.reduce((sum,entry)=>sum+(select(entry,'Tipo')==='Resgate'?Math.abs(number(entry,'XP')):0),0)}
+function totalXP(){return earnedXP()-spentXP()}
+function rewardIcon(name,category){
+  const icons={'Maratonar série':'🎬','Dia de Spa':'🛁','Cafeteria':'☕','Livro novo':'📚','Produtos de cabelo':'🪮','Produtos de skincare':'🧴','Roupa':'👗','Joias':'💎'};
+  return icons[name]||({Autocuidado:'🌷',Lazer:'☀️',Compra:'🛍️',Experiência:'✨'}[category]||'✦');
+}
+function renderShop(box){
+  box.innerHTML='';
+  const balance=totalXP(),earned=earnedXP(),spent=spentXP();
+  const summary=document.createElement('div');summary.className='shop-summary';
+  summary.innerHTML='<div><small>Seu saldo para escolher</small><strong></strong><span></span></div><div class="shop-earned"></div>';
+  summary.querySelector('strong').textContent=balance+' XP';
+  summary.querySelector('span').textContent=rewards.filter(r=>select(r,'Status')==='Disponível').length+' recompensas disponíveis';
+  summary.querySelector('.shop-earned').textContent=earned+' XP conquistados · '+spent+' XP resgatados';
+  box.append(summary);
+  const toolbar=document.createElement('div');toolbar.className='shop-toolbar';
+  [['vitrine','Vitrine'],['resgatadas','Já resgatadas']].forEach(([value,label])=>{
+    const btn=document.createElement('button');btn.type='button';btn.className='shop-tab'+(shopSection===value?' active':'');btn.textContent=label;
+    btn.addEventListener('click',()=>{shopSection=value;renderShop(box)});toolbar.append(btn);
+  });
+  box.append(toolbar);
+  const list=rewards.filter(r=>shopSection==='resgatadas'?select(r,'Status')==='Resgatada':select(r,'Status')!=='Resgatada');
+  if(!list.length){const empty=document.createElement('div');empty.className='empty-state';empty.textContent=shopSection==='resgatadas'?'Suas próximas lembranças ainda estão esperando para serem resgatadas.':'A vitrine está vazia por enquanto. Cadastre recompensas na base Loja de Recompensas do Notion.';box.append(empty);return}
+  const grid=document.createElement('div');grid.className='reward-grid';
+  list.sort((a,b)=>number(a,'Custo em XP')-number(b,'Custo em XP'));
+  list.forEach(reward=>{
+    const name=title(reward,'Recompensa')||'Recompensa',cost=number(reward,'Custo em XP'),category=prop(reward,'Categoria')?.select?.name||'Outro',status=select(reward,'Status')||'Sem status';
+    const card=document.createElement('article');card.className='reward-card';
+    const art=document.createElement('div');art.className='reward-art';art.textContent=rewardIcon(name,category);
+    const copy=document.createElement('div');copy.className='reward-copy';
+    const heading=document.createElement('h4');heading.textContent=name;
+    const detail=document.createElement('p');detail.textContent=category;
+    const state=document.createElement('small'),redeemedAt=date(reward,'Data do resgate');
+    state.textContent=status==='Resgatada'?'Conquistada'+(redeemedAt?' em '+new Intl.DateTimeFormat('pt-BR').format(new Date(redeemedAt+'T12:00:00')):''):status==='Em espera'?'Guardada para depois':cost<=balance?'Seu saldo permite este resgate':'Faltam '+Math.max(0,cost-balance)+' XP';
+    copy.append(heading,detail,state);
+    const side=document.createElement('div');side.className='reward-side';
+    const costTag=document.createElement('strong');costTag.className='reward-cost';costTag.textContent=cost+' XP';
+    const btn=document.createElement('button');btn.type='button';btn.className='reward-action';
+    if(status==='Resgatada'){btn.textContent='Resgatada';btn.disabled=true;btn.classList.add('muted')}
+    else if(status==='Em espera'){btn.textContent='Em espera';btn.disabled=true;btn.classList.add('muted')}
+    else if(cost<=0){btn.textContent='Defina o custo';btn.disabled=true}
+    else if(balance<cost){btn.textContent='Faltam '+(cost-balance)+' XP';btn.disabled=true;btn.classList.add('muted')}
+    else{btn.textContent='Resgatar';btn.addEventListener('click',()=>openRewardConfirmation(reward))}
+    side.append(costTag,btn);card.append(art,copy,side);grid.append(card);
+  });
+  box.append(grid);
+}
 function levelInfo(xp){const levels=[['Semente',0],['Broto',100],['Muda',250],['Floração',500],['Árvore',900],['Bosque',1500]];let current=levels[0],next=levels[1];for(let i=0;i<levels.length;i++){if(xp>=levels[i][1]){current=levels[i];next=levels[i+1]||null}}const pct=next?Math.min(100,Math.round((xp-current[1])/(next[1]-current[1])*100)):100;return{name:current[0],next:next?next[0]:'Nível máximo',pct,remaining:next?Math.max(0,next[1]-xp):0}}
 function renderRitualView(box){
  if(!rituals.length){box.innerHTML='<div class="empty-state">Seu jardim ainda não tem rituais cadastrados no Notion.</div>';return}
  rituals.forEach(r=>{const card=document.createElement('div');card.className='view-card';card.innerHTML='<h4></h4><div class="view-filter"><span class="tag"></span><span class="tag"></span><span class="tag"></span></div><p></p>';card.querySelector('h4').textContent=title(r,'Ritual')||'Ritual';const tags=card.querySelectorAll('.tag');tags[0].textContent=prop(r,'Área')?.select?.name||'Área não definida';tags[1].textContent=prop(r,'Frequência')?.select?.name||'Frequência não definida';tags[2].textContent=prop(r,'Ativo')?.checkbox?'Ativo':'Pausado';const chosen=multi(r,'Dia');card.querySelector('p').textContent=chosen.length?'Dias: '+chosen.join(' · '):'Dias ainda não definidos';box.append(card)});
 }
-function renderCharacter(box){const xp=totalXP(),level=levelInfo(xp);box.innerHTML='<div class="metric-grid"><div class="metric"><strong>'+xp+' XP</strong><small>Experiência registrada</small></div><div class="metric"><strong>'+level.name+'</strong><small>Nível atual</small></div></div><div class="view-card"><h4>Próximo florescer: '+level.next+'</h4><div class="progress"><span style="width:'+level.pct+'%"></span></div><p>'+level.pct+'% do caminho · '+(level.remaining?level.remaining+' XP para avançar':'Você alcançou o último nível cadastrado!')+'</p></div><div class="view-card"><h4>Seu cultivo</h4><p>Continue registrando suas tarefas e experiências no Notion. Os atributos pessoais poderão ser conectados quando definirmos como deseja acompanhá-los.</p></div>'}
-function renderAchievements(box){const xp=totalXP(),milestones=[100,250,500,900,1500];box.innerHTML='<div class="view-card"><h4>Marcos de experiência</h4><p>Conquistas calculadas a partir do XP registrado, sem criar registros no Notion.</p></div>';milestones.forEach((m,i)=>{const done=xp>=m,row=document.createElement('div');row.className='task';row.innerHTML='<span class="ritual-icon"></span><div class="task-info"><strong></strong><small></small></div><span class="tag"></span>';row.querySelector('.ritual-icon').textContent=done?'✦':'◇';row.querySelector('strong').textContent=['Primeiro broto','Raízes firmes','Em floração','Árvore forte','Bosque vivo'][i];row.querySelector('small').textContent=m+' XP';row.querySelector('.tag').textContent=done?'Alcançado':'Bloqueado';box.append(row)})}
-function renderPergaminho(box){box.innerHTML='<div class="view-card"><h4>Biblioteca do jardim</h4><p>Seu acervo de conhecimentos, receitas e feitiços para consultar e cultivar suas jornadas.</p></div><div class="view-card"><h4>Receitas e Feitiços</h4><p>'+recipes.length+' registros encontrados na coleção Receitas e Feitiços.</p></div>'}
+function renderCharacter(box){const xp=earnedXP(),balance=totalXP(),level=levelInfo(xp);box.innerHTML='<div class="metric-grid"><div class="metric"><strong>'+xp+' XP</strong><small>Experiência conquistada</small></div><div class="metric"><strong>'+balance+' XP</strong><small>Saldo disponível para resgates</small></div><div class="metric"><strong>'+level.name+'</strong><small>Nível atual</small></div></div><div class="view-card"><h4>Próximo florescer: '+level.next+'</h4><div class="progress"><span style="width:'+level.pct+'%"></span></div><p>'+level.pct+'% do caminho · '+(level.remaining?level.remaining+' XP para avançar':'Você alcançou o último nível cadastrado!')+'</p></div><div class="view-card"><h4>Seu cultivo</h4><p>Continue registrando suas tarefas e experiências no Notion. Os atributos pessoais poderão ser conectados quando definirmos como deseja acompanhá-los.</p></div>'}
 function showView(view){
  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
  const home=view==='inicio';document.getElementById('home-view').style.display=home?'block':'none';document.getElementById('other-view').style.display=home?'none':'block';
@@ -674,35 +782,61 @@ function showView(view){
  const p=pages[view];if(!p)return;
  document.getElementById('page-title').textContent=p[1];document.getElementById('page-subtitle').hidden=false;document.getElementById('page-subtitle').textContent=p[2];
  const box=document.getElementById('other-content');box.innerHTML='';
- if(view==='aventuras')renderAdventures(box);else if(view==='rituais')renderRitualView(box);else if(view==='personagem')renderCharacter(box);else if(view==='conquistas')renderAchievements(box);else if(view==='pergaminho')renderPergaminho(box);else if(view==='loja')renderShop(box);
+ if(view==='aventuras')renderAdventures(box);else if(view==='rituais')renderRitualView(box);else if(view==='personagem')renderCharacter(box);else if(view==='conquistas'){renderAchievements(box);syncAchievementsFromServer()}else if(view==='pergaminho')renderPergaminho(box);else if(view==='loja')renderShop(box);
 }
 async function refreshData(){
- try{
-  [tasks,adventures,rituals,xpEntries,recipes]=await Promise.all([load('tasks'),load('adventures'),load('rituals'),load('xp'),load('recipes')]);
-  // A loja é opcional até a rota /api/rewards ser publicada no Worker.
-  rewards=await load('rewards').catch(err=>{console.warn('Loja ainda não disponível no integrador:',err);return []});
-  renderTasks();renderAdventures();renderRituals();
-  document.getElementById('essence-total').textContent=totalXP()+' ES';
-  document.querySelector('.stats .stat:nth-child(3) strong').textContent=levelInfo(totalXP()).name;
-  document.querySelector('.stats .stat:nth-child(3) em').textContent=levelInfo(totalXP()).remaining+' XP para o próximo nível';
-  document.getElementById('essence-caption').textContent='saldo das flores colhidas';
-  document.querySelector('.stats .stat:nth-child(4) strong').textContent=rituals.length;
-  document.querySelector('.stats .stat:nth-child(4) em').textContent='registros no Notion';
-  const level=levelInfo(totalXP());
-  const homeProgress=document.getElementById('home-xp-progress');
-  const homeCaption=document.getElementById('home-xp-caption');
-  if(homeProgress)homeProgress.style.width=level.pct+'%';
-  if(homeCaption)homeCaption.textContent=level.remaining?level.pct+'% até '+level.next+' · faltam '+level.remaining+' XP':'Você alcançou o último nível cadastrado.';
- }catch(e){console.error(e);toast('Não foi possível carregar os dados do Notion.')}
+  try{
+   [tasks,adventures,rituals,xpEntries,recipes]=await Promise.all([load('tasks'),load('adventures'),load('rituals'),load('xp'),load('recipes')]);
+   [rewards,achievements]=await Promise.all([
+    load('rewards').catch(err=>{console.warn('Feira do Sol indisponível:',err);return []}),
+    load('achievements').catch(err=>{console.warn('Conquistas indisponíveis:',err);return []})
+   ]);
+   renderTasks();renderAdventures();renderRituals();
+   document.getElementById('essence-total').textContent=totalXP()+' ES';
+   document.querySelector('.stats .stat:nth-child(3) strong').textContent=levelInfo(earnedXP()).name;
+   document.querySelector('.stats .stat:nth-child(3) em').textContent=levelInfo(earnedXP()).remaining+' XP para o próximo nível';
+   document.getElementById('essence-caption').textContent='saldo disponível após resgates';
+   document.querySelector('.stats .stat:nth-child(4) strong').textContent=rituals.length;
+   document.querySelector('.stats .stat:nth-child(4) em').textContent='registros no Notion';
+   const level=levelInfo(earnedXP()),homeProgress=document.getElementById('home-xp-progress'),homeCaption=document.getElementById('home-xp-caption');
+   if(homeProgress)homeProgress.style.width=level.pct+'%';
+   if(homeCaption)homeCaption.textContent=level.remaining?level.pct+'% até '+level.next+' · faltam '+level.remaining+' XP':'Você alcançou o último nível cadastrado.';
+   const activeView=document.querySelector('.nav-btn.active')?.dataset.view,other=document.getElementById('other-content');
+   if(activeView==='loja')renderShop(other);
+   if(activeView==='conquistas')renderAchievements(other);
+  }catch(e){console.error(e);toast('Não foi possível carregar os dados do Notion.')}
 }
 document.getElementById('navigation').addEventListener('click',e=>{const b=e.target.closest('[data-view]');if(b)showView(b.dataset.view)});
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>showView(b.dataset.go));
 const TURNSTILE_SITEKEY='0x4AAAAAAFva0ZVGmY_UU-4C';
-const turnstileWidgets={create_task:null,toggle_task:null,sync_xp:null};
-const turnstilePending={create_task:null,toggle_task:null,sync_xp:null};
+const turnstileWidgets={create_task:null,toggle_task:null,sync_xp:null,sync_achievements:null,redeem_reward:null};
+const turnstilePending={create_task:null,toggle_task:null,sync_xp:null,sync_achievements:null,redeem_reward:null};
 const PREVIOUS_STATUS_KEY='herbario-task-status-before-colhido';
 const VALID_TASK_STATUSES=new Set(['Not started','In progress','Abandonado','Done']);
 
+const rewardModal=document.getElementById('reward-modal');
+const rewardModalTitle=document.getElementById('reward-modal-title');
+const rewardModalCopy=document.getElementById('reward-modal-copy');
+const rewardModalConfirm=document.getElementById('reward-modal-confirm');
+function openRewardConfirmation(reward){
+  pendingReward=reward;
+  const name=title(reward,'Recompensa'),cost=number(reward,'Custo em XP');
+  rewardModalTitle.textContent='Vamos trocar XP por '+name+'?';
+  rewardModalCopy.textContent='O resgate usará '+cost+' XP do seu saldo. Você ficará com '+(totalXP()-cost)+' XP disponíveis. Essa escolha será registrada no Extrato de XP.';
+  rewardModal.classList.add('open');
+}
+function closeRewardConfirmation(){rewardModal.classList.remove('open');pendingReward=null;rewardModalConfirm.disabled=false}
+document.getElementById('reward-modal-cancel').addEventListener('click',closeRewardConfirmation);
+rewardModal.addEventListener('click',event=>{if(event.target===rewardModal)closeRewardConfirmation()});
+rewardModalConfirm.addEventListener('click',async()=>{
+  if(!pendingReward||rewardModalConfirm.disabled)return;
+  const reward=pendingReward;rewardModalConfirm.disabled=true;
+  try{
+    await protectedWrite('/write/api/redeem-reward/'+encodeURIComponent(reward.id),'POST',{},'redeem_reward');
+    closeRewardConfirmation();await refreshData();showView('loja');
+    toast('Recompensa resgatada! Aproveite esse momento. ☀️');
+  }catch(error){rewardModalConfirm.disabled=false;toast(error.message||'Não foi possível concluir o resgate.')}
+});
 function waitForTurnstile(){
  if(window.turnstile)return Promise.resolve();
  return new Promise((resolve,reject)=>{
