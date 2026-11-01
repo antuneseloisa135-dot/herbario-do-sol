@@ -759,9 +759,21 @@ function journeyProgress(a){
  stages.forEach(stage=>{const ids=prop(stage,'Flores do Dia')?.relation||[];if(!ids.length)valid=false;let found=0;ids.forEach(id=>{const task=tasks.find(t=>t.id===id.id);if(task){found++;total++;if(select(task,'Status')==='Colhido')done++}});if(found!==ids.length)valid=false});
  return {stages,total,done,pct:total?Math.round(done/total*100):0,complete:valid&&total>0&&done===total};
 }
+function normalizeJourneyName(value){
+ return String(value||'').normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
+}
+const JOURNEY_ART_ALIASES={
+ 'glowupdecarreira':'Glow Up Carreira',
+ 'cofrinhoders3000':'Cofrinho de R$ 3.000'
+};
 function svgJourney(name,index){
- const art=JOURNEY_ART[name]||['leaf','<path d="M70 92C30 68 40 28 70 20c30 8 40 48 0 72Z"/><path d="M70 88V28" class="line"/>'];
- return '<svg viewBox="0 0 140 120" aria-hidden="true"><path d="M70 12c32 0 55 21 55 49s-23 48-55 48S15 89 15 61 38 12 70 12Z" fill="#fffdf766"/><g fill="none" stroke="#6c7654" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">'+art[1]+'</g></svg>';
+ const normalized=normalizeJourneyName(name);
+ const alias=JOURNEY_ART_ALIASES[normalized];
+ const key=alias||Object.keys(JOURNEY_ART).find(candidate=>normalizeJourneyName(candidate)===normalized);
+ const art=key?JOURNEY_ART[key]:null;
+ if(!art)console.warn('Ilustração de jornada não mapeada:',name);
+ const shape=art?art[1]:'<circle cx="70" cy="60" r="27"/><path d="M70 33v54m-27-27h54" class="line"/>';
+ return '<svg viewBox="0 0 140 120" aria-hidden="true"><path d="M70 12c32 0 55 21 55 49s-23 48-55 48S15 89 15 61 38 12 70 12Z" fill="#fffdf766"/><g fill="none" stroke="#6c7654" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">'+shape+'</g></svg>';
 }
 function rewardIllustration(name){
  const art={
