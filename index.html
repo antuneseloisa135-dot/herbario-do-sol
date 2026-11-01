@@ -898,7 +898,7 @@ function renderAdventures(target){
  exclusiveRewards.forEach((r,i)=>{
   const name=title(r,'Recompensa'),colors=['#d9b8a7','#b9a8ce','#a9b69a','#d6c879','#e4b99e','#b7c8d8','#c6a58d','#d8c4e8','#d9b8a7','#b9a8ce','#a9b69a','#d6c879'];
   const card=document.createElement('article');card.className='exclusive-card'+(select(r,'Status')==='Resgatada'?' redeemed':'');card.style.setProperty('--reward-color',colors[i%colors.length]);
-  const art=document.createElement('div');art.className='exclusive-art';art.innerHTML=rewardIllustration(name);
+  const art=document.createElement('div');art.className='exclusive-art';art.innerHTML=exclusiveRewardIllustration(name);
   const h=document.createElement('h4');h.textContent=name;
   const status=document.createElement('small');status.textContent=select(r,'Status')==='Resgatada'?'Escolhida':'Disponível após concluir uma jornada';
   card.append(art,h,status);rewardGrid.append(card);
@@ -962,6 +962,25 @@ function rewardIllustration(name){
  return '<svg viewBox="0 0 140 120" aria-hidden="true"><g fill="#fffdf7aa" stroke="#6b604f" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">'+shape+'</g></svg>';
 }
 
+// Ilustrações exclusivas do Baú das Jornadas.
+const EXCLUSIVE_REWARD_ART={
+ 'Fazer uma tatuagem':'<path d="m46 75 34-34 15 15-34 34Z"/><path d="m74 47 8-8 15 15-8 8" class="line"/><path d="M43 91q-9 8-15 3" class="line"/>',
+ 'Roupas novas':'<path d="m48 32 22 10 22-10 20 17-13 15-9-7v37H50V57l-9 7-13-15Z"/>',
+ 'Três livros novos':'<path d="M33 35h63v18H33Z"/><path d="M39 55h63v18H39Z"/><path d="M45 75h63v18H45Z"/>',
+ 'Cafeteria':'<path d="M35 43h58v36q0 15-16 15H51q-16 0-16-15Z"/><path d="M93 51h12q18 0 10 18-4 9-22 8M48 32q-8-9 0-17m20 17q-8-9 0-17m20 17q-8-9 0-17" class="line"/>',
+ 'Spa Plus':'<path d="M70 91q-30-18-25-42 5-16 25-4 20-12 25 4 5 24-25 42Z"/><path d="M70 39V20m-15 5q15-12 30 0" class="line"/>',
+ 'Maratonar série':'<rect x="29" y="29" width="82" height="58" rx="8"/><path d="m60 45 25 13-25 14Z" class="line"/>',
+ 'Bolsa e mochila':'<path d="M37 47h66v47H37Z"/><path d="M51 47V36q0-17 19-17t19 17v11m-52 0q-3-19 14-19m46 19q3-19-14-19" class="line"/>',
+ 'Assinatura do Cloud':'<path d="M42 82q-18 0-18-17 0-16 18-17 8-28 36-20 17 4 19 21 20 0 20 17 0 16-19 16Z"/><path d="M70 47v30m-12-12 12 12 12-12" class="line"/>',
+ 'Acessórios':'<circle cx="70" cy="62" r="23"/><path d="M70 39V23m-8 0h16m-8 39 1 1" class="line"/>',
+ 'Seis itens da Shein':'<path d="M32 42h76v48H32Z"/><path d="M48 42V30h44v12M48 58h44m-44 14h30" class="line"/>',
+ 'Produtos naturais':'<path d="M70 94C34 72 40 30 70 20c30 10 36 52 0 74Z"/><path d="M70 88V29m0 27q-19-17-28-9m28 24q19-17 28-9" class="line"/>',
+ 'Kit de artesanato':'<path d="M33 43h74v51H33Z"/><path d="m47 43 12-17h22l12 17M49 59l42 0m-42 14h27" class="line"/>'
+};
+function exclusiveRewardIllustration(name){
+ const shape=EXCLUSIVE_REWARD_ART[name]||'<circle cx="70" cy="60" r="30"/>';
+ return '<svg viewBox="0 0 140 120" aria-hidden="true"><g fill="#fffdf7aa" stroke="#6b604f" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">'+shape+'</g></svg>';
+}
 function renderShop(box){
   box.innerHTML='';
   const balance=totalXP(),earned=earnedXP(),spent=spentXP();
