@@ -464,6 +464,16 @@ aside{background:#e4eadf!important}
  #home-view > .columns{margin-bottom:32px}
 }
 
+
+/* Clareira mais limpa e data acomodada dentro da etiqueta */
+#page-subtitle[hidden]{display:none}
+.topbar>div:first-child{min-width:0}
+.date-pill{flex:0 0 auto;max-width:100%;white-space:normal;line-height:1.3;text-align:center}
+@media(max-width:699px){
+ .topbar{gap:8px}
+ .date-pill{width:108px;max-width:108px;font-size:9px;padding:8px 7px;overflow-wrap:anywhere}
+}
+
 </style>
 </head>
 <body>
@@ -482,7 +492,7 @@ aside{background:#e4eadf!important}
  <div class="aside-note">“A vida floresce quando cuidamos, um pouquinho por dia, daquilo que importa.”</div>
 </aside>
 <main>
- <div class="topbar"><div><div class="eyebrow">Um pequeno universo para cultivar a própria vida</div><h2 id="page-title">A Clareira do Dia</h2><div class="subtitle" id="page-subtitle">Pequenos passos também fazem florescer grandes mudanças.</div></div><div class="date-pill" id="today"></div></div>
+ <div class="topbar"><div><div class="eyebrow">Um pequeno universo para cultivar a própria vida</div><h2 id="page-title">A Clareira do Dia</h2><div class="subtitle" id="page-subtitle" hidden>Pequenos passos também fazem florescer grandes mudanças.</div></div><div class="date-pill" id="today"></div></div>
  <section id="home-view">
   <div class="hero"><div class="hero-copy"><h3 id="greeting">Bom dia, Guardiã.</h3><p id="greeting-message">Que hoje tenha espaço para florescer.</p></div><svg class="ghost-mascot hero-mascot" viewBox="0 0 120 140" role="img" aria-label="Fantasminha guardião do jardim"><path class="ghost-body" d="M18 116V62C18 31 37 10 61 10s43 21 43 52v54c-8-8-15-8-22 0-7-8-15-8-22 0-7-8-15-8-22 0-7-8-13-8-20 0Z"/><ellipse class="ghost-eye" cx="47" cy="62" rx="4" ry="6"/><ellipse class="ghost-eye" cx="76" cy="62" rx="4" ry="6"/><ellipse class="ghost-cheek" cx="35" cy="76" rx="7" ry="4"/><ellipse class="ghost-cheek" cx="88" cy="76" rx="7" ry="4"/><path d="M54 79q7 7 14 0" fill="none" stroke="#554c45" stroke-width="2.5" stroke-linecap="round"/><path class="ghost-leaf" d="M69 15q-2-13 12-13 0 12-12 13Zm-2 1q-13-8-19 1 10 7 19-1Z"/></svg></div>
   <div class="stats">
@@ -603,9 +613,9 @@ function renderPergaminho(box){box.innerHTML='<div class="view-card"><h4>Bibliot
 function showView(view){
  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
  const home=view==='inicio';document.getElementById('home-view').style.display=home?'block':'none';document.getElementById('other-view').style.display=home?'none':'block';
- if(home){document.getElementById('page-title').textContent='A Clareira do Dia';document.getElementById('page-subtitle').textContent='Cada pequeno cuidado abre caminho para algo bonito.';return}
+ if(home){document.getElementById('page-title').textContent='A Clareira do Dia';document.getElementById('page-subtitle').hidden=true;return}
  const p=pages[view];if(!p)return;
- document.getElementById('page-title').textContent=p[1];document.getElementById('page-subtitle').textContent=p[2];
+ document.getElementById('page-title').textContent=p[1];document.getElementById('page-subtitle').hidden=false;document.getElementById('page-subtitle').textContent=p[2];
  const box=document.getElementById('other-content');box.innerHTML='';
  if(view==='aventuras')renderAdventures(box);else if(view==='rituais')renderRitualView(box);else if(view==='personagem')renderCharacter(box);else if(view==='conquistas')renderAchievements(box);else if(view==='pergaminho')renderPergaminho(box);else if(view==='loja')renderShop(box);
 }
