@@ -122,7 +122,8 @@ async function rescheduleOverdueTasks(env) {
   for(const task of tasks){
     const status=getSelect(task,"Status"), scheduled=(getDate(task,"Date")||"").slice(0,10);
     if(!scheduled||scheduled>=currentDay||!["Not started","In progress"].includes(status))continue;
-    const nextDate=nextItajaiBusinessDay(currentDay);
+    const currentDate=new Date(currentDay+"T12:00:00Z");
+    const nextDate=isItajaiBusinessDay(currentDate)?currentDay:nextItajaiBusinessDay(currentDay);
     await notionWrite(env,"pages/"+task.id,"PATCH",{properties:{"Date":{date:{start:nextDate}}}});
     moved.push({id:task.id,from:scheduled,to:nextDate});
   }
