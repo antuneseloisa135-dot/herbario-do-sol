@@ -1,0 +1,25 @@
+{
+  "name": "Herbário do Sol",
+  "short_name": "Herbário",
+  "description": "Cultive seus hábitos, conquistas e pequenas evoluções.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f4f0e5",
+  "theme_color": "#526b50",
+  "icons": [
+    {
+      "src": "/icons/herbario-512.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/herbario-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}
