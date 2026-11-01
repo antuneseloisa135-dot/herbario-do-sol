@@ -546,7 +546,7 @@ aside{background:#e4eadf!important}
 .shop-tab.active{background:#e9eee4;color:#526b50;border-color:#ccd7c5}
 .reward-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .reward-card{display:flex;align-items:center;gap:12px;padding:14px;background:#fffdf7;border:1px solid #e5dece;border-radius:16px;min-width:0}
-.reward-art{width:62px;height:62px;display:grid;place-items:center;flex:none;border-radius:16px;background:linear-gradient(145deg,#f4e9c9,#e8eee2);font-size:29px}
+.reward-art{width:72px;height:72px;display:grid;place-items:center;flex:none;border-radius:16px;background:linear-gradient(145deg,#f4e9c9,#e8eee2);padding:5px}.reward-art svg{width:100%;height:100%;display:block;filter:drop-shadow(0 3px 3px #66594b12)}
 .reward-copy{flex:1;min-width:0}
 .reward-copy h4{font:600 15px Lora,serif;margin:0 0 4px;color:#5c5142}
 .reward-copy p{font-size:10px;color:#71836a;margin:0 0 5px}
@@ -565,7 +565,7 @@ aside{background:#e4eadf!important}
  .achievement-art{width:100px}
  .reward-grid{grid-template-columns:1fr}
  .reward-card{gap:10px;padding:12px}
- .reward-art{width:54px;height:54px;font-size:25px}
+ .reward-art{width:58px;height:58px}
  .reward-copy h4{font-size:14px}
  .reward-side{gap:7px}
  .reward-action{padding:8px 9px;font-size:9px}
@@ -947,10 +947,21 @@ function earnedXP(){
 }
 function spentXP(){return xpEntries.reduce((sum,entry)=>sum+(select(entry,'Tipo')==='Resgate'?Math.abs(number(entry,'XP')):0),0)}
 function totalXP(){return earnedXP()-spentXP()}
-function rewardIcon(name,category){
-  const icons={'Maratonar série':'🎬','Dia de Spa':'🛁','Cafeteria':'☕','Livro novo':'📚','Produtos de cabelo':'🪮','Produtos de skincare':'🧴','Roupa':'👗','Joias':'💎'};
-  return icons[name]||({Autocuidado:'🌷',Lazer:'☀️',Compra:'🛍️',Experiência:'✨'}[category]||'✦');
+function rewardIllustration(name){
+ const art={
+  'Produtos de skincare':'<path d="M53 28h34v12H53Z"/><path d="M48 40h44v53H48Z"/><path d="M60 57q10-10 20 0-10 14-20 0Z"/><path d="M70 52v13"/>',
+  'Roupa':'<path d="m48 31 22 10 22-10 20 18-13 15-9-7v38H50V57l-9 7-13-15Z"/>',
+  'Dia de Spa':'<path d="M37 66q0-19 33-19t33 19v17H37Z"/><path d="M45 47q-9-12 0-20m25 20q-9-12 0-20m25 20q-9-12 0-20" class="line"/><path d="M51 83v9m38-9v9"/>',
+  'Livro novo':'<path d="M35 32q18-8 35 2v59q-17-10-35-2Z"/><path d="M70 34q18-10 35-2v59q-17-8-35 2Z"/><path d="M70 34v59m-24-45h13m-13 9h13m22-9h13m-13 9h13" class="line"/>',
+  'Joias':'<path d="M43 43q27 53 54 0"/><path d="m70 61-12 14 12 17 12-17Z"/><path d="M43 43h54l-9-13H52Z"/>',
+  'Cafeteria':'<path d="M37 43h56v36q0 15-16 15H53q-16 0-16-15Z"/><path d="M93 51h12q18 0 10 18-4 9-22 8M49 32q-8-9 0-17m20 17q-8-9 0-17m20 17q-8-9 0-17" class="line"/>',
+  'Maratonar série':'<rect x="29" y="29" width="82" height="58" rx="8"/><path d="m60 45 25 13-25 14Z" class="line"/>',
+  'Produtos de cabelo':'<path d="M55 30h30v12H55Z"/><path d="M49 42h42v51H49Z"/><path d="M60 60q10-13 20 0-10 15-20 0Z"/><path d="M70 54v17"/>'
+ };
+ const shape=art[name]||'<circle cx="70" cy="60" r="25"/><path d="M70 35v50m-25-25h50"/>';
+ return '<svg viewBox="0 0 140 120" aria-hidden="true"><g fill="#fffdf7aa" stroke="#6b604f" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">'+shape+'</g></svg>';
 }
+
 function renderShop(box){
   box.innerHTML='';
   const balance=totalXP(),earned=earnedXP(),spent=spentXP();
@@ -973,7 +984,7 @@ function renderShop(box){
   list.forEach(reward=>{
     const name=title(reward,'Recompensa')||'Recompensa',cost=number(reward,'Custo em XP'),category=prop(reward,'Categoria')?.select?.name||'Outro',status=select(reward,'Status')||'Sem status';
     const card=document.createElement('article');card.className='reward-card';
-    const art=document.createElement('div');art.className='reward-art';art.textContent=rewardIcon(name,category);
+    const art=document.createElement('div');art.className='reward-art';art.innerHTML=rewardIllustration(name);
     const copy=document.createElement('div');copy.className='reward-copy';
     const heading=document.createElement('h4');heading.textContent=name;
     const detail=document.createElement('p');detail.textContent=category;
