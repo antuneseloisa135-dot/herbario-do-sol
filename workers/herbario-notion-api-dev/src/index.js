@@ -127,7 +127,7 @@ async function syncTaskXP(env) {
     const current = byOrigin.get(originId) || 0;
     const delta = desired - current;
     if (Math.abs(delta) < 0.000001) continue;
-    const operation = desired === 0 ? "Estorno" : current === 0 ? "Entrada" : "Ajuste";
+    const operation = desired === 0 && current > 0 ? "Estorno" : current === 0 && desired > 0 ? "Entrada" : "Ajuste";
     const amount = operation === "Ajuste" ? delta : Math.abs(delta);
     const name = getTitle(task, "Tarefa") || "Tarefa";
     const data = await notionWrite(env, "pages", "POST", {
