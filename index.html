@@ -7,7 +7,7 @@
 <title>Herbário do Sol</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Lora:wght@500;600;700&display=swap');
-:root{color-scheme:light;
+:root{
  --linen:#f4f0e5;--paper:#e9e2cf;--earth:#554c45;--moss:#526b50;
  --sage:#a9b69a;--gold:#a97836;--pink:#d9b8a7;--lav:#b9a8ce;--sun:#d6c879;
  --white:#fffdf7;--muted:#837b70;--line:#ded6c4;--shadow:0 12px 35px #554c4510;
@@ -19,7 +19,7 @@ aside{background:#eae5d7;border-right:1px solid var(--line);padding:28px 18px;di
 .brand{padding:4px 12px}.brand-mark{font-size:30px}.brand h1{font:600 25px Lora,serif;margin:8px 0 3px;color:var(--moss)}.brand p{font-size:11px;color:var(--muted);margin:0;letter-spacing:.04em}
 .nav-label{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:#928a7d;padding:0 12px;margin-bottom:8px}
 nav{display:grid;gap:5px}.nav-btn{border:0;background:transparent;text-align:left;padding:11px 12px;border-radius:12px;color:var(--earth);display:flex;gap:12px;align-items:center;font-size:13px}
-.nav-btn:hover,.nav-btn.active{background:#dce3d5;color:var(--moss)}.nav-btn span:first-child{width:20px;min-width:20px;height:20px;display:grid;place-items:center;color:var(--moss);font-size:15px;font-weight:700}
+.nav-btn:hover,.nav-btn.active{background:#dce3d5;color:var(--moss)}.nav-btn span:first-child{width:20px;text-align:center;font-size:16px}
 .aside-note{margin-top:auto;background:#f5f0e4;border:1px solid var(--line);border-radius:16px;padding:15px;font:italic 13px Lora,serif;line-height:1.5;color:#756d5e}
 main{padding:30px clamp(18px,4vw,54px);max-width:1500px;width:100%;margin:auto}
 .topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:28px}
@@ -28,7 +28,16 @@ h2{font:600 clamp(28px,4vw,40px) Lora,serif;margin:6px 0;color:var(--earth)}
 .subtitle{color:var(--muted);font-size:13px}.date-pill{background:var(--white);border:1px solid var(--line);border-radius:30px;padding:10px 15px;font-size:12px;color:var(--muted)}
 .hero{background:linear-gradient(115deg,#526b50,#71866a);color:#fffdf7;border-radius:22px;padding:27px 30px;display:flex;justify-content:space-between;align-items:center;gap:20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
 .hero:after{content:"✿";position:absolute;right:23%;top:-40px;font-size:170px;color:#ffffff10;transform:rotate(-18deg)}
-.hero h3{font:500 22px Lora,serif;margin:0 0 7px}.hero p{font-size:13px;line-height:1.5;color:#edf0e7;margin:0;max-width:490px}.greeting-copy{position:relative;z-index:1}.ghost-mascot{width:112px;min-width:112px;align-self:center;z-index:1}.ghost-mascot svg{display:block;width:100%;height:auto;filter:drop-shadow(0 5px 5px #263b251c)}.hero-mark{font-size:62px;opacity:.9;z-index:1}
+.hero h3{font:500 25px Lora,serif;margin:0 0 8px}.hero p{font-size:13px;line-height:1.6;color:#edf0e7;margin:0;max-width:490px}.hero-mark{font-size:62px;opacity:.9;z-index:1}
+.ghost-mascot{width:clamp(76px,11vw,118px);height:auto;flex:none;filter:drop-shadow(0 8px 8px #263b2a30);z-index:2}
+.ghost-mascot .ghost-body{fill:#fffdf7;stroke:#e9e2cf;stroke-width:2}
+.ghost-mascot .ghost-eye{fill:#554c45}
+.ghost-mascot .ghost-cheek{fill:#d9b8a7}
+.ghost-mascot .ghost-leaf{fill:#a9b69a;stroke:#526b50;stroke-width:1.5}
+.brand-mark .ghost-mascot{width:38px;display:block}
+.hero-copy{position:relative;z-index:2;max-width:560px}
+.empty-state{display:flex;align-items:center;gap:14px;padding:18px 8px;color:var(--muted);font-size:12px;line-height:1.5}
+.empty-state .ghost-mascot{width:64px}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin:18px 0 27px}
 .stat,.panel{background:var(--white);border:1px solid var(--line);border-radius:17px;box-shadow:var(--shadow)}
 .stat{padding:16px 18px}.stat small{color:var(--muted);font-size:11px}.stat strong{display:block;font:600 25px Lora,serif;margin-top:6px;color:var(--moss)}.stat em{font-style:normal;font-size:11px;color:var(--muted)}
@@ -40,100 +49,519 @@ h2{font:600 clamp(28px,4vw,40px) Lora,serif;margin:6px 0;color:var(--earth)}
 .ritual{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #eee9de;font-size:12px}.ritual:last-child{border:0}.ritual-icon{width:30px;height:30px;border-radius:10px;background:#f1eee3;display:grid;place-items:center}
 .progress{height:8px;background:#eee9de;border-radius:20px;overflow:hidden;margin:10px 0 7px}.progress span{display:block;height:100%;width:34%;background:var(--gold);border-radius:20px}
 .adventure{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid #eee9de}.adventure:last-child{border:0}.adventure-icon{font-size:22px;width:40px;height:40px;border-radius:13px;background:#f2eee3;display:grid;place-items:center}.adventure-info{flex:1}.adventure-info strong{font:600 13px Lora,serif}.adventure-info small{display:block;color:var(--muted);font-size:10px;margin-top:3px}
-.page-content{padding:12px 20px}.page-content .task{padding:16px 0}.page-content .ritual-icon{font-size:15px;color:var(--moss)}
 .footer{text-align:center;color:#a39a8c;font:italic 12px Lora,serif;padding:30px 0 10px}
 .modal-backdrop{position:fixed;inset:0;background:#29271f77;display:none;align-items:center;justify-content:center;padding:18px}.modal-backdrop.open{display:flex}.modal{background:var(--white);padding:24px;border-radius:18px;width:min(420px,100%);box-shadow:0 20px 70px #0003}.modal h3{font:600 21px Lora,serif;margin:0 0 15px}.modal input{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff;margin:8px 0 14px}.modal-actions{display:flex;justify-content:flex-end;gap:8px}.primary,.secondary{border:0;border-radius:10px;padding:10px 14px;font-size:12px;font-weight:700}.primary{background:var(--moss);color:white}.secondary{background:#eee9de;color:var(--earth)}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--earth);color:white;padding:11px 16px;border-radius:20px;font-size:12px;opacity:0;pointer-events:none;transition:.25s}.toast.show{opacity:1}
-@media(max-width:900px){.shell{grid-template-columns:1fr}aside{padding:9px 10px;position:fixed;left:0;right:0;bottom:0;top:auto;z-index:10;border-right:0;border-top:1px solid var(--line);background:#eae5d7;padding-bottom:calc(9px + env(safe-area-inset-bottom))}.brand{display:none}nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}.nav-label,.aside-note{display:none}.nav-btn{white-space:normal;justify-content:center;flex-direction:column;gap:3px;padding:7px 2px;font-size:9px;line-height:1.1;text-align:center;min-width:0}.nav-btn span:first-child{width:18px;min-width:18px;height:18px;font-size:16px}}
-@media(max-width:680px){main{padding:18px 14px calc(125px + env(safe-area-inset-bottom))}.topbar{align-items:flex-start}.date-pill{font-size:10px}.hero{padding:18px 19px}.ghost-mascot{width:82px;min-width:82px}.hero h3{font-size:20px}.hero p{font-size:12px}.stats{grid-template-columns:repeat(2,1fr);gap:9px}.stat{padding:13px}.stat strong{font-size:22px}.columns{grid-template-columns:1fr}.section-head{margin-top:23px}.topbar{margin-bottom:18px}.subtitle{font-size:12px;line-height:1.45}.date-pill{max-width:120px;text-align:center}.footer{font-size:10px;line-height:1.5}.page-content{padding:8px 15px}}
+
+/* Mobile-first layout */
+.shell{display:block;min-height:100vh}
+aside{position:sticky;top:0;z-index:10;padding:10px 12px;gap:8px;border-right:0;border-bottom:1px solid var(--line)}
+.brand{display:none}
+.nav-label,.aside-note{display:none}
+nav{display:flex;overflow-x:auto;gap:5px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+nav::-webkit-scrollbar{display:none}
+.nav-btn{flex:0 0 auto;white-space:nowrap;min-height:44px;padding:10px 12px;font-size:12px;gap:7px}
+.nav-btn span:first-child{width:auto;font-size:15px}
+main{padding:20px 14px 28px;max-width:760px}
+.topbar{align-items:flex-start;margin-bottom:20px}
+.topbar h2{font-size:29px;line-height:1.15}
+.date-pill{font-size:10px;padding:8px 10px;white-space:nowrap}
+.hero{padding:20px;border-radius:18px;align-items:flex-start}
+.hero h3{font-size:22px;line-height:1.2}
+.hero p{font-size:13px}
+.hero-mark{font-size:42px}
+.stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:14px 0 22px}
+.stat{padding:13px;border-radius:14px;min-width:0}
+.stat strong{font-size:22px}
+.section-head{align-items:center;margin:22px 0 11px}
+.section-head h3{font-size:19px}
+.section-head p{font-size:11px;line-height:1.4}
+.columns{grid-template-columns:minmax(0,1fr);gap:12px}
+.panel{padding:15px;border-radius:15px;min-width:0}
+.task{gap:10px;padding:13px 0}
+.task-info strong{font-size:13px;line-height:1.35;overflow-wrap:anywhere}
+.task-info small{font-size:10px;line-height:1.4}
+.check{width:22px;height:22px;border-radius:7px}
+.adventure{gap:10px;align-items:flex-start}
+.adventure-info strong{font-size:13px;line-height:1.35}
+.adventure-info small{line-height:1.4}
+.footer{padding:24px 0 12px}
+.modal{padding:20px}
+.modal input{min-height:46px;font-size:16px}
+.primary,.secondary{min-height:44px}
+@media(min-width:700px){
+ aside{position:static;padding:24px 16px;gap:26px;border-right:1px solid var(--line);border-bottom:0}
+ .shell{display:grid;grid-template-columns:220px minmax(0,1fr)}
+ .brand{display:block}
+ .nav-label{display:block}
+ nav{display:grid;overflow:visible}
+ .nav-btn{white-space:normal;justify-content:flex-start}
+ main{padding:28px clamp(20px,3vw,42px);max-width:1400px}
+ .topbar{align-items:center;margin-bottom:26px}
+ .topbar h2{font-size:clamp(30px,3vw,40px)}
+ .date-pill{font-size:12px;padding:10px 15px}
+ .hero{padding:25px 28px}
+ .hero-mark{font-size:58px}
+ .stats{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px 0 26px}
+ .stat{padding:16px}
+ .stat strong{font-size:25px}
+ .columns{grid-template-columns:minmax(0,1.3fr) minmax(260px,.9fr);gap:15px}
+ .panel{padding:18px}
+}
+@media(min-width:1100px){
+ .shell{grid-template-columns:248px minmax(0,1fr)}
+ aside{padding:28px 18px}
+ .brand{padding:4px 12px}
+ .aside-note{display:block;margin-top:auto}
+ .columns{grid-template-columns:1.35fr .85fr}
+}
+
+/* Shared visual language */
+button{transition:background .18s ease,transform .18s ease,box-shadow .18s ease}
+button:focus-visible{outline:3px solid #d6c879;outline-offset:3px}
+.panel,.stat{box-shadow:0 8px 26px #554c450b}
+.tag{font-weight:600;letter-spacing:.01em}
+.hero{isolation:isolate;background-image:linear-gradient(115deg,#526b50ee,#71866ae8),url('https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=1600&q=80');background-size:cover;background-position:center}
+.adventure-open{font:inherit}.adventure-detail{padding:8px 14px 14px 64px;border-bottom:1px solid var(--line);background:#f8f5ed;border-radius:0 0 12px 12px}.stage-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:12px}.stage-row:last-child{border:0}.view-card{padding:16px 0;border-bottom:1px solid var(--line)}.view-card:last-child{border:0}.view-card h4{font:600 16px Lora,serif;margin:0 0 5px}.view-card p{font-size:12px;color:var(--muted);margin:0;line-height:1.5}.metric-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:16px}.metric{background:#f5f1e7;border-radius:13px;padding:14px}.metric strong{display:block;font:600 22px Lora,serif;color:var(--moss)}.metric small{font-size:10px;color:var(--muted)}.view-filter{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}.view-filter span{font-size:11px;background:#f1eee3;color:var(--moss);padding:7px 10px;border-radius:20px}.stage-number{font:600 11px Lora,serif;color:var(--gold)}.stage-name{flex:1}.stage-status{font-size:10px;color:var(--moss);background:#e9eee4;padding:4px 8px;border-radius:12px}
+@media(max-width:699px){
+ .hero{align-items:center}
+ .hero-copy{max-width:calc(100% - 76px)}
+ .hero-mascot{width:72px}
+}
+
+/* Herbário do Sol · camada de encantamento */
+:root{--night:#344b3b;--glow:#f3df9c;--ink:#66594b}
+body{background-color:var(--linen);background-image:radial-gradient(ellipse at 12% 8%,#e7dfc8aa 0,transparent 34%),radial-gradient(ellipse at 92% 28%,#dce5d4aa 0,transparent 30%),url("https://www.transparenttextures.com/patterns/cream-paper.png")}
+.shell{position:relative}
+aside{background:linear-gradient(180deg,#e9e4d5f5,#e4e8d9f5),url("https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=700&q=75");background-size:cover;background-position:center;border-right:1px solid #d4cbb7}
+.brand{position:relative;padding:14px 12px 18px}
+.brand:after{content:"✧  ❧  ✧";display:block;color:var(--gold);font:18px Lora,serif;letter-spacing:.3em;margin-top:13px;opacity:.8}
+.brand-mark{display:inline-flex;align-items:center;justify-content:center;width:54px;height:54px;border-radius:50%;background:#f8f4e8;border:1px solid #d8cba9;box-shadow:0 4px 15px #554c4512}
+.brand-mark .ghost-mascot{width:39px}
+.brand h1{font-size:27px;letter-spacing:-.04em}
+.nav-label{color:#9a8058}
+.nav-btn{position:relative;border:1px solid transparent}
+.nav-btn.active{background:#f5f1e5;border-color:#d8d9c6;box-shadow:0 3px 12px #554c450d}
+.nav-btn.active:before{content:"✦";color:var(--gold);font-size:9px;position:absolute;left:3px}
+main{position:relative}
+.topbar{position:relative}
+.topbar:after{content:"";position:absolute;right:4%;bottom:-17px;width:115px;height:1px;background:linear-gradient(90deg,transparent,#c6b58c,transparent)}
+.eyebrow{display:flex;align-items:center;gap:9px}
+.eyebrow:before{content:"✧";font-size:15px;color:var(--gold)}
+.date-pill{background:#fffdf7d9;box-shadow:0 3px 15px #554c4508}
+.hero{min-height:190px;border:1px solid #829477;box-shadow:0 15px 36px #344b3b20}
+.hero:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 78% 40%,#f5e4a833,transparent 25%),linear-gradient(90deg,transparent 50%,#283d3030);pointer-events:none}
+.hero:after{content:"✧     ·    ✦       ·     ✧";right:8%;top:18px;font:18px Lora,serif;letter-spacing:.7em;color:#f7e8b477;transform:none}
+.hero h3{font-size:clamp(24px,3vw,31px);text-shadow:0 2px 12px #263b2a40}
+.hero p{max-width:510px;color:#f4f0e5;line-height:1.75}
+.hero-mascot{filter:drop-shadow(0 10px 12px #1f332a66);transform:translateY(4px)}
+.stat,.panel{position:relative;overflow:hidden}
+.stat:after{content:"";position:absolute;width:68px;height:68px;border:1px solid #d9cfb7;border-radius:50%;right:-29px;top:-32px;opacity:.48}
+.stat:nth-child(1){background:linear-gradient(145deg,#fffdf7,#f6f1e5)}
+.stat:nth-child(2){background:linear-gradient(145deg,#fffdf7,#f0eee3)}
+.stat:nth-child(3){background:linear-gradient(145deg,#fffdf7,#eaf0e5)}
+.stat:nth-child(4){background:linear-gradient(145deg,#fffdf7,#f5eae5)}
+.stat strong{font-size:26px}
+.section-head{position:relative}
+.section-head h3{display:flex;align-items:center;gap:9px}
+.section-head h3:before{content:"";display:inline-block;width:18px;height:1px;background:var(--gold)}
+.panel{background:linear-gradient(145deg,#fffdf9,#fffdf7 72%,#f8f4e9);border-color:#e0d8c7}
+.panel-title h4{letter-spacing:.01em}
+.task{transition:background .2s ease;padding-left:7px;padding-right:7px;border-radius:10px}
+.task:hover{background:#f7f3e9}
+.check{border-radius:50%;background:#fffdf7}
+.check.done{background:var(--moss)}
+.ritual-icon,.adventure-icon{border:1px solid #e5ddca;background:linear-gradient(145deg,#f7f3e8,#e9eee4)}
+.adventure-open:hover{background:#f8f5ec!important;border-radius:12px}
+.adventure-detail{background:linear-gradient(120deg,#f8f5ed,#f1f0e5);border-left:2px solid #c4b17f}
+.stage-status{background:#e6ecdf}
+.tag{border:1px solid #dfe5d8}
+.view-card{position:relative;padding:17px 12px;border-radius:12px}
+.view-card:hover{background:#faf7ef}
+.view-card h4:before{content:"✧";color:var(--gold);font-size:13px;margin-right:8px}
+.metric{background:linear-gradient(145deg,#f7f3e8,#e9eee4);border:1px solid #e5decd}
+.progress{height:9px;background:#e9e3d5;border:1px solid #e0d8c7}
+.progress span{background:linear-gradient(90deg,#8da17b,#c7a45f);box-shadow:0 0 9px #c7a45f66}
+.footer{position:relative;letter-spacing:.03em}
+.footer:before{content:"❧  ✧  ❧";display:block;color:#b39a6b;font-size:18px;margin-bottom:8px}
+@media(min-width:700px){aside{background-blend-mode:soft-light}.brand{margin-bottom:4px}.nav-btn{padding:12px 14px}.hero{min-height:205px}}
+@media(max-width:699px){aside{background:#eae5d7f5;backdrop-filter:blur(12px)}.hero{min-height:164px}.hero:after{right:0;letter-spacing:.35em}.brand-mark{display:none}}
+
+
+/* Ateliê criativo — arte 2D, formas sólidas e paleta pastel */
+body{
+ background:#f4f0e5!important;
+ background-image:none!important;
+}
+aside{
+ background:#e9e2cf!important;
+ background-image:none!important;
+}
+.hero{
+ background:#71866a!important;
+ background-image:linear-gradient(115deg,#526b50,#71866a)!important;
+ border:2px solid #829477;
+ box-shadow:0 8px 0 #d9dfce,0 13px 26px #554c4510;
+}
+.hero:before{
+ content:"";position:absolute;right:115px;bottom:-42px;width:150px;height:150px;
+ border-radius:48% 52% 50% 50%;background:#a9b69a;opacity:.7;z-index:0;
+}
+.hero:after{
+ content:"✦";position:absolute;right:36px;top:22px;font:34px Lora,serif;
+ color:#f3df9c;letter-spacing:0;transform:rotate(12deg);
+ text-shadow:-42px 48px 0 #d9b8a7, -75px -2px 0 #d6c879;
+}
+.hero-copy{z-index:2}
+.hero-mascot{position:relative;z-index:2}
+main{
+ background-image:
+ radial-gradient(ellipse at 96% 5%,#d9b8a755 0 5%,transparent 5.5%),
+ radial-gradient(ellipse at 4% 36%,#b9a8ce44 0 4%,transparent 4.5%);
+ background-repeat:no-repeat;
+}
+.stat,.panel{
+ border:1.5px solid #ded6c4;
+ box-shadow:0 4px 0 #e8e1d1,0 9px 20px #554c4508;
+}
+.stat{border-radius:18px}
+.stat:after{width:54px;height:54px;border:5px solid #d6c87955;border-radius:50%;right:-24px;top:-24px}
+.stat:nth-child(1){background:#fffdf7}
+.stat:nth-child(2){background:#f4f0e5}
+.stat:nth-child(3){background:#edf1e8}
+.stat:nth-child(4){background:#f5eae5}
+.panel{background:#fffdf7}
+.nav-btn.active{background:#f7f3e8;border:1.5px solid #cbd5c2;box-shadow:0 3px 0 #dce3d5}
+.brand-mark{background:#f5e9df;border:2px solid #d9b8a7;box-shadow:0 3px 0 #d7c5b3}
+.ritual-icon,.adventure-icon{
+ border:1.5px solid #d9d4c4;
+ box-shadow:0 3px 0 #e9e2cf;
+}
+.ritual-icon{background:#e8eee2}
+.adventure-icon{background:#f3e7df}
+.task:hover{background:#f5f1e7}
+.check{border:2px solid #a9b69a}
+.progress{background:#e9e2cf;border:1px solid #ded6c4}
+.progress span{background:#a9b69a;box-shadow:none}
+.tag{background:#e9eee4;border:1px solid #d4dfcd;color:#526b50}
+.view-filter span{background:#f1e8e2;border:1px solid #e6d3c9}
+.metric{background:#edf1e8;border:1.5px solid #d7dfd0}
+.adventure-detail{background:#f5f1e7;border-left:3px solid #d6c879}
+.stage-status{background:#e9eee4}
+.footer:before{content:"✿  ✧  ❀";font-size:20px;color:#a9b69a}
+@media(max-width:699px){
+ main{background-image:radial-gradient(ellipse at 95% 2%,#d9b8a755 0 6%,transparent 6.5%)}
+ .hero:before{right:55px;width:100px;height:100px;bottom:-35px}
+ .hero:after{right:14px;top:12px;font-size:25px;text-shadow:-28px 32px 0 #d9b8a7,-52px -1px 0 #d6c879}
+}
+
+
+/* Revisão do ateliê: amarelo solar, superfícies planas e sem sombras/contornos */
+:root{--sun:#f2d36b;--gold:#bd922e;--linen:#fff9e8;--paper:#f8edc9;--earth:#5c5142;--moss:#7c8652}
+body{background:#fff9e8!important;background-image:none!important}
+aside{background:#f7e8ad!important;border:0!important}
+.hero{background:#e8c85e!important;background-image:none!important;border:0!important;box-shadow:none!important;color:#5c5142}
+.hero p{color:#5c5142!important}.hero:before{background:#f6df91!important;opacity:.65}.hero:after{color:#fff4c8!important}
+.stat,.panel,.metric,.reward-card,.shop-summary{box-shadow:none!important;border:0!important;outline:0!important}
+.stat{background:#fff1bf!important}.stat:nth-child(2){background:#f8e5a0!important}.stat:nth-child(3){background:#f5edc9!important}.stat:nth-child(4){background:#f9e7b7!important}
+.panel{background:#fffdf5!important}.nav-btn.active{background:#fff4c9!important;border:0!important;box-shadow:none!important}
+.task,.ritual,.adventure,.view-card,.stage-row{border:0!important;border-bottom:0!important}
+.task:hover,.view-card:hover,.adventure-open:hover{background:#fff8df!important}
+.tag{border:0!important;background:#f6e9b9!important}.ritual-icon,.adventure-icon{border:0!important;box-shadow:none!important;background:#f8edc9!important}
+.progress{border:0!important;background:#f1e6c4!important}.progress span{background:#d9b64e!important;box-shadow:none!important}
+main{background-image:none!important}.topbar:after,.section-head h3:before,.view-card h4:before{display:none!important}
+.brand-mark{border:0!important;box-shadow:none!important;background:#fff4c9!important}
+.reward-summary{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.shop-summary{background:#f7e8ad;padding:18px;border-radius:16px;margin-bottom:14px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.shop-summary strong{font:600 23px Lora,serif;color:#80621e}.shop-summary span{font-size:12px;align-self:center}
+.reward-card{display:flex;align-items:center;gap:14px;padding:16px 10px;background:#fff8df;border-radius:16px;margin:10px 0}.reward-art{width:48px;height:48px;border-radius:14px;background:#f3df91;display:grid;place-items:center;font-size:24px;color:#9c7929;flex:none}.reward-copy{flex:1;min-width:0}.reward-copy h4{font:600 16px Lora,serif;margin:0 0 4px}.reward-copy p,.reward-copy small{font-size:11px;color:#837b70;margin:0}.reward-cost{font-size:13px;color:#9c7929;white-space:nowrap}
+
+/* Equilíbrio cromático: amarelo como acento, não como fundo dominante */
+:root{--linen:#f5f1e7;--paper:#eee8d8;--earth:#5c5142;--moss:#71836a;--sage:#b9c5ad;--gold:#bd963f;--sun:#efd77f;--white:#fffdf7;--muted:#837b70}
+body{background:#f5f1e7!important;background-image:none!important}
+aside{background:#e9eee4!important;border:0!important}
+main{background:none!important}
+.hero{background:#e7eddf!important;background-image:none!important;color:#4f5d48!important;border:0!important;box-shadow:none!important}
+.hero h3,.hero p{color:#4f5d48!important;text-shadow:none!important}
+.hero:before{display:none!important;content:none!important}
+.hero:after{content:"✦   ✧"!important;color:#d3b85f!important;text-shadow:none!important;opacity:.8}
+.hero-mascot{filter:none!important}
+.stat,.panel,.metric,.reward-card,.shop-summary{box-shadow:none!important;border:0!important;outline:0!important}
+.stat{background:#fffdf7!important}
+.stat:nth-child(2){background:#f3eee2!important}
+.stat:nth-child(3){background:#edf1e8!important}
+.stat:nth-child(4){background:#f5eae5!important}
+.panel{background:#fffdf7!important}
+.nav-btn.active{background:#f2e7bd!important;border:0!important;box-shadow:none!important}
+.ritual-icon,.adventure-icon{box-shadow:none!important;border:0!important}
+.ritual-icon{background:#e8eee2!important}.adventure-icon{background:#f3e7df!important}
+.metric{background:#edf1e8!important}
+.tag{background:#e9eee4!important;border:0!important;color:#526b50!important}
+.reward-card{background:#f6f0df!important}
+.shop-summary{background:#f2e7bd!important}
+@media(max-width:699px){.hero:after{right:10px;top:12px;font-size:22px}}
+
+/* Identidade consolidada · Herbário do Sol */
+:root{--linen:#f5f1e7;--paper:#eee8d8;--earth:#5c5142;--moss:#71836a;--sage:#b9c5ad;--gold:#bd963f;--sun:#efd77f;--white:#fffdf7;--muted:#837b70}
+body{background:var(--linen)!important;color:var(--earth)}
+aside{background:#e9eee4!important}
+.brand h1{letter-spacing:-.045em}
+.brand p{line-height:1.55;max-width:185px}
+.nav-label{font-weight:700;letter-spacing:.13em}
+.nav-btn{font-weight:600;color:#665d50}
+.nav-btn.active{background:#f5f1e7!important;color:#526b50!important;border:1px solid #d9dfd1!important}
+.hero{background:#e8eee2!important;border:1px solid #dce4d5!important;border-radius:22px!important;box-shadow:none!important;color:#4f5d48!important}
+.hero h3,.hero p{color:#4f5d48!important;text-shadow:none!important}
+.hero p{line-height:1.75}
+.hero:before{display:block!important;background:radial-gradient(circle,#f2df9a 0 18%,transparent 19%)!important;opacity:.38!important;right:12%;bottom:-45px;width:170px;height:170px;border-radius:50%}
+.hero:after{content:"✦  ✧  ✦"!important;color:#bd963f!important;right:7%;top:18px;font-size:20px;letter-spacing:.5em}
+.hero-mascot{filter:none!important}
+.stat,.panel{box-shadow:none!important;border:1px solid #e5dece!important}
+.stat{background:#fffdf7!important;border-radius:17px}
+.stat:nth-child(2){background:#f4efe3!important}.stat:nth-child(3){background:#edf1e8!important}.stat:nth-child(4){background:#f5eae5!important}
+.stat strong{color:var(--moss)}
+.panel{background:#fffdf7!important;border-radius:18px}
+.section-head h3{color:#5c5142}
+.section-head h3:before{display:inline-block!important;width:17px;height:2px;background:#bd963f;content:""!important}
+.task{border-bottom:1px solid #eee9de!important}
+.task:hover{background:#f8f5ec}
+.ritual-icon,.adventure-icon{box-shadow:none!important;border:1px solid #e5dece!important}
+.ritual-icon{background:#e9eee4!important}.adventure-icon{background:#f5eae5!important}
+.tag{background:#e9eee4!important;color:#526b50!important;border:0!important}
+.progress{background:#eee8d8!important;border:0!important}
+.progress span{background:linear-gradient(90deg,#8ea47d,#bd963f)!important;box-shadow:none!important}
+.shop-summary{background:#f2e7bd!important}
+.reward-card{background:#f7f3e8!important}
+.footer{color:#8e8577}
+@media(max-width:699px){aside{background:#e9eee4f5!important}.hero{min-height:168px}.hero:before{right:42px;width:110px;height:110px}.hero:after{right:8px;letter-spacing:.2em}}
+
+/* Ajustes visuais aprovados · mobile first, mantendo o comportamento conectado ao Notion */
+.nav-btn span:first-child{width:20px;min-width:20px;height:20px;display:grid;place-items:center;color:var(--moss);font-size:16px;font-weight:700}
+.hero{min-height:0;padding:18px 20px;align-items:center}
+.hero-copy{position:relative;z-index:2;max-width:calc(100% - 100px)}
+.hero h3{font-size:clamp(19px,3vw,23px);margin:0 0 7px}
+.hero p{font-size:12px;line-height:1.5;margin:0}
+.hero-mascot{width:88px;max-width:28%;height:auto;position:relative;z-index:2}
+.check{width:20px;height:20px;border-radius:50%;background:#fffdf7;border:2px solid #a9b69a;flex:none;color:transparent}
+.check.done{background:var(--moss);border-color:var(--moss)}
+.task.done strong{text-decoration:line-through;color:#aaa397}
+@media(max-width:699px){
+ .shell{display:block;min-height:100vh}
+ aside{position:fixed;left:0;right:0;bottom:0;top:auto;z-index:20;padding:7px 8px calc(7px + env(safe-area-inset-bottom));border:0;border-top:1px solid var(--line);background:#e9eee4f5!important;backdrop-filter:blur(12px)}
+ .brand,.nav-label,.aside-note{display:none!important}
+ nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;overflow:visible}
+ .nav-btn{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:3px;min-width:0;white-space:normal;text-align:center;padding:6px 2px;font-size:9px;line-height:1.1;border-radius:9px}
+ .nav-btn span:first-child{width:18px;min-width:18px;height:18px;font-size:15px}
+ main{padding:17px 14px calc(128px + env(safe-area-inset-bottom));width:100%}
+ .topbar{align-items:flex-start;gap:9px;margin-bottom:17px}
+ .topbar h2{font-size:27px;line-height:1.15}
+ .eyebrow{font-size:9px;letter-spacing:.12em}
+ .subtitle{font-size:11px;line-height:1.4}
+ .date-pill{font-size:9px;padding:8px 9px;max-width:112px;text-align:center}
+ .hero{padding:17px 16px;min-height:112px;gap:8px}
+ .hero-copy{max-width:calc(100% - 76px)}
+ .hero h3{font-size:19px}
+ .hero p{font-size:11px;line-height:1.45}
+ .hero-mascot{width:72px;max-width:72px}
+ .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:13px 0 20px}
+ .stat{padding:12px 13px}
+ .stat small{font-size:10px}
+ .stat strong{font-size:21px;margin-top:4px}
+ .stat em{font-size:9px}
+ .columns{grid-template-columns:1fr;gap:11px}
+ .panel{padding:15px}
+ .section-head{margin:20px 0 10px}
+ .section-head h3{font-size:18px}
+ .section-head p{font-size:11px}
+ .task{gap:9px;padding:11px 5px}
+ .task-info strong{font-size:11px}
+ .task-info small,.xp{font-size:9px}
+ .footer{font-size:10px;line-height:1.5;padding:20px 0 4px}
+}
+@media(min-width:700px){
+ .shell{display:grid;grid-template-columns:220px minmax(0,1fr)}
+ aside{position:static;padding:24px 16px;gap:26px;border-right:1px solid var(--line);border-bottom:0}
+ .brand{display:block}.nav-label{display:block}
+ nav{display:grid;overflow:visible}
+ .nav-btn{white-space:normal;flex-direction:row;justify-content:flex-start;padding:11px 12px;font-size:12px}
+ main{padding:26px clamp(20px,3vw,42px) 32px;max-width:1400px}
+ .topbar{align-items:center;margin-bottom:22px}
+ .hero{padding:22px 25px;min-height:140px}
+ .hero-mascot{width:92px;max-width:92px}
+ .stats{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+ .columns{grid-template-columns:minmax(0,1.3fr) minmax(260px,.9fr);gap:15px}
+}
+@media(min-width:1100px){.shell{grid-template-columns:248px minmax(0,1fr)}aside{padding:28px 18px}.columns{grid-template-columns:1.35fr .85fr}}
 </style>
 </head>
 <body>
 <div class="shell">
 <aside>
- <div class="brand"><div class="brand-mark" aria-hidden="true">✳</div><h1>Herbário do Sol</h1><p>UM PEQUENO UNIVERSO PARA CULTIVAR A PRÓPRIA VIDA</p></div>
- <div><div class="nav-label">Meu universo</div><nav id="navigation">
+ <div class="brand"><div class="brand-mark"><svg class="ghost-mascot" viewBox="0 0 120 140" role="img" aria-label="Fantasminha do Herbário"><path class="ghost-body" d="M18 116V62C18 31 37 10 61 10s43 21 43 52v54c-8-8-15-8-22 0-7-8-15-8-22 0-7-8-15-8-22 0-7-8-13-8-20 0Z"/><ellipse class="ghost-eye" cx="47" cy="62" rx="4" ry="6"/><ellipse class="ghost-eye" cx="76" cy="62" rx="4" ry="6"/><ellipse class="ghost-cheek" cx="35" cy="76" rx="7" ry="4"/><ellipse class="ghost-cheek" cx="88" cy="76" rx="7" ry="4"/><path d="M54 79q7 7 14 0" fill="none" stroke="#554c45" stroke-width="2.5" stroke-linecap="round"/><path class="ghost-leaf" d="M69 15q-2-13 12-13 0 12-12 13Zm-2 1q-13-8-19 1 10 7 19-1Z"/></svg></div><h1>Herbário do Sol</h1><p>UM PEQUENO UNIVERSO PARA CULTIVAR A PRÓPRIA VIDA</p></div>
+ <div><div class="nav-label">Caminhos do Herbário</div><nav id="navigation">
   <button class="nav-btn active" data-view="inicio"><span>⌂</span> Jardim do dia</button>
   <button class="nav-btn" data-view="aventuras"><span>◇</span> Aventuras</button>
   <button class="nav-btn" data-view="rituais"><span>✳</span> Rituais do Jardim</button>
-  <button class="nav-btn" data-view="guardiao"><span>◎</span> Guardião</button>
+  <button class="nav-btn" data-view="personagem"><span>◎</span> Guardião</button>
   <button class="nav-btn" data-view="conquistas"><span>☆</span> Conquistas</button>
+  <button class="nav-btn" data-view="loja"><span>♧</span> Feira do Sol</button>
   <button class="nav-btn" data-view="pergaminho"><span>▤</span> Pergaminho</button>
-  <button class="nav-btn" data-view="feira"><span>♧</span> Feira do Sol</button>
  </nav></div>
  <div class="aside-note">“A vida floresce quando cuidamos, um pouquinho por dia, daquilo que importa.”</div>
 </aside>
 <main>
- <div class="topbar"><div><div class="eyebrow">Seu espaço de cultivo</div><h2 id="page-title">O jardim desperta</h2><div class="subtitle" id="page-subtitle">Pequenos passos também fazem florescer grandes mudanças.</div></div><div class="date-pill" id="today"></div></div>
+ <div class="topbar"><div><div class="eyebrow">Um pequeno universo para cultivar a própria vida</div><h2 id="page-title">A Clareira do Dia</h2><div class="subtitle" id="page-subtitle">Pequenos passos também fazem florescer grandes mudanças.</div></div><div class="date-pill" id="today"></div></div>
  <section id="home-view">
-  <div class="hero home-greeting"><div class="greeting-copy"><h3 id="daily-greeting">Bom dia, Guardião.</h3><p id="daily-message">Que hoje tenha espaço para florescer.</p></div><div class="ghost-mascot" role="img" aria-label="Fantasminha do Herbário do Sol"><svg viewBox="0 0 180 190" xmlns="http://www.w3.org/2000/svg">
- <path d="M38 151c-3-12-5-28-4-49C36 54 55 23 91 20c37-3 59 26 61 68 1 21-1 43-7 63-2 7-8 9-14 5l-14-10-14 13c-5 5-11 5-16 0l-14-13-14 12c-7 5-17 2-20-7Z" fill="#f7f0df" stroke="#e6ddca" stroke-width="3"/>
- <ellipse cx="70" cy="91" rx="5" ry="7" fill="#51483f"/><ellipse cx="111" cy="91" rx="5" ry="7" fill="#51483f"/>
- <ellipse cx="54" cy="108" rx="10" ry="5" fill="#e8aaa0" opacity=".75"/><ellipse cx="127" cy="108" rx="10" ry="5" fill="#e8aaa0" opacity=".75"/>
- <path d="M84 109q7 8 14 0" fill="none" stroke="#8b665d" stroke-width="3" stroke-linecap="round"/>
- <path d="M83 25c1-12 10-19 22-17-3 8-8 14-17 17 10-3 19 0 23 8-11 2-21 0-28-8Z" fill="#91a77e" stroke="#526b50" stroke-width="2" stroke-linejoin="round"/>
- <path d="M100 17q8-8 16-6" fill="none" stroke="#526b50" stroke-width="2" stroke-linecap="round"/>
- </svg></div></div>
+  <div class="hero"><div class="hero-copy"><h3 id="greeting">Bom dia, Guardião.</h3><p id="greeting-message">Que hoje tenha espaço para florescer.</p></div><svg class="ghost-mascot hero-mascot" viewBox="0 0 120 140" role="img" aria-label="Fantasminha guardião do jardim"><path class="ghost-body" d="M18 116V62C18 31 37 10 61 10s43 21 43 52v54c-8-8-15-8-22 0-7-8-15-8-22 0-7-8-15-8-22 0-7-8-13-8-20 0Z"/><ellipse class="ghost-eye" cx="47" cy="62" rx="4" ry="6"/><ellipse class="ghost-eye" cx="76" cy="62" rx="4" ry="6"/><ellipse class="ghost-cheek" cx="35" cy="76" rx="7" ry="4"/><ellipse class="ghost-cheek" cx="88" cy="76" rx="7" ry="4"/><path d="M54 79q7 7 14 0" fill="none" stroke="#554c45" stroke-width="2.5" stroke-linecap="round"/><path class="ghost-leaf" d="M69 15q-2-13 12-13 0 12-12 13Zm-2 1q-13-8-19 1 10 7 19-1Z"/></svg></div>
   <div class="stats">
-   <div class="stat"><small>Flores para hoje</small><strong id="remaining">3</strong><em>tarefas em aberto</em></div>
-   <div class="stat"><small>Essência Solar</small><strong>—</strong><em>aguardando conexão com o Notion</em></div>
+   <div class="stat"><small>Flores de hoje</small><strong id="remaining">3</strong><em>tarefas em aberto</em></div>
+   <div class="stat"><small>Essência Solar</small><strong id="essence-total">—</strong><em id="essence-caption">carregando do Notion</em></div>
    <div class="stat"><small>Nível atual</small><strong>Semente</strong><em>primeiros brotos</em></div>
-   <div class="stat"><small>Rituais ativos</small><strong>3</strong><em>hábitos em cultivo</em></div>
+   <div class="stat"><small>Cultivos ativos</small><strong>3</strong><em>hábitos em cultivo</em></div>
   </div>
-  <div class="section-head"><div><h3>O que floresce hoje</h3><p>Suas tarefas e pequenos compromissos.</p></div><button class="text-btn" id="add-task">＋ Nova flor</button></div>
+  <div class="section-head"><div><h3>O que pede cuidado hoje</h3><p>Pequenos passos que merecem um lugar no seu dia.</p></div><button class="text-btn" id="add-task">＋ Semear tarefa</button></div>
   <div class="columns">
-   <div class="panel"><div class="panel-title"><h4>Flores do Dia</h4><span class="tag">Hoje</span></div><div id="task-list"></div></div>
-   <div class="panel"><div class="panel-title"><h4>Rituais do Jardim</h4><span class="tag">Cultivo</span></div>
-    <div class="ritual"><span class="ritual-icon">◌</span><span>Beber água</span><span class="tag">Diário</span></div>
-    <div class="ritual"><span class="ritual-icon">▤</span><span>Momento de estudo</span><span class="tag">Diário</span></div>
-    <div class="ritual"><span class="ritual-icon">◎</span><span>Cuidar de mim</span><span class="tag">Diário</span></div>
-    <div style="margin-top:19px"><div class="panel-title"><h4>Próximo florescer</h4><small style="font-size:10px;color:var(--muted)">Nível 2 · Broto</small></div><div class="progress"><span></span></div><small style="font-size:10px;color:var(--muted)">Progresso indisponível até a conexão com o Notion.</small></div>
+   <div class="panel"><div class="panel-title"><h4>✿ Flores de Hoje</h4><span class="tag">Hoje</span></div><div id="task-list"></div></div>
+   <div class="panel"><div class="panel-title"><h4>❧ Pequenos Cultivos</h4><span class="tag">Cultivo</span></div>
+    <div class="ritual"><span class="ritual-icon">💧</span><span>Beber água</span><span class="tag">Diário</span></div>
+    <div class="ritual"><span class="ritual-icon">📖</span><span>Momento de estudo</span><span class="tag">Diário</span></div>
+    <div class="ritual"><span class="ritual-icon">🧘</span><span>Cuidar de mim</span><span class="tag">Diário</span></div>
+    <div style="margin-top:19px"><div class="panel-title"><h4>✧ Próxima evolução</h4><small style="font-size:10px;color:var(--muted)">Nível 2 · Broto</small></div><div class="progress"><span id="home-xp-progress"></span></div><small id="home-xp-caption" style="font-size:10px;color:var(--muted)">Carregando sua próxima conquista...</small></div>
    </div>
   </div>
-  <div class="section-head"><div><h3>Aventuras em andamento</h3><p>Projetos maiores, divididos em etapas possíveis.</p></div><button class="text-btn" data-go="aventuras">Ver aventuras →</button></div>
+  <div class="section-head"><div><h3>Jornadas em curso</h3><p>Grandes sonhos, cultivados em pequenas etapas.</p></div><button class="text-btn" data-go="aventuras">Explorar jornadas →</button></div>
   <div class="panel" id="adventure-list">
-   <div class="adventure"><div class="adventure-icon">▤</div><div class="adventure-info"><strong>Livro: Não Anjo</strong><small>Diagnóstico · Revisão · Preparação · Publicação</small></div><span class="tag">Em andamento</span></div>
-   <div class="adventure"><div class="adventure-icon">✳</div><div class="adventure-info"><strong>Glow Up Carreira</strong><small>Projeto de desenvolvimento profissional</small></div><span class="tag">Planejado</span></div>
-   <div class="adventure"><div class="adventure-icon">◇</div><div class="adventure-info"><strong>Cofrinho 06 meses</strong><small>Construir uma reserva com constância</small></div><span class="tag">Planejado</span></div>
+   <div class="adventure"><div class="adventure-icon">📖</div><div class="adventure-info"><strong>Livro: Não Anjo</strong><small>Diagnóstico · Revisão · Preparação · Publicação</small></div><span class="tag">Em andamento</span></div>
+   <div class="adventure"><div class="adventure-icon">🌻</div><div class="adventure-info"><strong>Glow Up Carreira</strong><small>Projeto de desenvolvimento profissional</small></div><span class="tag">Planejado</span></div>
+   <div class="adventure"><div class="adventure-icon">🏺</div><div class="adventure-info"><strong>Cofrinho 06 meses</strong><small>Construir uma reserva com constância</small></div><span class="tag">Planejado</span></div>
   </div>
  </section>
- <section id="other-view" style="display:none"><div class="panel page-content" id="other-content"></div></section>
- <div class="footer">Feito de pequenos começos, cuidado e luz. · Prévia visual sem sincronização com o Notion.</div>
+ <section id="other-view" style="display:none"><div class="panel" id="other-content"></div></section>
+ <div class="footer">Feito de pequenos começos, cuidado e luz. ✦</div>
 </main>
 </div>
-<div class="modal-backdrop" id="modal"><div class="modal"><h3>Plantar uma nova flor</h3><label for="task-name" style="font-size:12px;color:var(--muted)">Nome da tarefa</label><input id="task-name" placeholder="O que você deseja cultivar hoje?"><div class="modal-actions"><button class="secondary" id="cancel">Cancelar</button><button class="primary" id="save">Adicionar flor</button></div></div></div>
+<div class="modal-backdrop" id="modal"><div class="modal"><h3>Semear uma nova tarefa</h3><label for="task-name" style="font-size:12px;color:var(--muted)">Nome da tarefa</label><input id="task-name" placeholder="O que você deseja cultivar hoje?"><div class="modal-actions"><button class="secondary" id="cancel">Cancelar</button><button class="primary" id="save">Semear tarefa</button></div></div></div>
 <div class="toast" id="toast"></div>
 <script>
-/* Prévia visual: tarefas e valores abaixo são exemplos locais, não dados do Notion. */
-const sampleTasks=[
- {name:"Revisar uma etapa do livro Não Anjo",meta:"Projeto · Não Anjo",xp:10,done:false},
- {name:"Assistir à aula do curso de IA",meta:"Estudos · Coursera",xp:10,done:false},
- {name:"Organizar pequenas prioridades do dia",meta:"Pessoal",xp:5,done:false}
-];
+
+const API='https://herbario-notion-api-dev.antuneseloisa135.workers.dev';
+let tasks=[], adventures=[], rituals=[], xpEntries=[], recipes=[], rewards=[];
+const localToday=()=>{const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')};
+const recipeTitle=p=>{for(const [k,v] of Object.entries(p.properties||{})){if(v.type==='title')return (v.title||[]).map(x=>x.plain_text||'').join('')}return 'Etapa sem título'};
 const pages={
- aventuras:["🧭","Aventuras em andamento","Projetos que ganham vida quando são divididos em etapas.","Suas aventuras",["Livro: Não Anjo — 5 etapas organizadas","Glow Up Carreira — planejamento e desenvolvimento","Cofrinho 06 meses — construção da reserva","Associação Revivendo — projeto institucional"]],
- rituais:["🌱","Rituais do Jardim","Pequenos cuidados repetidos criam raízes.","Hábitos em cultivo",["Beber água — Diário","Momento de estudo — Diário","Cuidar de mim — Diário"]],
- guardiao:["◎","Guardião","Seu perfil de evolução: nível, atributos e Essência Solar.","Ficha do Guardião",["Nível e evolução — serão exibidos após a conexão com o Notion","Essência Solar — saldo consultado no Extrato de XP","Atributos pessoais — disciplina · criatividade · coragem · equilíbrio"]],
- conquistas:["🏆","Coleção de conquistas","Cada avanço merece ser reconhecido.","Conquistas",["Primeiro broto — concluir sua primeira tarefa","Raízes fortes — manter um ritual por sete dias","Jardineira dedicada — cultivar várias áreas da vida"]],
- pergaminho:["▤","Pergaminho","Seu espaço de consulta: regras, referências, estudos e conhecimentos.","Biblioteca",["Regras e orientações do sistema","Estudos, cursos e materiais de referência","Anotações e ideias para revisitar"]],
- feira:["♧","Feira do Sol","Um espaço para trocar Essência Solar por recompensas escolhidas por você.","Recompensas",["Catálogo de recompensas — aguardando cadastro","Seu saldo de Essência Solar — aguardando conexão com o Notion","Histórico de resgates — aguardando integração"]]
+ aventuras:["🧭","Jornadas em curso","Projetos que ganham vida quando são divididos em etapas.","Suas aventuras",[]],
+ rituais:["🌱","Pequenos Cultivos","Cuidados que, repetidos com carinho, criam raízes.","Seus cultivos",[]],
+ personagem:["◎","Guardião","Acompanhe sua evolução, sua Essência Solar e os caminhos que já percorreu.","Seu retrato no Herbário",["Nível e atributos carregados do Notion."]],
+ conquistas:["🏆","Coleção de conquistas","Cada avanço merece ser reconhecido.","Conquistas",["As conquistas serão conectadas ao Notion em uma próxima etapa."]],
+ pergaminho:["📜","Pergaminho","Seu espaço de referências, ideias e conhecimentos.","Biblioteca",["Estudos e cursos","Referências importantes","Anotações e ideias para revisitar"]],
+ loja:["♧","Feira do Sol","Pequenas recompensas para celebrar o caminho percorrido.","Recompensas disponíveis",[]]
 };
-const taskList=document.getElementById('task-list');
-function renderTasks(){taskList.innerHTML='';sampleTasks.forEach((t,i)=>{const row=document.createElement('div');row.className='task'+(t.done?' done':'');row.innerHTML=`<button class="check ${t.done?'done':''}" aria-label="Concluir tarefa">${t.done?'✓':''}</button><div class="task-info"><strong></strong><small></small></div><span class="xp">+${t.xp} XP</span>`;row.querySelector('strong').textContent=t.name;row.querySelector('small').textContent=t.meta;row.querySelector('button').onclick=()=>{t.done=!t.done;renderTasks();toast(t.done?'Concluída apenas nesta prévia.':'Tarefa reaberta nesta prévia.');};taskList.append(row)});document.getElementById('remaining').textContent=sampleTasks.filter(t=>!t.done).length}
+function prop(page,name){return page?.properties?.[name]}
+function title(page,name){return (prop(page,name)?.title||[]).map(x=>x.plain_text||x.text?.content||"").join("")}
+function select(page,name){return prop(page,name)?.select?.name||prop(page,name)?.status?.name||""}
+function multi(page,name){return (prop(page,name)?.multi_select||[]).map(x=>x.name)}
+function date(page,name){return prop(page,name)?.date?.start||""}
+function number(page,name){return prop(page,name)?.number??prop(page,name)?.formula?.number??prop(page,name)?.rollup?.number??0}
+function relationCount(page,name){return prop(page,name)?.relation?.length||0}
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2200)}
-function showView(view){document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===view));const home=view==='inicio';document.getElementById('home-view').style.display=home?'block':'none';document.getElementById('other-view').style.display=home?'none':'block';if(home){document.getElementById('page-title').textContent='O jardim desperta';document.getElementById('page-subtitle').textContent='Pequenos passos também fazem florescer grandes mudanças.';return}const p=pages[view];document.getElementById('page-title').textContent=p[1];document.getElementById('page-subtitle').textContent=p[2];const box=document.getElementById('other-content');box.innerHTML='';p[4].forEach(item=>{const div=document.createElement('div');div.className='task';div.innerHTML='<span class="ritual-icon">✦</span><div class="task-info"><strong></strong></div>';div.querySelector('strong').textContent=item;box.append(div)})}
+async function load(resource){
+ const all=[];let cursor=null;
+ do{
+  const params=new URLSearchParams({page_size:'100'});
+  if(cursor)params.set('start_cursor',cursor);
+  const r=await fetch(API+'/api/'+resource+'?'+params.toString());
+  if(!r.ok)throw new Error('Falha ao consultar '+resource+' ('+r.status+')');
+  const j=await r.json();
+  if(!j.ok)throw new Error('Resposta inválida de '+resource);
+  all.push(...(j.results||[]));
+  cursor=j.has_more?j.next_cursor:null;
+  if(j.has_more&&!cursor)throw new Error('Paginação incompleta em '+resource);
+ }while(cursor);
+ return all;
+}
+function renderTasks(){
+ const box=document.getElementById('task-list');box.innerHTML='';
+ const todays=tasks.filter(t=>(date(t,'Date')||'').slice(0,10)===localToday());
+ const open=todays.filter(t=>!['Done','Colhido'].includes(select(t,'Status')));
+ document.getElementById('remaining').textContent=open.length;
+ if(!todays.length){box.innerHTML='<div class="empty-state"><span>Nenhuma flor agendada para hoje. Que tal aproveitar o espaço para respirar ou planejar o próximo passo?</span></div>';return}
+ todays.forEach(t=>{const status=select(t,'Status'),done=status==='Colhido',name=title(t,'Tarefa')||'Tarefa sem título',tags=multi(t,'Tags').join(' · ');const row=document.createElement('div');row.className='task'+(done?' done':'');row.innerHTML='<span class="check '+(done?'done':'')+'" aria-label="'+(done?'Concluída':'Pendente')+'"></span><div class="task-info"><strong></strong><small></small></div><span class="xp"></span>';row.querySelector('strong').textContent=name;row.querySelector('small').textContent=[tags,status].filter(Boolean).join(' · ')||'Sem categoria';row.querySelector('.xp').textContent='+'+number(t,'XP')+' ES';box.append(row)});
+}
+function renderAdventures(target){
+ const box=target||document.getElementById('adventure-list');box.innerHTML='';
+ if(!adventures.length){box.textContent='Nenhuma aventura cadastrada no Notion.';return}
+ adventures.forEach(a=>{
+  const row=document.createElement('button');row.type='button';row.className='adventure adventure-open';row.style.cssText='width:100%;border:0;background:transparent;text-align:left;color:inherit;cursor:pointer';
+  row.innerHTML='<span class="adventure-icon"><img alt="" src="https://api.iconify.design/ph/plant-duotone.svg?color=%23526b50" width="25" height="25"></span><span class="adventure-info"><strong></strong><small></small></span><span class="tag">Ver etapas⌄</span>';
+  row.querySelector('strong').textContent=title(a,'Name')||'Aventura sem título';
+  const related=prop(a,'Receitas e Feitiços')?.relation||[];row.querySelector('small').textContent=related.length+' etapas vinculadas · '+Math.round((number(a,'Progresso')||0)*100)+'% concluído';
+  const detail=document.createElement('div');detail.className='adventure-detail';detail.hidden=true;const stages=related.map(rel=>recipes.find(r=>r.id===rel.id)).filter(Boolean);
+  if(stages.length){stages.forEach((stage,i)=>{const item=document.createElement('div');item.className='stage-row';item.innerHTML='<span class="stage-number"></span><span class="stage-name"></span><span class="stage-status"></span>';item.querySelector('.stage-number').textContent=String(i+1).padStart(2,'0');item.querySelector('.stage-name').textContent=recipeTitle(stage);item.querySelector('.stage-status').textContent=select(stage,'Status')||'Etapa';detail.append(item)})}else detail.textContent=related.length?'As etapas estão vinculadas, mas não foi possível carregar seus detalhes.':'Esta aventura ainda não tem etapas vinculadas.';
+  row.addEventListener('click',()=>{detail.hidden=!detail.hidden;row.querySelector('.tag').textContent=detail.hidden?'Ver etapas⌄':'Ocultar etapas⌃'});box.append(row,detail);
+ });
+}
+function renderRituals(){
+ const box=document.querySelector('#home-view .columns .panel:nth-child(2)');
+ if(!box)return;
+ const heading=box.querySelector('.panel-title');
+ box.querySelectorAll('.ritual').forEach(x=>x.remove());
+ const list=rituals;
+ if(!list.length){const empty=document.createElement('p');empty.style.cssText='font-size:12px;color:var(--muted)';empty.textContent='Nenhum ritual cadastrado no Notion.';heading.after(empty);return}
+ list.forEach(r=>{
+  const row=document.createElement('div');row.className='ritual';
+  row.innerHTML='<span class="ritual-icon">✦</span><span></span><span class="tag"></span>';
+  row.children[1].textContent=title(r,'Ritual')||'Ritual';
+  row.children[2].textContent=prop(r,'Frequência')?.select?.name||'';
+  heading.after(row);
+ });
+}
+function totalXP(){
+ // Somente tarefas Colhidas geram XP. "Done" identifica atividades antigas e não pontua.
+ return tasks.reduce((sum,task)=>sum+(select(task,'Status')==='Colhido'?(number(task,'XP')||0):0),0);
+}
+function renderShop(box){const xp=totalXP(),available=rewards.filter(r=>select(r,'Status')==='Disponível');const intro=document.createElement('div');intro.className='shop-summary';intro.innerHTML='<strong></strong><span></span>';intro.querySelector('strong').textContent=xp+' XP disponíveis';intro.querySelector('span').textContent=available.length+' recompensas na vitrine';box.append(intro);if(!rewards.length){const empty=document.createElement('div');empty.className='empty-state';empty.textContent='A loja está vazia por enquanto. Cadastre suas recompensas na base Loja de Recompensas do Notion e elas aparecerão aqui.';box.append(empty);return}rewards.forEach(r=>{const card=document.createElement('article');card.className='reward-card';const cost=number(r,'Custo em XP'),status=select(r,'Status')||'Sem status';card.innerHTML='<div class="reward-art">✦</div><div class="reward-copy"><h4></h4><p></p><small></small></div><strong class="reward-cost"></strong>';card.querySelector('h4').textContent=title(r,'Recompensa')||'Recompensa';card.querySelector('p').textContent=[prop(r,'Categoria')?.select?.name,status].filter(Boolean).join(' · ');card.querySelector('small').textContent=cost<=xp&&status==='Disponível'?'Você já pode resgatar pelo Notion.':cost+' XP para desbloquear';card.querySelector('.reward-cost').textContent=cost+' XP';box.append(card)})}
+function levelInfo(xp){const levels=[['Semente',0],['Broto',100],['Muda',250],['Floração',500],['Árvore',900],['Bosque',1500]];let current=levels[0],next=levels[1];for(let i=0;i<levels.length;i++){if(xp>=levels[i][1]){current=levels[i];next=levels[i+1]||null}}const pct=next?Math.min(100,Math.round((xp-current[1])/(next[1]-current[1])*100)):100;return{name:current[0],next:next?next[0]:'Nível máximo',pct,remaining:next?Math.max(0,next[1]-xp):0}}
+function renderRitualView(box){
+ if(!rituals.length){box.innerHTML='<div class="empty-state">Seu jardim ainda não tem rituais cadastrados no Notion.</div>';return}
+ rituals.forEach(r=>{const card=document.createElement('div');card.className='view-card';card.innerHTML='<h4></h4><div class="view-filter"><span class="tag"></span><span class="tag"></span><span class="tag"></span></div><p></p>';card.querySelector('h4').textContent=title(r,'Ritual')||'Ritual';const tags=card.querySelectorAll('.tag');tags[0].textContent=prop(r,'Área')?.select?.name||'Área não definida';tags[1].textContent=prop(r,'Frequência')?.select?.name||'Frequência não definida';tags[2].textContent=prop(r,'Ativo')?.checkbox?'Ativo':'Pausado';const chosen=multi(r,'Dia');card.querySelector('p').textContent=chosen.length?'Dias: '+chosen.join(' · '):'Dias ainda não definidos';box.append(card)});
+}
+function renderCharacter(box){const xp=totalXP(),level=levelInfo(xp);box.innerHTML='<div class="metric-grid"><div class="metric"><strong>'+xp+' XP</strong><small>Experiência registrada</small></div><div class="metric"><strong>'+level.name+'</strong><small>Nível atual</small></div></div><div class="view-card"><h4>Próximo florescer: '+level.next+'</h4><div class="progress"><span style="width:'+level.pct+'%"></span></div><p>'+level.pct+'% do caminho · '+(level.remaining?level.remaining+' XP para avançar':'Você alcançou o último nível cadastrado!')+'</p></div><div class="view-card"><h4>Seu cultivo</h4><p>Continue registrando suas tarefas e experiências no Notion. Os atributos pessoais poderão ser conectados quando definirmos como deseja acompanhá-los.</p></div>'}
+function renderAchievements(box){const xp=totalXP(),milestones=[100,250,500,900,1500];box.innerHTML='<div class="view-card"><h4>Marcos de experiência</h4><p>Conquistas calculadas a partir do XP registrado, sem criar registros no Notion.</p></div>';milestones.forEach((m,i)=>{const done=xp>=m,row=document.createElement('div');row.className='task';row.innerHTML='<span class="ritual-icon"></span><div class="task-info"><strong></strong><small></small></div><span class="tag"></span>';row.querySelector('.ritual-icon').textContent=done?'✦':'◇';row.querySelector('strong').textContent=['Primeiro broto','Raízes firmes','Em floração','Árvore forte','Bosque vivo'][i];row.querySelector('small').textContent=m+' XP';row.querySelector('.tag').textContent=done?'Alcançado':'Bloqueado';box.append(row)})}
+function renderPergaminho(box){box.innerHTML='<div class="view-card"><h4>Biblioteca do jardim</h4><p>Um espaço para reunir estudos, referências e ideias. As coleções de Pergaminho e Receitas e Feitiços poderão ganhar filtros e pesquisa nesta área.</p></div><div class="view-card"><h4>Etapas e receitas</h4><p>'+recipes.length+' registros encontrados na coleção Receitas e Feitiços.</p></div>'}
+function showView(view){
+ document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
+ const home=view==='inicio';document.getElementById('home-view').style.display=home?'block':'none';document.getElementById('other-view').style.display=home?'none':'block';
+ if(home){document.getElementById('page-title').textContent='A Clareira do Dia';document.getElementById('page-subtitle').textContent='Cada pequeno cuidado abre caminho para algo bonito.';return}
+ const p=pages[view];if(!p)return;
+ document.getElementById('page-title').textContent=p[1];document.getElementById('page-subtitle').textContent=p[2];
+ const box=document.getElementById('other-content');box.innerHTML='';
+ if(view==='aventuras')renderAdventures(box);else if(view==='rituais')renderRitualView(box);else if(view==='personagem')renderCharacter(box);else if(view==='conquistas')renderAchievements(box);else if(view==='pergaminho')renderPergaminho(box);else if(view==='loja')renderShop(box);
+}
+async function refreshData(){
+ try{
+  [tasks,adventures,rituals,xpEntries,recipes]=await Promise.all([load('tasks'),load('adventures'),load('rituals'),load('xp'),load('recipes')]);
+  // A loja é opcional até a rota /api/rewards ser publicada no Worker.
+  rewards=await load('rewards').catch(err=>{console.warn('Loja ainda não disponível no integrador:',err);return []});
+  renderTasks();renderAdventures();renderRituals();
+  document.getElementById('essence-total').textContent=totalXP()+' ES';
+  document.querySelector('.stats .stat:nth-child(3) strong').textContent=levelInfo(totalXP()).name;
+  document.querySelector('.stats .stat:nth-child(3) em').textContent=levelInfo(totalXP()).remaining+' XP para o próximo nível';
+  document.getElementById('essence-caption').textContent='saldo das flores colhidas';
+  document.querySelector('.stats .stat:nth-child(4) strong').textContent=rituals.length;
+  document.querySelector('.stats .stat:nth-child(4) em').textContent='registros no Notion';
+  const level=levelInfo(totalXP());
+  const homeProgress=document.getElementById('home-xp-progress');
+  const homeCaption=document.getElementById('home-xp-caption');
+  if(homeProgress)homeProgress.style.width=level.pct+'%';
+  if(homeCaption)homeCaption.textContent=level.remaining?level.pct+'% até '+level.next+' · faltam '+level.remaining+' XP':'Você alcançou o último nível cadastrado.';
+ }catch(e){console.error(e);toast('Não foi possível carregar os dados do Notion.')}
+}
 document.getElementById('navigation').addEventListener('click',e=>{const b=e.target.closest('[data-view]');if(b)showView(b.dataset.view)});
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>showView(b.dataset.go));
-const modal=document.getElementById('modal');document.getElementById('add-task').onclick=()=>{modal.classList.add('open');document.getElementById('task-name').focus()};document.getElementById('cancel').onclick=()=>modal.classList.remove('open');
-document.getElementById('save').onclick=()=>{const input=document.getElementById('task-name');const name=input.value.trim();if(!name){input.focus();return}sampleTasks.push({name,meta:'Nova flor · criada nesta prévia',xp:5,done:false});renderTasks();input.value='';modal.classList.remove('open');toast('Adicionada apenas à prévia; ainda não salva no Notion.')}
+document.getElementById('add-task').onclick=()=>toast('A criação de tarefas será habilitada na próxima etapa.');
+function updateGreeting(){const hour=new Date().getHours();const greeting=hour<12?'Bom dia':hour<18?'Boa tarde':'Boa noite';document.getElementById('greeting').textContent=greeting+', Guardião.';const messages=['Que hoje tenha espaço para florescer.','Um pequeno passo já faz diferença.','Cultive o que importa, no seu ritmo.','Hoje é um bom dia para recomeçar.','Cuide do essencial, sem pressa.','A constância faz a vida florescer.','Que seu dia seja leve e gentil.'];document.getElementById('greeting-message').textContent=messages[Math.floor(Date.now()/86400000)%messages.length];}
+updateGreeting();
 document.getElementById('today').textContent=new Intl.DateTimeFormat('pt-BR',{weekday:'long',day:'2-digit',month:'long'}).format(new Date());
-const hour=new Date().getHours();
-const salutation=hour>=5&&hour<12?"Bom dia":hour>=12&&hour<18?"Boa tarde":"Boa noite";
-const greetings=["Que hoje tenha espaço para florescer.","Um pequeno passo já faz diferença.","Cultive o que importa, no seu ritmo.","Hoje é um bom dia para recomeçar.","Cuide do essencial, sem pressa.","A constância faz a vida florescer.","Que seu dia seja leve e gentil."];
-const dayIndex=Math.floor(Date.now()/86400000)%greetings.length;
-document.getElementById('daily-greeting').textContent=salutation+", Guardião.";
-document.getElementById('daily-message').textContent=greetings[dayIndex];
-renderTasks();
+renderTasks();refreshData();
 </script>
 </body>
 </html>
