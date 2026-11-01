@@ -10,7 +10,8 @@ const NOTION_VERSION = "2025-09-03";
 const CORS = {
   "Access-Control-Allow-Origin": SITE_ORIGIN,
   "Access-Control-Allow-Methods": "GET, POST, PATCH, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Cf-Access-Jwt-Assertion",
+  "Access-Control-Allow-Headers": "Content-Type",
+  "Access-Control-Allow-Credentials": "true",
   "Vary": "Origin"
 };
 const json = (data, status = 200) => new Response(JSON.stringify(data), {
@@ -151,6 +152,7 @@ let syncPromise;
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    const routePath = url.pathname.startsWith("/write/") ? url.pathname.slice(6) : url.pathname;
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
     if (!env.NOTION_TOKEN) return json({ ok: false, error: "NOTION_TOKEN não configurado" }, 500);
     try {
@@ -184,14 +186,14 @@ export default {
         if (!r.ok) return json({ ok: false, resource, error: data.message || "Falha ao consultar Notion" }, r.status);
         return json({ ok: true, resource, results: data.results || [], has_more: !!data.has_more, next_cursor: data.next_cursor || null });
       }
-      if (request.method === "POST" || request.method === "PATCH") {
+      if ((request.method === "POST" || request.method === "PATCH") && url.pathname.startsWith("/write/")) {
         if (!await requireWriteAccess(request, env)) return json({ ok: false, error: "Acesso de gravação não autorizado. Entre pelo acesso protegido do Herbário." }, 401);
         const payload = await request.json();
-        if (url.pathname === "/api/sync-xp" && request.method === "POST") {
+        if (routePath === "/api/sync-xp" && request.method === "POST") {
           if (!syncPromise) syncPromise = syncTaskXP(env).finally(() => { syncPromise = null; });
           return json({ ok: true, result: await syncPromise });
         }
-        const parts = url.pathname.split("/").filter(Boolean);
+        const parts = routePath.split("/").filter(Boolean);
         if (parts[0] !== "api" || !Object.prototype.hasOwnProperty.call(SOURCES, parts[1])) return json({ ok: false, error: "Recurso não encontrado" }, 404);
         if (!payload || !payload.properties || typeof payload.properties !== "object" || Array.isArray(payload.properties)) return json({ ok: false, error: "Envie um objeto properties válido" }, 400);
         if (request.method === "POST" && parts.length === 2) {
