@@ -13,7 +13,7 @@
  --white:#fffdf7;--muted:#837b70;--line:#ded6c4;--shadow:0 12px 35px #554c4510;
 }
 *{box-sizing:border-box} body{margin:0;background:var(--linen);color:var(--earth);font-family:'DM Sans',sans-serif}
-button,input{font:inherit} button{cursor:pointer}
+button,input,select{font:inherit} button{cursor:pointer}
 .shell{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
 aside{background:#eae5d7;border-right:1px solid var(--line);padding:28px 18px;display:flex;flex-direction:column;gap:30px}
 .brand{padding:4px 12px}.brand-mark{font-size:30px}.brand h1{font:600 25px Lora,serif;margin:8px 0 3px;color:var(--moss)}.brand p{font-size:11px;color:var(--muted);margin:0;letter-spacing:.04em}
@@ -50,7 +50,10 @@ h2{font:600 clamp(28px,4vw,40px) Lora,serif;margin:6px 0;color:var(--earth)}
 .progress{height:8px;background:#eee9de;border-radius:20px;overflow:hidden;margin:10px 0 7px}.progress span{display:block;height:100%;width:34%;background:var(--gold);border-radius:20px}
 .adventure{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid #eee9de}.adventure:last-child{border:0}.adventure-icon{font-size:22px;width:40px;height:40px;border-radius:13px;background:#f2eee3;display:grid;place-items:center}.adventure-info{flex:1}.adventure-info strong{font:600 13px Lora,serif}.adventure-info small{display:block;color:var(--muted);font-size:10px;margin-top:3px}
 .footer{text-align:center;color:#a39a8c;font:italic 12px Lora,serif;padding:30px 0 10px}
-.modal-backdrop{position:fixed;inset:0;background:#29271f77;display:none;align-items:center;justify-content:center;padding:18px}.modal-backdrop.open{display:flex}.modal{background:var(--white);padding:24px;border-radius:18px;width:min(420px,100%);box-shadow:0 20px 70px #0003}.modal h3{font:600 21px Lora,serif;margin:0 0 15px}.modal input{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff;margin:8px 0 14px}.modal-actions{display:flex;justify-content:flex-end;gap:8px}.primary,.secondary{border:0;border-radius:10px;padding:10px 14px;font-size:12px;font-weight:700}.primary{background:var(--moss);color:white}.secondary{background:#eee9de;color:var(--earth)}
+.modal-backdrop{position:fixed;inset:0;background:#29271f77;display:none;align-items:center;justify-content:center;padding:18px}.modal-backdrop.open{display:flex}.modal{background:var(--white);padding:24px;border-radius:18px;width:min(420px,100%);box-shadow:0 20px 70px #0003}.modal h3{font:600 21px Lora,serif;margin:0 0 15px}.modal input,.modal select{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff;margin:8px 0 14px;color:var(--earth)}
+.modal-label{display:block;font-size:12px;color:var(--muted);margin-top:6px}
+.form-hint{display:block;font-size:10px;color:var(--muted);line-height:1.45;margin:-6px 0 11px}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px}.primary,.secondary{border:0;border-radius:10px;padding:10px 14px;font-size:12px;font-weight:700}.primary{background:var(--moss);color:white}.secondary{background:#eee9de;color:var(--earth)}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--earth);color:white;padding:11px 16px;border-radius:20px;font-size:12px;opacity:0;pointer-events:none;transition:.25s}.toast.show{opacity:1}
 
 /* Mobile-first layout */
@@ -528,8 +531,26 @@ aside{background:#e4eadf!important}
  <div class="footer">Feito de pequenos começos, cuidado e luz. ✦</div>
 </main>
 </div>
-<div class="modal-backdrop" id="modal"><div class="modal"><h3>Semear uma nova tarefa</h3><label for="task-name" style="font-size:12px;color:var(--muted)">Nome da tarefa</label><input id="task-name" maxlength="2000" placeholder="O que você deseja cultivar hoje?"><div id="turnstile-create_task" class="turnstile-slot" aria-live="polite"></div><div class="modal-actions"><button class="secondary" id="cancel">Cancelar</button><button class="primary" id="save">Semear tarefa</button></div></div></div>
+<div class="modal-backdrop" id="modal"><div class="modal">
+ <h3>Semear uma nova tarefa</h3>
+ <label for="task-name" class="modal-label">Nome da tarefa</label>
+ <input id="task-name" maxlength="2000" placeholder="O que você deseja cultivar hoje?">
+ <label for="task-date" class="modal-label">Data da tarefa</label>
+ <input id="task-date" type="date" required>
+ <label for="task-difficulty" class="modal-label">Dificuldade e Essência Solar</label>
+ <select id="task-difficulty" required>
+  <option value="">Selecione a dificuldade</option>
+  <option value="Leve">Leve · 5 XP</option>
+  <option value="Média">Média · 10 XP</option>
+  <option value="Difícil">Difícil · 15 XP</option>
+ </select>
+ <small id="task-xp-preview" class="form-hint">A dificuldade escolhida define os XP recebidos ao colher a tarefa.</small>
+ <small class="form-hint">Tarefas de outras datas aparecem em “Flores de Hoje” no dia agendado.</small>
+ <div id="turnstile-create_task" class="turnstile-slot" aria-live="polite"></div>
+ <div class="modal-actions"><button class="secondary" id="cancel">Cancelar</button><button class="primary" id="save">Semear tarefa</button></div>
+</div></div>
 <div id="turnstile-toggle_task" style="position:fixed;bottom:64px;left:50%;transform:translateX(-50%);z-index:1200" aria-live="polite"></div>
+<div id="turnstile-sync_xp" style="position:fixed;bottom:64px;left:50%;transform:translateX(-50%);z-index:1200" aria-live="polite"></div>
 <div class="toast" id="toast"></div>
 <script>
 
@@ -576,10 +597,11 @@ function renderTasks(){
  if(!todays.length){box.innerHTML='<div class="empty-state"><span>Nenhuma flor agendada para hoje. Que tal aproveitar o espaço para respirar ou planejar o próximo passo?</span></div>';return}
  todays.forEach(t=>{
   const status=select(t,'Status'),done=status==='Colhido',name=title(t,'Tarefa')||'Tarefa sem título',tags=multi(t,'Tags').join(' · ');
+  const difficulty=prop(t,'Dificuldade')?.select?.name||'Dificuldade não definida';
   const row=document.createElement('div');row.className='task'+(done?' done':'');
   row.innerHTML='<button type="button" class="check '+(done?'done':'')+'" aria-label="'+(done?'Restaurar status anterior':'Marcar como colhida')+'" title="'+(done?'Restaurar status anterior':'Marcar como colhida')+'"></button><div class="task-info"><strong></strong><small></small></div><span class="xp"></span>';
   row.querySelector('strong').textContent=name;
-  row.querySelector('small').textContent=[tags,status].filter(Boolean).join(' · ')||'Sem categoria';
+  row.querySelector('small').textContent=[tags,difficulty,status].filter(Boolean).join(' · ');
   row.querySelector('.xp').textContent='+'+number(t,'XP')+' ES';
   const check=row.querySelector('.check');
   check.addEventListener('click',()=>toggleTask(t,check));
@@ -658,8 +680,8 @@ async function refreshData(){
 document.getElementById('navigation').addEventListener('click',e=>{const b=e.target.closest('[data-view]');if(b)showView(b.dataset.view)});
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>showView(b.dataset.go));
 const TURNSTILE_SITEKEY='0x4AAAAAAFva0ZVGmY_UU-4C';
-const turnstileWidgets={create_task:null,toggle_task:null};
-const turnstilePending={create_task:null,toggle_task:null};
+const turnstileWidgets={create_task:null,toggle_task:null,sync_xp:null};
+const turnstilePending={create_task:null,toggle_task:null,sync_xp:null};
 const PREVIOUS_STATUS_KEY='herbario-task-status-before-colhido';
 const VALID_TASK_STATUSES=new Set(['Not started','In progress','Abandonado','Done']);
 
@@ -733,8 +755,15 @@ async function toggleTask(task,button){
  try{
   await protectedWrite('/write/api/tasks/'+encodeURIComponent(task.id),'PATCH',{Status:{status:{name:isHarvested?nextStatus:'Colhido'}}},'toggle_task');
   if(isHarvested)clearPreviousTaskStatus(task.id);else writePreviousTaskStatus(task.id,currentStatus);
-  toast(isHarvested?'Status anterior restaurado.':'Tarefa colhida! Essência Solar atualizada.');
+  let xpSyncError=null;
+  try{
+   await protectedWrite('/write/api/sync-xp','POST',{},'sync_xp');
+  }catch(syncError){
+   xpSyncError=syncError;
+   console.error('Tarefa atualizada, mas a sincronização de XP falhou:',syncError);
+  }
   await refreshData();
+  toast(xpSyncError?'Tarefa atualizada; não foi possível sincronizar o XP. Tente novamente.':(isHarvested?'Status anterior restaurado e XP recalculado.':'Tarefa colhida! Essência Solar atualizada.'));
  }catch(error){
   console.error(error);button.disabled=false;toast(error.message||'Não foi possível atualizar a tarefa.');
  }
@@ -743,22 +772,46 @@ const taskModal=document.getElementById('modal');
 const taskNameInput=document.getElementById('task-name');
 const saveTaskButton=document.getElementById('save');
 function closeTaskModal(){taskModal.classList.remove('open')}
-document.getElementById('add-task').onclick=()=>{taskModal.classList.add('open');taskNameInput.focus()};
+const taskDateInput=document.getElementById('task-date');
+const taskDifficultyInput=document.getElementById('task-difficulty');
+const taskXpPreview=document.getElementById('task-xp-preview');
+const XP_BY_DIFFICULTY={Leve:5,'Média':10,Difícil:15};
+function updateTaskXpPreview(){
+ const xp=XP_BY_DIFFICULTY[taskDifficultyInput.value];
+ taskXpPreview.textContent=xp?('Ao colher esta tarefa, você receberá '+xp+' XP.'):'A dificuldade escolhida define os XP recebidos ao colher a tarefa.';
+}
+taskDifficultyInput.addEventListener('change',updateTaskXpPreview);
+document.getElementById('add-task').onclick=()=>{
+ taskModal.classList.add('open');
+ taskDateInput.value=localToday();
+ taskDifficultyInput.value='';
+ updateTaskXpPreview();
+ taskNameInput.focus();
+};
 document.getElementById('cancel').onclick=closeTaskModal;
 saveTaskButton.onclick=createTask;
 taskNameInput.addEventListener('keydown',event=>{if(event.key==='Enter')createTask()});
 async function createTask(){
  const name=taskNameInput.value.trim();
+ const taskDate=taskDateInput.value;
+ const difficulty=taskDifficultyInput.value;
  if(!name){toast('Dê um nome para sua nova tarefa.');taskNameInput.focus();return}
+ if(!taskDate){toast('Escolha a data da tarefa.');taskDateInput.focus();return}
+ if(!XP_BY_DIFFICULTY[difficulty]){toast('Escolha a dificuldade para definir os XP.');taskDifficultyInput.focus();return}
  if(saveTaskButton.disabled)return;
  saveTaskButton.disabled=true;
  try{
   await protectedWrite('/write/api/tasks','POST',{
    Tarefa:{title:[{text:{content:name}}]},
-   Date:{date:{start:localToday()}},
+   Date:{date:{start:taskDate}},
+   Dificuldade:{select:{name:difficulty}},
    Status:{status:{name:'Not started'}}
   },'create_task');
-  taskNameInput.value='';closeTaskModal();toast('Sua nova tarefa foi semeada!');
+  taskNameInput.value='';
+  taskDifficultyInput.value='';
+  closeTaskModal();
+  const scheduled=taskDate===localToday()?'hoje':new Intl.DateTimeFormat('pt-BR',{dateStyle:'short',timeZone:'UTC'}).format(new Date(taskDate+'T12:00:00Z'));
+  toast('Tarefa semeada para '+scheduled+'.');
   await refreshData();
  }catch(error){
   console.error(error);toast(error.message||'Não foi possível criar a tarefa.');
