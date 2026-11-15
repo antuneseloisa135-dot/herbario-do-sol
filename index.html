@@ -730,7 +730,59 @@ aside{background:#e4eadf!important}
 .house-save-note{font-size:10px;color:#8b806d;text-align:right;margin:9px 3px 0}
 @media(max-width:520px){.house-intro{align-items:flex-start;padding:14px}.house-intro h3{font-size:20px}.house-status{font-size:9px;padding:7px 9px}.house-scene{height:270px}.house-window{border-width:5px}.house-picture{border-width:5px}.house-shelf{padding-bottom:3px}.house-customize{padding:14px}.house-actions{display:grid;grid-template-columns:1fr}.house-actions button{width:100%}}
 </style>
-<style>.house-choice:disabled,.house-actions button:disabled{opacity:.55;cursor:wait}</style></head>
+<style>.house-choice:disabled,.house-actions button:disabled{opacity:.55;cursor:wait} 
+/* Herbário do Sol — linguagem visual botânica e encantada */
+.house-intro{background:linear-gradient(115deg,#e8eadb 0%,#f2ead8 58%,#eadfcf 100%);border:1px solid #d8d9c6;position:relative;overflow:hidden}
+.house-intro:after{content:"✧  ❀  ✧";position:absolute;right:18%;bottom:8px;color:#a7ae88;letter-spacing:13px;font-size:20px;opacity:.65}
+.house-intro h3,.house-customize-head h3{font-family:"Cormorant Garamond",Lora,serif;font-size:27px;color:#4f6048}
+.house-intro p,.house-customize-head p{font-family:"DM Sans",sans-serif;color:#706f5d}
+.house-status{background:#f8f1df;color:#65774f;border:1px solid #d9d3b9;letter-spacing:.04em;text-transform:uppercase}
+.botanical-room{background:#d7dfc9;border-color:#b9c4a7;box-shadow:inset 0 0 35px #596b4430}
+.botanical-room:before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 70% 25%,#fff4c966,transparent 38%),linear-gradient(180deg,#fff8e51c,transparent 55%)}
+.botanical-room .house-wall{background:linear-gradient(135deg,#e8e8d3,#d8e2ce)}
+.botanical-room.wall-sage .house-wall{background:linear-gradient(135deg,#d5e1ce,#b9cdb5)}
+.botanical-room.wall-lavender .house-wall{background:linear-gradient(135deg,#e7dfe9,#d3c8dc)}
+.botanical-room.wall-cream .house-wall{background:linear-gradient(135deg,#f0e8d4,#dedfc9)}
+.botanical-room .house-floor{background:repeating-linear-gradient(0deg,#a98763 0 3px,#c0a17a 3px 8px);border-color:#8e7456}
+.botanical-room.floor-sand .house-floor{background:repeating-linear-gradient(0deg,#c3b18c 0 3px,#d7c8a8 3px 8px);border-color:#a99a77}
+.botanical-room.floor-rose .house-floor{background:repeating-linear-gradient(0deg,#ad8176 0 3px,#c49b8d 3px 8px);border-color:#916c64}
+.botanical-room .house-window{border-color:#f8f1df;border-radius:48% 48% 8px 8px;background:linear-gradient(145deg,#a8c8bd,#f2d99b);box-shadow:0 0 22px #f5e5a866,0 4px 0 #b4a786}
+.botanical-room .house-window:before,.botanical-room .house-window:after{background:#f8f1df}
+.house-sun-glow{position:absolute;left:14%;top:18%;width:15%;aspect-ratio:1;border-radius:50%;background:#f6dfa0;filter:blur(17px);opacity:.55;z-index:1}
+.botanical-room .house-picture{border:5px solid #e9dfc3;background:radial-gradient(circle,#e7c878,#d4ae67);color:#6f7850;box-shadow:0 0 0 3px #9b9b70,0 4px 9px #655b3b40}
+.botanical-room .house-shelf{background:#7c694f;border-color:#62533f;box-shadow:0 5px 9px #55462d33}
+.house-vine{position:absolute;top:4%;width:18%;height:49%;z-index:3;border-left:3px solid #758b62;opacity:.9}
+.vine-left{left:2%;transform:rotate(7deg)}.vine-right{right:2%;transform:scaleX(-1) rotate(7deg)}
+.house-vine i,.house-vine b,.house-vine em{position:absolute;width:30%;height:16%;background:#8fa77a;border-radius:100% 0 100% 0;transform:rotate(-25deg);left:-2px;top:18%}
+.house-vine b{top:43%;left:-17%;transform:rotate(35deg);background:#a6b88b}
+.house-vine em{top:67%;left:-1%;transform:rotate(-25deg);background:#718d67}
+.house-bottles{position:absolute;right:9%;top:12%;width:15%;height:9%;z-index:4;display:flex;align-items:flex-end;gap:8%}
+.house-bottles i,.house-bottles b,.house-bottles em{display:block;width:23%;height:75%;border-radius:5px 5px 3px 3px;background:#b8c6a0;border:2px solid #879b75;position:relative}
+.house-bottles i:before,.house-bottles b:before,.house-bottles em:before{content:"";position:absolute;top:-6px;left:25%;width:50%;height:5px;background:#8b7755}
+.house-bottles b{height:95%;background:#d5b9a0;border-color:#ae8e76}
+.house-bottles em{height:62%;background:#b5b3cc;border-color:#918da9}
+.house-crystal{position:absolute;left:62%;top:33%;z-index:3;color:#b3a6c9;font-size:clamp(20px,4vw,32px);text-shadow:0 0 12px #fff2ce;animation:house-crystal-glow 3s ease-in-out infinite}
+@keyframes house-crystal-glow{0%,100%{opacity:.65;transform:translateY(0)}50%{opacity:1;transform:translateY(-5px)}}
+.botanical-room .house-rug{background:#b6b99a;border-color:#929b79;box-shadow:0 3px 8px #62563c30}
+.botanical-room .house-plant:before{background:#a77e5d}
+.botanical-room .house-plant i{background:#718d64}.botanical-room .house-plant b{background:#9caf7d}
+.botanical-room .house-back{background:#8e9b7c;border-color:#697b5f}
+.botanical-room .house-seat{background:#b8a78d;border-color:#89795f}
+.botanical-room .house-pillow{background:#d6c18e}
+.botanical-room .house-lamp i{background:#f3d88a;filter:drop-shadow(0 0 10px #f2d68c)}
+.botanical-room .house-ghost{filter:drop-shadow(0 0 10px #fff4c9)}
+.house-fireflies{position:absolute;inset:0;z-index:6;pointer-events:none;color:#f5df9a}
+.house-fireflies i,.house-fireflies b,.house-fireflies em{position:absolute;width:5px;height:5px;border-radius:50%;background:#fff0ae;box-shadow:0 0 10px 3px #f5df9a;animation:house-firefly 4s ease-in-out infinite}
+.house-fireflies i{left:37%;top:35%}.house-fireflies b{left:75%;top:53%;animation-delay:1.2s}.house-fireflies em{left:18%;top:65%;animation-delay:2.1s}
+@keyframes house-firefly{0%,100%{opacity:.25;transform:translateY(0) scale(.7)}50%{opacity:1;transform:translateY(-13px) scale(1.2)}}
+.house-customize{background:linear-gradient(145deg,#fbf8ed,#f1efe3);border-color:#d9ddcb}
+.house-option-group{border-color:#e0e1d3}
+.house-choice{background:#f7f4e9;border-color:#d4d8c7;color:#5f6d55}
+.house-choice.active{background:#e3eadb;border-color:#9eae8d;color:#4f684a}
+.house-actions .primary{background:#657b58;border-color:#657b58}
+.house-actions .secondary{background:#f4f0e3;border-color:#d6d2bf;color:#647054}
+@media(max-width:520px){.house-intro h3{font-size:25px}.house-vine{width:15%;height:40%}.house-bottles{right:8%;top:12%}.house-crystal{left:61%;top:34%}}
+</style></head>
 <body>
 <div class="shell">
 <aside>
@@ -1250,7 +1302,7 @@ function renderPergaminho(box){box.innerHTML='<div class="view-card"><h4>Bibliot
 
 function renderHouse(box){
  const optionButtons=(field,label)=>'<div class="house-option-group"><h4>'+label+'</h4><div class="house-options">'+HOUSE_CHOICES[field].map(item=>'<button type="button" class="house-choice '+(houseState[field]===item.value?'active':'')+'" data-house-field="'+field+'" data-house-value="'+item.value+'" '+(houseStateLoaded?'':'disabled')+'>'+item.label+'</button>').join('')+'</div></div>';
- box.innerHTML='<div class="house-intro"><div><span class="eyebrow">UM LUGAR PARA VOLTAR</span><h3>A casinha do Guardião</h3><p>Um refúgio tranquilo para descansar entre uma aventura e outra. Escolha as cores e o cantinho que combinam com ele.</p></div><div class="house-status">Decoração inicial</div></div><div class="house-scene wall-'+houseState.wall+' floor-'+houseState.floor+'"><div class="house-wall"></div><div class="house-window"><span></span><i></i></div><div class="house-picture">✿</div><div class="house-shelf"><span>✧</span><span>▤</span><span>❀</span></div><div class="house-rug"></div><div class="house-plant"><i></i><b></b></div><div class="house-furniture furniture-'+houseState.furniture+'"><div class="house-back"></div><div class="house-seat"></div><div class="house-pillow"></div><div class="house-legs"></div></div><div class="house-lamp"><i></i><b></b></div><div class="house-ghost"><svg viewBox="0 0 120 140" aria-hidden="true"><path d="M18 116V62C18 31 37 10 61 10s43 21 43 52v54c-8-8-15-8-22 0-7-8-15-8-22 0-7-8-15-8-22 0-7-8-13-8-20 0Z" fill="#fffdf7" stroke="#e9e2cf" stroke-width="2"/><ellipse cx="47" cy="62" rx="4" ry="6" fill="#554c45"/><ellipse cx="76" cy="62" rx="4" ry="6" fill="#554c45"/><path d="M54 79q7 7 14 0" fill="none" stroke="#554c45" stroke-width="2.5" stroke-linecap="round"/><path d="M69 15q-2-13 12-13 0 12-12 13Zm-2 1q-13-8-19 1 10 7 19-1Z" fill="#a9b69a" stroke="#526b50" stroke-width="1.5"/></svg></div><div class="house-floor"></div></div><div class="house-customize"><div class="house-customize-head"><h3>Deixe o cantinho com a sua cara</h3><p>As mudanças ficam na prévia até você salvar.</p></div>'+optionButtons("wall","Paredes")+optionButtons("floor","Piso")+optionButtons("furniture","Móveis")+'</div><div class="house-actions"><button type="button" class="secondary" data-house-reset '+(houseStateLoaded?'':'disabled')+'>Voltar à decoração inicial</button><button type="button" class="primary" data-house-save '+(houseStateLoaded?'':'disabled')+'>'+(houseStateLoaded?'Salvar decoração':'Carregando decoração...')+'</button></div><p class="house-save-note">Sua decoração fica guardada no Herbário e continua aqui quando você voltar.</p>';
+ box.innerHTML='<div class="house-intro"><div><span class="eyebrow">UM REFÚGIO NA CLAREIRA</span><h3>A casinha do Guardião</h3><p>Entre folhas, livros e pequenos encantamentos, este é o cantinho onde a magia do jardim descansa.</p></div><div class="house-status">Refúgio botânico</div></div><div class="house-scene botanical-room wall-'+houseState.wall+' floor-'+houseState.floor+'"><div class="house-wall"></div><div class="house-window"><span></span><i></i></div><div class="house-sun-glow"></div><div class="house-picture">☼</div><div class="house-shelf"><span>✧</span><span>▤</span><span>❀</span></div><div class="house-vine vine-left"><i></i><b></b><em></em></div><div class="house-vine vine-right"><i></i><b></b><em></em></div><div class="house-bottles"><i></i><b></b><em></em></div><div class="house-crystal">✧</div><div class="house-rug"></div><div class="house-plant"><i></i><b></b></div><div class="house-furniture furniture-'+houseState.furniture+'"><div class="house-back"></div><div class="house-seat"></div><div class="house-pillow"></div><div class="house-legs"></div></div><div class="house-lamp"><i></i><b></b></div><div class="house-ghost"><svg viewBox="0 0 120 140" aria-hidden="true"><path d="M18 116V62C18 31 37 10 61 10s43 21 43 52v54c-8-8-15-8-22 0-7-8-15-8-22 0-7-8-15-8-22 0-7-8-13-8-20 0Z" fill="#fffdf7" stroke="#e9e2cf" stroke-width="2"/><ellipse cx="47" cy="62" rx="4" ry="6" fill="#554c45"/><ellipse cx="76" cy="62" rx="4" ry="6" fill="#554c45"/><path d="M54 79q7 7 14 0" fill="none" stroke="#554c45" stroke-width="2.5" stroke-linecap="round"/><path d="M69 15q-2-13 12-13 0 12-12 13Zm-2 1q-13-8-19 1 10 7 19-1Z" fill="#a9b69a" stroke="#526b50" stroke-width="1.5"/></svg></div><div class="house-fireflies"><i></i><b></b><em></em></div><div class="house-floor"></div></div><div class="house-customize"><div class="house-customize-head"><h3>Deixe o cantinho com a sua cara</h3><p>As mudanças ficam na prévia até você salvar.</p></div>'+optionButtons("wall","Paredes")+optionButtons("floor","Piso")+optionButtons("furniture","Móveis")+'</div><div class="house-actions"><button type="button" class="secondary" data-house-reset '+(houseStateLoaded?'':'disabled')+'>Voltar à decoração inicial</button><button type="button" class="primary" data-house-save '+(houseStateLoaded?'':'disabled')+'>'+(houseStateLoaded?'Salvar decoração':'Carregando decoração...')+'</button></div><p class="house-save-note">Sua decoração fica guardada no Herbário e continua aqui quando você voltar.</p>';
  box.querySelectorAll('[data-house-field]').forEach(button=>button.addEventListener('click',()=>{
   const field=button.dataset.houseField,value=button.dataset.houseValue;
   houseState={...houseState,[field]:value};renderHouse(box);
