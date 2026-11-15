@@ -673,11 +673,17 @@ aside{background:#e4eadf!important}
 @keyframes guardian-wave-left{from{transform:rotate(-42deg)}to{transform:rotate(-105deg) translateY(-4px)}}
 @keyframes guardian-wave-right{from{transform:rotate(42deg)}to{transform:rotate(105deg) translateY(-4px)}}
 .hero-mascot.mood-pending .ghost-leaf{rotate:-12deg;transition:rotate .35s ease}
-.hero-mascot.mood-happy{filter:drop-shadow(0 0 10px #e6c66c99)!important}
+.hero-mascot .ghost-sparkles{opacity:0}
+.hero-mascot .ghost-mouth-worried,.hero-mascot .ghost-mouth-happy{opacity:0}
+.hero-mascot.mood-pending-night .ghost-mouth-normal,.hero-mascot.mood-happy .ghost-mouth-normal{opacity:0}
+.hero-mascot.mood-pending-night .ghost-mouth-worried{opacity:1}
+.hero-mascot.mood-happy .ghost-mouth-happy{opacity:1}
+.hero-mascot.mood-pending-night .ghost-eye{transform:translateY(2px) scaleY(.88)}
+.hero-mascot.mood-happy{filter:none!important}
 .hero-mascot.mood-happy .ghost-mouth{transform:scale(1.22);transform-origin:70px 80px}
 .hero-mascot.mood-happy .ghost-cheek{opacity:1}
 .hero-mascot.mood-celebrate{animation:guardian-celebrate 1.15s ease-in-out 2!important}
-.hero-mascot.mood-celebrate .ghost-sparkles{animation:guardian-sparkle .45s ease-in-out 4 alternate}
+.hero-mascot.mood-celebrate{filter:drop-shadow(0 0 11px #e6c66ccc)!important}.hero-mascot.mood-celebrate .ghost-sparkles{opacity:1;animation:guardian-sparkle .45s ease-in-out 4 alternate}
 @keyframes guardian-celebrate{
   0%,100%{transform:translateY(0) scale(1);rotate:0deg}
   25%{transform:translateY(-13px) scale(1.08);rotate:-5deg}
@@ -908,7 +914,7 @@ aside{background:#e4eadf!important}
 <main>
  <div class="topbar"><div><h2 id="page-title">A Clareira do Dia</h2><div class="subtitle" id="page-subtitle" hidden>Pequenos passos também fazem florescer grandes mudanças.</div></div><div class="date-pill" id="today"></div></div>
  <section id="home-view">
-  <div class="hero"><div class="hero-copy"><h3 id="greeting">Bom dia, Guardiã.</h3><p id="greeting-message">Que hoje tenha espaço para florescer.</p></div><svg class="ghost-mascot hero-mascot" viewBox="0 0 120 140" role="img" aria-label="Fantasminha guardião do jardim"><g class="ghost-arm ghost-arm-left"><path d="M27 78 C18 78 13 84 9 92 C7 97 10 100 14 97 L29 87" fill="none" stroke="#e9e2cf" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M27 78 C18 78 13 84 9 92 C7 97 10 100 14 97 L29 87" fill="none" stroke="#fffdf7" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></g><g class="ghost-arm ghost-arm-right"><path d="M95 78 C104 78 109 84 113 92 C115 97 112 100 108 97 L93 87" fill="none" stroke="#e9e2cf" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M95 78 C104 78 109 84 113 92 C115 97 112 100 108 97 L93 87" fill="none" stroke="#fffdf7" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></g><path class="ghost-body" d="M18 116V62C18 31 37 10 61 10s43 21 43 52v54c-8-8-15-8-22 0-7-8-15-8-22 0-7-8-15-8-22 0-7-8-13-8-20 0Z"/><ellipse class="ghost-eye" cx="47" cy="62" rx="4" ry="6"/><ellipse class="ghost-eye" cx="76" cy="62" rx="4" ry="6"/><ellipse class="ghost-cheek" cx="35" cy="76" rx="7" ry="4"/><ellipse class="ghost-cheek" cx="88" cy="76" rx="7" ry="4"/><path class="ghost-mouth" d="M54 79q7 7 14 0" fill="none" stroke="#554c45" stroke-width="2.5" stroke-linecap="round"/><path class="ghost-leaf" d="M69 15q-2-13 12-13 0 12-12 13Zm-2 1q-13-8-19 1 10 7 19-1Z"/><path class="ghost-sparkles" d="M8 38l2 4 4 2-4 2-2 4-2-4-4-2 4-2zM108 89l2 3 3 2-3 2-2 3-2-3-3-2 3-2z" fill="#d1ad63" opacity=".9"><animate attributeName="opacity" values=".25;1;.25" dur="3.6s" repeatCount="indefinite"/></path></svg></div>
+  <div class="hero"><div class="hero-copy"><h3 id="greeting">Bom dia, Guardiã.</h3><p id="greeting-message">Que hoje tenha espaço para florescer.</p></div><svg class="ghost-mascot hero-mascot" viewBox="0 0 120 140" role="img" aria-label="Fantasminha guardião do jardim"><g class="ghost-arm ghost-arm-left"><path d="M27 78 C18 78 13 84 9 92 C7 97 10 100 14 97 L29 87" fill="none" stroke="#e9e2cf" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M27 78 C18 78 13 84 9 92 C7 97 10 100 14 97 L29 87" fill="none" stroke="#fffdf7" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></g><g class="ghost-arm ghost-arm-right"><path d="M95 78 C104 78 109 84 113 92 C115 97 112 100 108 97 L93 87" fill="none" stroke="#e9e2cf" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M95 78 C104 78 109 84 113 92 C115 97 112 100 108 97 L93 87" fill="none" stroke="#fffdf7" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></g><path class="ghost-body" d="M18 116V62C18 31 37 10 61 10s43 21 43 52v54c-8-8-15-8-22 0-7-8-15-8-22 0-7-8-15-8-22 0-7-8-13-8-20 0Z"/><ellipse class="ghost-eye" cx="47" cy="62" rx="4" ry="6"/><ellipse class="ghost-eye" cx="76" cy="62" rx="4" ry="6"/><ellipse class="ghost-cheek" cx="35" cy="76" rx="7" ry="4"/><ellipse class="ghost-cheek" cx="88" cy="76" rx="7" ry="4"/><path class="ghost-mouth ghost-mouth-normal" d="M54 79q7 7 14 0" fill="none" stroke="#554c45" stroke-width="2.5" stroke-linecap="round"/><path class="ghost-mouth ghost-mouth-worried" d="M54 84q7-8 14 0" fill="none" stroke="#554c45" stroke-width="2.5" stroke-linecap="round"/><path class="ghost-mouth ghost-mouth-happy" d="M51 77q9 14 18 0" fill="none" stroke="#554c45" stroke-width="2.8" stroke-linecap="round"/><path class="ghost-leaf" d="M69 15q-2-13 12-13 0 12-12 13Zm-2 1q-13-8-19 1 10 7 19-1Z"/><path class="ghost-sparkles" d="M8 38l2 4 4 2-4 2-2 4-2-4-4-2 4-2zM108 89l2 3 3 2-3 2-2 3-2-3-3-2 3-2z" fill="#d1ad63" opacity=".9"><animate attributeName="opacity" values=".25;1;.25" dur="3.6s" repeatCount="indefinite"/></path></svg></div>
   <div class="stats">
    <div class="stat"><small>Flores de hoje</small><strong id="remaining">—</strong><em>tarefas em aberto</em></div>
    <div class="stat"><small>Essência Solar</small><strong id="essence-total">—</strong><em id="essence-caption">carregando do Notion</em></div>
@@ -1018,11 +1024,12 @@ function updateGuardianMood(){
  if(!mascot||!message)return;
  const todays=tasks.filter(t=>(date(t,'Date')||'').slice(0,10)===localToday());
  const open=todays.filter(t=>!['Done','Colhido'].includes(select(t,'Status')));
- const mood=!todays.length?'resting':open.length?'pending':'happy';
- mascot.classList.remove('mood-resting','mood-pending','mood-happy');
+ const night=new Date().getHours()>=18||new Date().getHours()<6;
+ const mood=!todays.length?'resting':open.length?(night?'pending-night':'pending'):'happy';
+ mascot.classList.remove('mood-resting','mood-pending','mood-pending-night','mood-happy');
  mascot.classList.add('mood-'+mood);
- mascot.setAttribute('aria-label',mood==='pending'?'Guardião atento às tarefas do dia':mood==='happy'?'Guardião feliz: todas as tarefas de hoje foram concluídas':'Guardião descansando no jardim');
- message.textContent=mood==='pending'
+ mascot.setAttribute('aria-label':mood==='pending-night'?'Guardião preocupado com tarefas pendentes à noite':mood==='pending'?'Guardião atento às tarefas do dia':mood==='happy'?'Guardião feliz: todas as tarefas de hoje foram concluídas':'Guardião descansando no jardim');
+ message.textContent=(mood==='pending'||mood==='pending-night')
   ? 'Ainda temos '+open.length+' '+(open.length===1?'flor para cuidar':'flores para cuidar')+'. Vamos uma de cada vez.'
   : mood==='happy'
    ? 'Todas as flores de hoje foram cuidadas. Que orgulho do que você cultivou!'
@@ -1443,7 +1450,7 @@ function gardenDisplayPlant(n,i,name){
 function renderGarden(box){
  if(!gardenState){box.innerHTML='<p class="garden-loading">Despertando o jardim...</p>';return}
  const plants=gardenState.plants||[],today=localToday(),weekday=new Intl.DateTimeFormat("pt-BR",{weekday:"long"}).format(new Date()).replace(/^./,c=>c.toUpperCase());
- const scene='<section class="garden-landscape" aria-label="Seu pequeno jardim em cultivo"><div class="garden-backdrop"><span class="garden-sun"></span><i class="garden-hill hill-back"></i><i class="garden-hill hill-front"></i></div><div class="garden-stage-heading"><span>SEU JARDIM EM CULTIVO</span></div><div class="garden-stage-pots">'+(plants.length?plants.map((p,i)=>gardenDisplayPlant(p.completions||0,i,p.name)).join(''):'<p class="garden-empty-stage">Seu primeiro vasinho vai aparecer aqui quando você cultivar um ritual.</p>')+'</div></section>';
+ const scene='<section class="garden-landscape" aria-label="Seu pequeno jardim em cultivo"><div class="garden-backdrop"><span class="garden-sun"></span><i class="garden-hill hill-back"></i><i class="garden-hill hill-front"></i></div><div class="garden-stage-pots">'+(plants.length?plants.map((p,i)=>gardenDisplayPlant(p.completions||0,i,p.name)).join(''):'<p class="garden-empty-stage">Seu primeiro vasinho vai aparecer aqui quando você cultivar um ritual.</p>')+'</div></section>';
  const summary=document.createElement("div");summary.className="garden-summary";
  const activityCount=plants.reduce((sum,p)=>sum+(p.activities||[]).length,0);
  summary.innerHTML='<span>'+plants.length+' plantas em cultivo</span><span>'+activityCount+' atividades · '+plants.reduce((a,p)=>a+(p.completions||0),0)+' práticas registradas</span>';
