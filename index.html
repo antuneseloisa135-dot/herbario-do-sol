@@ -806,6 +806,13 @@ aside{background:#e4eadf!important}
 /* Jardim de Cultivo */
 .garden-intro{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:8px 2px 22px}.garden-intro h3{font:600 25px Lora,serif;margin:7px 0;color:var(--night)}.garden-intro p{max-width:570px;color:var(--muted);font-size:13px;line-height:1.7;margin:0}.garden-inventory{flex:none;min-width:120px;padding:15px 18px;border:1px solid #d9cfb7;border-radius:16px;background:linear-gradient(145deg,#f7f1df,#e8ecdf);text-align:center}.garden-inventory span,.garden-inventory small{display:block;font-size:10px;color:var(--muted)}.garden-inventory strong{display:block;font:600 30px Lora,serif;color:var(--moss);margin:3px}.garden-summary{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:12px 3px;border-block:1px solid var(--line);font-size:11px;color:var(--muted)}.garden-plots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:18px 0}.garden-plot{min-width:0;text-align:center;padding:17px 13px;border:1px solid #e1d9c8;border-radius:17px;background:linear-gradient(180deg,#fffdf8,#f4f0e5);display:flex;flex-direction:column;align-items:center}.garden-plot h4{font:600 16px Lora,serif;margin:8px 0 4px}.garden-plot p{font-size:11px;color:var(--muted);line-height:1.5;min-height:32px;margin:0 0 10px}.garden-pot{height:104px;width:112px;position:relative;margin:0 auto 5px;background:radial-gradient(ellipse at 50% 82%,#a9b69a 0 38%,transparent 39%)}.garden-pot:after{content:"";position:absolute;bottom:8px;left:26px;width:60px;height:45px;background:linear-gradient(100deg,#b77950,#d6a77b,#9e6747);clip-path:polygon(0 0,100% 0,86% 100%,14% 100%);border-radius:0 0 8px 8px}.garden-pot span{position:absolute;top:15px;left:50%;transform:translateX(-50%);font-size:24px;color:var(--gold)}.garden-pot i,.garden-pot b{position:absolute;z-index:1;bottom:47px;left:55px;width:2px;height:34px;background:#6d895b;transform:rotate(-12deg)}.garden-pot b{height:20px;transform:rotate(35deg);transform-origin:bottom}.garden-plant-art{height:104px;width:112px;position:relative;margin:0 auto 5px}.garden-plant-art .stem{position:absolute;left:55px;bottom:10px;height:73px;width:3px;background:#6d895b;border-radius:4px}.garden-plant-art .leaf{position:absolute;width:25px;height:13px;background:#91a879;border-radius:100% 0 100% 0;bottom:42px;left:32px;transform:rotate(18deg)}.garden-plant-art .leaf.right{left:56px;bottom:54px;transform:rotate(195deg)}.garden-plant-art .bloom{position:absolute;top:3px;left:42px;font-size:34px;color:#d9b8a7}.garden-plant-art .garden-sun{position:absolute;right:9px;top:12px;color:var(--gold)}.garden-plant-art.ready .bloom{color:#c89ab8;filter:drop-shadow(0 0 7px #d9b8a788)}.garden-plot.growing{background:linear-gradient(180deg,#fffdf8,#edf1e7)}.garden-meta{display:grid;gap:4px;font-size:9px;color:var(--muted);margin:0 0 12px}.garden-actions{width:100%;margin-top:auto}.garden-actions button,.garden-plot>button{width:100%;font-size:11px}.garden-plot button:disabled{opacity:.45;cursor:not-allowed}.garden-note{padding:14px 16px;background:#f1eee3;border-left:3px solid #b8a16e;border-radius:0 12px 12px 0;font-size:11px;color:#756d5e;line-height:1.65}.garden-loading{padding:30px;color:var(--muted);font-size:13px}
 @media(max-width:650px){.garden-intro{align-items:flex-start;flex-direction:column}.garden-intro h3{font-size:22px}.garden-inventory{display:grid;grid-template-columns:auto auto;align-items:center;gap:4px 12px;text-align:left;min-width:0;padding:10px 14px}.garden-inventory span{grid-column:1/-1}.garden-inventory strong{font-size:24px;margin:0}.garden-inventory small{font-size:10px}.garden-plots{grid-template-columns:1fr;gap:10px}.garden-plot{display:grid;grid-template-columns:88px minmax(0,1fr);column-gap:12px;text-align:left;align-items:center;padding:12px}.garden-pot,.garden-plant-art{grid-row:1/5;transform:scale(.78);transform-origin:center}.garden-plot h4{margin:0}.garden-plot p{min-height:0;margin:2px 0 6px}.garden-meta{margin-bottom:8px}.garden-actions{grid-column:2}.garden-plot>button{grid-column:2}}
+
+/* Jardim como primeira paisagem do Refúgio */
+.garden-landscape{height:clamp(170px,32vw,280px);position:relative;overflow:hidden;border-radius:20px;border:1px solid #cbd7c4;background:#dce8d7;margin:0 0 17px;box-shadow:0 4px 0 #e6e1d4}.garden-landscape svg{width:100%;height:100%;display:block}.landscape-caption{position:absolute;left:20px;bottom:15px;display:grid;gap:4px;color:#405b42}.landscape-caption span{font-size:9px;letter-spacing:.17em;font-weight:700}.landscape-caption strong{font:600 clamp(18px,3vw,25px) Lora,serif}
+.ritual-garden-grid{grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch}.ritual-plant-card{display:grid;grid-template-columns:100px minmax(0,1fr);column-gap:13px;align-items:center;text-align:left;padding:14px;min-height:145px}.ritual-plant-card>div:first-child{grid-row:1/5;display:grid;place-items:center}.ritual-plant-card h4{margin:0;font-size:15px}.ritual-plant-card p{min-height:0;margin:3px 0 5px}.ritual-plant-card .garden-meta{margin:0 0 8px}.ritual-complete{grid-column:2;width:100%;min-height:38px;border:0;border-radius:10px;background:#71866a;color:#fff;font-size:10px;font-weight:700;padding:9px}.ritual-complete:disabled{background:#e9e7dc;color:#8d887c;opacity:1;cursor:default}
+.ritual-flower{width:96px;height:108px;position:relative;--flower:#d9b8a7}.flower-stem{position:absolute;left:49px;bottom:6px;height:65px;width:3px;background:#6d895b;border-radius:4px}.flower-leaf{position:absolute;left:29px;bottom:37px;width:25px;height:13px;background:#91a879;border-radius:100% 0 100% 0;transform:rotate(15deg)}.flower-leaf.right{left:49px;bottom:48px;transform:rotate(195deg)}.flower-bloom{position:absolute;left:31px;top:5px;width:40px;height:40px;display:grid;place-items:center;color:var(--flower);font-size:34px}.stage-semente .flower-bloom{font-size:24px;color:#b6a47e}.stage-semente .flower-stem{height:15px}.stage-semente .flower-leaf{display:none}.stage-broto .flower-bloom{font-size:27px}.stage-broto .flower-stem{height:38px}.stage-botão .flower-bloom{font-size:31px}.stage-floração .flower-bloom{font-size:40px;filter:drop-shadow(0 0 8px #e5c987)}
+.house-combined{margin-top:32px;padding-top:20px;border-top:1px solid #ded6c4}.refuge-divider{text-align:center;padding:8px 10px 18px}.refuge-divider>span{color:#a77b35;font-size:19px}.refuge-divider h3{font:600 24px Lora,serif;color:#4f6048;margin:5px 0}.refuge-divider p{font-size:11px;color:var(--muted);margin:0}.house-content .house-intro{margin-bottom:14px}
+@media(max-width:650px){.ritual-garden-grid{grid-template-columns:1fr}.ritual-plant-card{grid-template-columns:82px minmax(0,1fr);padding:11px}.ritual-flower{transform:scale(.86);transform-origin:center}.garden-landscape{height:190px;border-radius:15px}.landscape-caption{left:14px;bottom:12px}.house-combined{margin-top:25px}}
 </style>
 </head>
 <body>
@@ -817,8 +824,7 @@ aside{background:#e4eadf!important}
   <button class="nav-btn" data-view="aventuras"><span>◇</span> Aventuras</button>
   <button class="nav-btn" data-view="rituais"><span>✳</span> Rituais do Jardim</button>
   <button class="nav-btn" data-view="personagem"><span>◎</span> Guardião</button>
-  <button class="nav-btn" data-view="casinha"><span>✿</span> Refúgio</button>
-  <button class="nav-btn" data-view="jardim"><span>❀</span> Jardim de Cultivo</button>
+  <button class="nav-btn" data-view="refugio"><span>✿</span> Refúgio & Jardim</button>
   <button class="nav-btn" data-view="conquistas"><span>☆</span> Conquistas</button>
   <button class="nav-btn" data-view="loja"><span>♧</span> Feira do Sol</button>
   <button class="nav-btn" data-view="pergaminho"><span>▤</span> Pergaminho</button>
@@ -879,6 +885,7 @@ aside{background:#e4eadf!important}
 <div id="turnstile-start_journey" style="position:fixed;bottom:64px;left:50%;transform:translateX(-50%);z-index:1200" aria-live="polite"></div>
 <div id="turnstile-save_house" style="position:fixed;bottom:64px;left:50%;transform:translateX(-50%);z-index:1200" aria-live="polite"></div>
 <div id="turnstile-save_garden" style="position:fixed;bottom:64px;left:50%;transform:translateX(-50%);z-index:1200" aria-live="polite"></div>
+<div id="turnstile-complete_ritual" style="position:fixed;bottom:64px;left:50%;transform:translateX(-50%);z-index:1200" aria-live="polite"></div>
 <div class="modal-backdrop" id="reward-modal"><div class="modal"><div class="eyebrow">Feira do Sol</div><h3 id="reward-modal-title">Uma recompensa merece ser celebrada</h3><p id="reward-modal-copy"></p><div class="modal-actions"><button class="secondary" id="reward-modal-cancel">Voltar</button><button class="primary" id="reward-modal-confirm">Confirmar resgate</button></div></div></div>
 <div class="toast" id="toast"></div>
 <script>
@@ -901,11 +908,11 @@ const pages={
  aventuras:["🧭","Jornadas em curso","Projetos que ganham vida quando são divididos em etapas.","Suas aventuras",[]],
  rituais:["🌱","Pequenos Cultivos","Cuidados que, repetidos com carinho, criam raízes.","Seus cultivos",[]],
  personagem:["◎","Guardiã","Acompanhe sua evolução, sua Essência Solar e os caminhos que já percorreu.","Seu retrato no Herbário",["Nível e atributos carregados do Notion."]],
- casinha:["✿","Refúgio","Um cantinho só dele, que você pode deixar com a sua cara.","Seu pequeno refúgio",[]],
+ refugio:["✿","Refúgio & Jardim","Um espaço para descansar e acompanhar cada ritual florescer.","Seu jardim e seu refúgio",[]],
  conquistas:["🏆","Coleção de conquistas","Cada avanço merece ser reconhecido.","Conquistas",["As conquistas serão conectadas ao Notion em uma próxima etapa."]],
  pergaminho:["📜","Pergaminho","Seu espaço de referências, ideias e conhecimentos.","Biblioteca",["Estudos e cursos","Referências importantes","Anotações e ideias para revisitar"]],
  loja:["♧","Feira do Sol","Pequenas recompensas para celebrar o caminho percorrido.","Recompensas disponíveis",[]],
- jardim:["❀","Jardim de Cultivo","Semeie, cuide e acompanhe o florescimento no seu próprio ritmo.","Seu pequeno jardim",[]]
+ 
 };
 function prop(page,name){return page?.properties?.[name]}
 function title(page,name){return (prop(page,name)?.title||[]).map(x=>x.plain_text||x.text?.content||"").join("")}
@@ -1326,21 +1333,21 @@ async function syncAchievementsFromServer(){
     const names=result.result?.unlocked||[];if(names.length)toast('Nova insígnia conquistada: '+names.join(', ')+'!');
   }catch(error){console.warn('Não foi possível atualizar as conquistas agora:',error);toast(error.message||'Não foi possível conferir as conquistas.')}
 }
-let gardenState=null,gardenLoaded=false,gardenBusy=false;
-const GARDEN_DEFAULT={seeds:3,flowers:[],plots:[{id:"plot-1",plant:null},{id:"plot-2",plant:null},{id:"plot-3",plant:null}]};
-function gardenTime(v){const l=Math.max(0,v-Date.now());if(!l)return "Pronta para colher";const hh=Math.floor(l/36e5),mm=Math.floor(l%36e5/6e4);return hh?hh+"h "+mm+"min restantes":mm+" min restantes"}
+let gardenState=null,gardenLoaded=false,gardenLoading=false,gardenBusy=false,houseStateLoading=false;
+function gardenStage(n){return n>=7?"floração":n>=3?"botão":n>=1?"broto":"semente"}
+function flowerArt(n,i){const c=["#d9b8a7","#b9a8ce","#d6c879","#c5d1bb"];return '<div class="ritual-flower stage-'+gardenStage(n)+'" style="--flower:'+c[i%4]+'"><i class="flower-stem"></i><i class="flower-leaf left"></i><i class="flower-leaf right"></i><b class="flower-bloom">'+(n>=3?"✿":n>=1?"✧":"·")+'</b></div>'}
 function renderGarden(box){
- if(!gardenState){box.innerHTML='<p class="garden-loading">Preparando seu jardim...</p>';return}
- const planted=gardenState.plots.filter(p=>p.plant).length;
- box.innerHTML='<section class="garden-intro"><div><span class="eyebrow">UM NOVO CANTINHO PARA CULTIVAR</span><h3>Um jardim que cresce com você.</h3><p>O tempo faz parte do cultivo. Um pouco de cuidado pode acelerar o florescimento, mas nenhuma planta murcha se você precisar se ausentar.</p></div><div class="garden-inventory"><span>SEMENTES</span><strong>'+gardenState.seeds+'</strong><small>Flores colhidas: '+gardenState.flowers.length+'</small></div></section><div class="garden-summary"><span>'+planted+' de 3 canteiros ocupados</span><span>Flores silvestres · primeira espécie</span></div><div class="garden-plots">'+gardenState.plots.map((p,i)=>{
- if(!p.plant)return '<article class="garden-plot empty"><div class="garden-pot"><span>✧</span><i></i><b></b></div><h4>Canteiro '+(i+1)+'</h4><p>Um espaço esperando uma nova semente.</p><button type="button" class="primary" data-ga="plant" data-plot="'+p.id+'" '+(!gardenState.seeds||gardenBusy?'disabled':'')+'>Plantar semente</button></article>';
- const x=p.plant,ready=Date.now()>=x.readyAt,waterReady=!x.wateredAt||Date.now()-x.wateredAt>=432e5;
- return '<article class="garden-plot growing"><div class="garden-plant-art '+(ready?'ready':'')+'"><span class="garden-sun">✧</span><i class="stem"></i><i class="leaf left"></i><i class="leaf right"></i><i class="bloom">✿</i></div><h4>Flor silvestre</h4><p>'+gardenTime(x.readyAt)+'</p><div class="garden-meta"><span>Plantada em '+new Date(x.plantedAt).toLocaleDateString('pt-BR')+'</span><span>'+(x.wateredAt?'Último cuidado: '+new Date(x.wateredAt).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'Ainda não recebeu água')+'</span></div><div class="garden-actions">'+(ready?'<button type="button" class="primary" data-ga="harvest" data-plot="'+p.id+'">Colher flor</button>':'<button type="button" class="secondary" data-ga="water" data-plot="'+p.id+'" '+(!waterReady?'disabled':'')+'>Regar e acelerar</button>')+'</div></article>';
- }).join('')+'</div><p class="garden-note">Cada semente leva cerca de 24 horas para florescer. Regar acelera o crescimento em 4 horas; você pode cuidar de cada planta uma vez a cada 12 horas. O jardim continua crescendo mesmo quando o Herbário está fechado.</p>';
- box.querySelectorAll('[data-ga]').forEach(b=>b.addEventListener('click',()=>gardenAction(b.dataset.ga,b.dataset.plot,box,b)));
+ if(!gardenState){box.innerHTML='<p class="garden-loading">Despertando o jardim...</p>';return}
+ const plants=gardenState.plants||[],today=localToday(),weekday=new Intl.DateTimeFormat("pt-BR",{weekday:"long"}).format(new Date()).replace(/^./,c=>c.toUpperCase());
+ const scene='<div class="garden-landscape" role="img" aria-label="Jardim florido ao amanhecer"><svg viewBox="0 0 900 250" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="gsky" x2="0" y2="1"><stop stop-color="#dce8d7"/><stop offset="1" stop-color="#f5e9cf"/></linearGradient><linearGradient id="gsoil" x2="0" y2="1"><stop stop-color="#9daf83"/><stop offset="1" stop-color="#657e5b"/></linearGradient></defs><rect width="900" height="250" fill="url(#gsky)"/><circle cx="700" cy="65" r="38" fill="#f5d98e" opacity=".8"/><path d="M0 155Q130 75 260 150T520 140T900 130V250H0Z" fill="#b6c5a0"/><path d="M0 185Q170 115 340 177T660 160T900 170V250H0Z" fill="url(#gsoil)"/><path d="M390 250Q420 185 480 166Q540 190 570 250Z" fill="#d9c59a"/><g stroke="#66845d" stroke-width="5" stroke-linecap="round"><path d="M190 210v-65m0 38q-38-34-54-13m54-4q30-32 49-14M680 205v-74m0 42q-35-34-52-14m52-8q32-33 50-13M300 214v-48m0 28q-25-22-39-9m39-7q22-23 35-9"/></g><g fill="#d9b8a7"><circle cx="190" cy="140" r="12"/><circle cx="177" cy="140" r="8"/><circle cx="203" cy="140" r="8"/></g><g fill="#b9a8ce"><circle cx="680" cy="127" r="12"/><circle cx="667" cy="127" r="8"/><circle cx="693" cy="127" r="8"/></g><g fill="#f2d36b"><circle cx="300" cy="163" r="9"/><circle cx="290" cy="163" r="6"/><circle cx="310" cy="163" r="6"/></g></svg><div class="landscape-caption"><span>O JARDIM DE CULTIVO</span><strong>O que você cuida, floresce.</strong></div></div>';
+ const summary=document.createElement("div");summary.className="garden-summary";summary.innerHTML='<span>'+plants.length+' flores ligadas aos seus rituais</span><span>'+plants.reduce((a,p)=>a+(p.completions||0),0)+' cuidados realizados</span>';
+ const grid=document.createElement("div");grid.className="garden-plots ritual-garden-grid";
+ if(!plants.length){const e=document.createElement("div");e.className="garden-note";e.textContent="Quando você cadastrar um ritual ativo, sua flor aparecerá aqui.";grid.append(e)}
+ plants.forEach((p,i)=>{const card=document.createElement("article");card.className="garden-plot ritual-plant-card";const art=document.createElement("div");art.innerHTML=flowerArt(p.completions||0,i);const h=document.createElement("h4");h.textContent=p.name;const d=document.createElement("p");d.textContent=(p.area||"Autocuidado")+" · "+((p.days||[]).join(" e ")||"dias a definir");const m=document.createElement("div");m.className="garden-meta";m.textContent=(p.completions||0)+" cuidados · estágio: "+gardenStage(p.completions||0);const btn=document.createElement("button");btn.type="button";btn.className="primary ritual-complete";const done=p.lastPracticed===today,scheduled=(p.days||[]).includes(weekday);btn.disabled=gardenBusy||done||!scheduled;btn.textContent=done?"Cultivada hoje":scheduled?"Concluir ritual":"Próximo cuidado: "+((p.days||[]).join(" · ")||"defina os dias");if(scheduled&&!done)btn.addEventListener("click",()=>completeRitual(p.ritualId,box,btn));card.append(art,h,d,m,btn);grid.append(card)});
+ box.innerHTML='<section class="garden-intro"><div><span class="eyebrow">UM JARDIM, MUITOS COMEÇOS</span><h3>Seu cuidado ganha raízes.</h3><p>Cada ritual tem uma flor própria. Quando você pratica, ela cresce um pouquinho. Se precisar pausar, ela continuará aqui, esperando seu retorno.</p></div><div class="garden-inventory"><span>SEUS RITUAIS</span><strong>'+plants.length+'</strong><small>uma flor para cada cuidado</small></div></section>'+scene;box.append(summary,grid);
 }
-async function loadGardenState(){try{const r=await fetch(API+'/garden/state'),j=await r.json();if(!r.ok||!j?.ok)throw Error(j?.error||'Não foi possível carregar o jardim.');gardenState=j.state||GARDEN_DEFAULT;gardenLoaded=true;if(document.querySelector('.nav-btn.active')?.dataset.view==='jardim')renderGarden(document.getElementById('other-content'))}catch(e){console.error(e);toast('Não foi possível carregar o Jardim de Cultivo.')}}
-async function gardenAction(op,plotId,box,button){if(gardenBusy||button.disabled)return;gardenBusy=true;button.disabled=true;button.textContent='Aguarde...';try{const j=await protectedWrite('/write/api/garden/action','POST',{operation:op,plotId},'save_garden');gardenState=j.state;toast(({plant:'Uma nova semente foi plantada!',water:'Seu cuidado acelerou o florescimento.',harvest:'Flor colhida e guardada na coleção!'})[op])}catch(e){console.error(e);toast(e.message||'Não foi possível cuidar do jardim.')}finally{gardenBusy=false;if(box.isConnected)renderGarden(box)}}
+async function loadGardenState(){if(gardenLoading||gardenLoaded)return;gardenLoading=true;try{const r=await fetch(API+"/garden/state"),j=await r.json();if(!r.ok||!j?.ok)throw Error(j?.error||"Não foi possível carregar o jardim.");gardenState=j.state||{plants:[]};gardenLoaded=true;if(document.querySelector(".nav-btn.active")?.dataset.view==="refugio")renderRefuge(document.getElementById("other-content"))}catch(e){console.error(e);toast("Não foi possível carregar o Jardim de Cultivo.")}finally{gardenLoading=false}}
+async function completeRitual(id,box,button){if(gardenBusy||button.disabled)return;gardenBusy=true;button.disabled=true;button.textContent="Cultivando...";try{const r=await protectedWrite("/write/api/garden/action","POST",{operation:"complete",ritualId:id},"complete_ritual");gardenState=r.state;rituals=await load("rituals");gardenLoaded=true;toast("Ritual concluído. Sua flor cresceu um pouquinho!")}catch(e){console.error(e);toast(e.message||"Não foi possível registrar o ritual.")}finally{gardenBusy=false;if(box.isConnected)renderRefuge(box)}}
 function renderPergaminho(box){box.innerHTML='<div class="view-card"><h4>Biblioteca do jardim</h4><p>Seu acervo de conhecimentos, receitas e feitiços para consultar e cultivar suas jornadas.</p></div><div class="view-card"><h4>Receitas e Feitiços</h4><p>'+recipes.length+' registros encontrados na coleção Receitas e Feitiços.</p></div>'}
 
 function renderHouse(box){
@@ -1354,6 +1361,7 @@ function renderHouse(box){
  box.querySelector('[data-house-save]').addEventListener('click',()=>saveHouse(box));
 }
 async function loadHouseState(){
+ if(houseStateLoading||houseStateLoaded)return;houseStateLoading=true;
  try{
   const response=await fetch(API+'/house/state');
   const result=await response.json();
@@ -1365,8 +1373,8 @@ async function loadHouseState(){
    furniture:HOUSE_CHOICES.furniture.some(x=>x.value===saved.furniture)?saved.furniture:'reading'
   };
   houseStateLoaded=true;
-  if(document.querySelector('.nav-btn.active')?.dataset.view==='casinha')renderHouse(document.getElementById('other-content'));
- }catch(error){console.error('Falha ao carregar decoração:',error);toast('Não foi possível carregar a decoração salva.')}
+  if(document.querySelector('.nav-btn.active')?.dataset.view==='refugio')renderHouse(document.getElementById('other-content'));
+ }catch(error){console.error('Falha ao carregar decoração:',error);toast('Não foi possível carregar a decoração salva.')}finally{houseStateLoading=false}
 }
 async function saveHouse(box){
  const button=box.querySelector('[data-house-save]');
@@ -1379,6 +1387,7 @@ async function saveHouse(box){
  }catch(error){console.error('Falha ao salvar decoração:',error);toast(error.message||'Não foi possível salvar a casinha.')}
  finally{if(button.isConnected){button.disabled=false;button.textContent='Salvar decoração'}}
 }
+function renderRefuge(box){renderGarden(box);const house=document.createElement("section");house.className="house-combined";house.innerHTML='<div class="refuge-divider"><span>✧</span><h3>O Refúgio do Guardião</h3><p>Um cantinho para descansar entre um cuidado e outro.</p></div>';const content=document.createElement("div");content.className="house-content";house.append(content);box.append(house);renderHouse(content);if(!gardenLoaded)loadGardenState();if(!houseStateLoaded&&!houseStateLoading)loadHouseState()}
 function showView(view){
  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
  const home=view==='inicio';document.getElementById('home-view').style.display=home?'block':'none';document.getElementById('other-view').style.display=home?'none':'block';
@@ -1386,7 +1395,7 @@ function showView(view){
  const p=pages[view];if(!p)return;
  document.getElementById('page-title').textContent=p[1];document.getElementById('page-subtitle').hidden=false;document.getElementById('page-subtitle').textContent=p[2];
  const box=document.getElementById('other-content');box.innerHTML='';
- if(view==='aventuras')renderAdventures(box);else if(view==='rituais')renderRitualView(box);else if(view==='personagem')renderCharacter(box);else if(view==='conquistas'){renderAchievements(box);syncAchievementsFromServer()}else if(view==='pergaminho')renderPergaminho(box);else if(view==='loja')renderShop(box);else if(view==='casinha'){renderHouse(box);if(!houseStateLoaded)loadHouseState();}else if(view==='jardim'){renderGarden(box);if(!gardenLoaded)loadGardenState();}
+ if(view==='aventuras')renderAdventures(box);else if(view==='rituais')renderRitualView(box);else if(view==='personagem')renderCharacter(box);else if(view==='conquistas'){renderAchievements(box);syncAchievementsFromServer()}else if(view==='pergaminho')renderPergaminho(box);else if(view==='loja')renderShop(box);else if(view==='refugio'){renderRefuge(box)}
 }
 async function refreshData(){
   try{
@@ -1417,7 +1426,7 @@ async function refreshData(){
 document.getElementById('navigation').addEventListener('click',e=>{const b=e.target.closest('[data-view]');if(b)showView(b.dataset.view)});
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>showView(b.dataset.go));
 const TURNSTILE_SITEKEY='0x4AAAAAAFva0ZVGmY_UU-4C';
-const turnstileWidgets={create_task:null,toggle_task:null,sync_xp:null,sync_achievements:null,redeem_reward:null,reschedule_overdue:null,claim_exclusive_reward:null,start_journey:null,save_house:null,save_garden:null};
+const turnstileWidgets={create_task:null,toggle_task:null,sync_xp:null,sync_achievements:null,redeem_reward:null,reschedule_overdue:null,claim_exclusive_reward:null,start_journey:null,save_house:null,save_garden:null,complete_ritual:null};
 const turnstilePending={create_task:null,toggle_task:null,sync_xp:null,sync_achievements:null,redeem_reward:null,reschedule_overdue:null,claim_exclusive_reward:null,start_journey:null,save_house:null,save_garden:null};
 const PREVIOUS_STATUS_KEY='herbario-task-status-before-colhido';
 const VALID_TASK_STATUSES=new Set(['Not started','In progress','Abandonado','Done']);
