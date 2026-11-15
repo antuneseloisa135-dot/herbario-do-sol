@@ -839,7 +839,7 @@ aside{background:#e4eadf!important}
    <div class="stat"><small>Flores de hoje</small><strong id="remaining">—</strong><em>tarefas em aberto</em></div>
    <div class="stat"><small>Essência Solar</small><strong id="essence-total">—</strong><em id="essence-caption">carregando do Notion</em></div>
    <div class="stat"><small>Nível atual</small><strong>—</strong><em>carregando do Notion</em></div>
-   <div class="stat"><small>Cultivos ativos</small><strong>—</strong><em>carregando do Notion</em></div>
+   <div class="stat"><small>Rituais ativos</small><strong>—</strong><em>carregando do Notion</em></div>
   </div>
   <div class="section-head"><div><h3>O que pede cuidado hoje</h3><p>Pequenos passos que merecem um lugar no seu dia.</p></div><button class="text-btn" id="add-task">＋ Semear tarefa</button></div>
   <div class="columns">
@@ -1184,7 +1184,7 @@ function renderRituals(){
  if(!box)return;
  const heading=box.querySelector('.panel-title');
  box.querySelectorAll('.ritual').forEach(x=>x.remove());
- const list=rituals;
+ const list=rituals.filter(r=>select(r,'Tipo')==='Ritual');
  if(!list.length){const empty=document.createElement('p');empty.style.cssText='font-size:12px;color:var(--muted)';empty.textContent='Nenhum ritual cadastrado no Notion.';heading.after(empty);return}
  list.forEach(r=>{
   const row=document.createElement('div');row.className='ritual';
@@ -1452,8 +1452,8 @@ async function refreshData(){
    document.querySelector('.stats .stat:nth-child(3) strong').textContent=levelInfo(earnedXP()).name;
    document.querySelector('.stats .stat:nth-child(3) em').textContent=levelInfo(earnedXP()).remaining+' XP para o próximo nível';
    document.getElementById('essence-caption').textContent='saldo disponível após resgates';
-   document.querySelector('.stats .stat:nth-child(4) strong').textContent=rituals.length;
-   document.querySelector('.stats .stat:nth-child(4) em').textContent='registros no Notion';
+   document.querySelector('.stats .stat:nth-child(4) strong').textContent=rituals.filter(r=>select(r,'Tipo')==='Ritual').length;
+   document.querySelector('.stats .stat:nth-child(4) em').textContent='rituais principais';
    const level=levelInfo(earnedXP()),homeProgress=document.getElementById('home-xp-progress'),homeCaption=document.getElementById('home-xp-caption');
    if(homeProgress)homeProgress.style.width=level.pct+'%';
    if(homeCaption)homeCaption.textContent=level.remaining?level.pct+'% até '+level.next+' · faltam '+level.remaining+' XP':'Você alcançou o último nível cadastrado.';
