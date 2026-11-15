@@ -92,6 +92,13 @@ async function requireWriteAccess(request, env, expectedAction, token) {
     && result.hostname === "herbario-do-sol.pages.dev";
 }
 const difficultyXP = { "Leve": 5, "Média": 10, "Difícil": 15 };
+const HOUSE_DEFAULT = { wall: "cream", floor: "wood", furniture: "reading" };
+const HOUSE_OPTIONS = {
+  wall: ["cream", "sage", "lavender"],
+  floor: ["wood", "sand", "rose"],
+  furniture: ["reading", "garden", "rest"]
+};
+
 
 function easterSunday(year) {
   const a=year%19,b=Math.floor(year/100),c=year%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3);
@@ -298,6 +305,10 @@ export default {
       if (request.method === "GET" && url.pathname === "/health") {
         return json({ ok: true, service: "herbario-notion-api-dev", writeProtection: "Cloudflare Turnstile" });
       }
+      if (request.method === "GET" && url.pathname === "/house/state") {
+        const state = await env.HOUSE_STATE.get("main", "json");
+        return json({ ok: true, state: state || HOUSE_DEFAULT });
+      }
       if (request.method === "GET" && url.pathname === "/notion/status") {
         const r = await fetch("https://api.notion.com/v1/users/me", { headers: notionHeaders(env.NOTION_TOKEN) });
         const data = await r.json();
@@ -338,6 +349,7 @@ export default {
         else if (request.method === "POST" && routePath === "/api/sync-xp") expectedAction = "sync_xp";
         else if (request.method === "POST" && routePath === "/api/reschedule-overdue") expectedAction = "reschedule_overdue";
         else if (request.method === "POST" && routePath === "/api/sync-achievements") expectedAction = "sync_achievements";
+        else if (request.method === "POST" && routePath === "/api/house/state") expectedAction = "save_house";
         else if (request.method === "POST" && routePath.startsWith("/api/redeem-reward/")) expectedAction = "redeem_reward";
         else if (request.method === "POST" && routePath.startsWith("/api/claim-exclusive-reward/")) expectedAction = "claim_exclusive_reward";
         else if (request.method === "PATCH" && routePath.startsWith("/api/adventures/")) expectedAction = "start_journey";
@@ -345,6 +357,18 @@ export default {
           return json({ ok: false, error: "Verificação de segurança não autorizada. Tente novamente." }, 403);
         }
         if (payload && typeof payload === "object") delete payload.turnstileToken;
+        if (routePath === "/api/house/state" && request.method === "POST") {
+          const input = payload?.properties;
+          if (!input || typeof input !== "object" || Array.isArray(input)) return json({ ok: false, error: "Envie uma decoração válida." }, 400);
+          const state = {};
+          for (const field of Object.keys(HOUSE_OPTIONS)) {
+            const value = input[field];
+            if (!HOUSE_OPTIONS[field].includes(value)) return json({ ok: false, error: "Uma das opções de decoração é inválida." }, 400);
+            state[field] = value;
+          }
+          await env.HOUSE_STATE.put("main", JSON.stringify(state));
+          return json({ ok: true, state });
+        }
         if (routePath === "/api/reschedule-overdue" && request.method === "POST") {
           return json({ ok: true, result: await rescheduleOverdueTasks(env) });
         }
