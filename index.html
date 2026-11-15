@@ -782,7 +782,30 @@ aside{background:#e4eadf!important}
 .house-actions .primary{background:#657b58;border-color:#657b58}
 .house-actions .secondary{background:#f4f0e3;border-color:#d6d2bf;color:#647054}
 @media(max-width:520px){.house-intro h3{font-size:25px}.house-vine{width:15%;height:40%}.house-bottles{right:8%;top:12%}.house-crystal{left:61%;top:34%}}
-</style></head>
+</style><style>
+/* Painel unificado do Guardião — identidade botânica do Herbário */
+.stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+.guardian-dashboard{padding:20px;margin-bottom:18px;border:1px solid #d9ddcb;border-radius:19px;background:linear-gradient(125deg,#f7f4e8,#e9eddf 58%,#f0e5d8);box-shadow:var(--shadow)}
+.guardian-dashboard-head{display:flex;justify-content:space-between;align-items:center;gap:16px}
+.guardian-dashboard-head h3{font:600 25px "Cormorant Garamond",Lora,serif;color:#4f6048;margin:5px 0}
+.guardian-dashboard-head p{font-size:12px;color:#706f5d;margin:0}
+.guardian-level{min-width:105px;padding:12px 16px;border-radius:15px;background:#fffaf0;border:1px solid #e2d9c4;text-align:center}
+.guardian-level span{display:block;font-size:9px;letter-spacing:.12em;color:#8a806b}
+.guardian-level strong{display:block;margin-top:4px;font:600 20px "Cormorant Garamond",Lora,serif;color:#657b58}
+.guardian-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:17px}
+.guardian-metric{padding:13px 14px;border-radius:13px;background:#fffdf7c9;border:1px solid #e4dfcf}
+.guardian-metric small{display:block;color:#817968;font-size:10px}
+.guardian-metric strong{display:block;margin-top:5px;font:600 20px "Cormorant Garamond",Lora,serif;color:#526b50}
+.guardian-progress{margin-top:15px;padding:0 3px}
+.guardian-progress-label{display:flex;justify-content:space-between;gap:12px;font-size:10px;color:#777563}
+.guardian-progress-label strong{color:#526b50}
+.guardian-progress .progress{background:#dedfce;margin:8px 0 0;height:9px}
+.guardian-progress .progress span{background:linear-gradient(90deg,#82956f,#c5a45d)}
+#guardian-house-content .house-intro{margin-top:0}
+@media(max-width:650px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.guardian-dashboard{padding:15px}.guardian-dashboard-head{align-items:flex-start}.guardian-dashboard-head h3{font-size:23px}.guardian-level{min-width:88px;padding:10px}.guardian-metrics{grid-template-columns:1fr 1fr}.guardian-metric:last-child{grid-column:1/-1}.guardian-progress-label{align-items:flex-start;flex-direction:column;gap:3px}}
+@media(max-width:390px){.guardian-dashboard-head{flex-direction:column}.guardian-level{align-self:flex-start}.guardian-metrics{gap:7px}.guardian-metric{padding:11px}}
+</style>
+</head>
 <body>
 <div class="shell">
 <aside>
@@ -791,8 +814,7 @@ aside{background:#e4eadf!important}
   <button class="nav-btn active" data-view="inicio"><span>⌂</span> Jardim do dia</button>
   <button class="nav-btn" data-view="aventuras"><span>◇</span> Aventuras</button>
   <button class="nav-btn" data-view="rituais"><span>✳</span> Rituais do Jardim</button>
-  <button class="nav-btn" data-view="personagem"><span>◎</span> Guardião</button>
-  <button class="nav-btn" data-view="casinha"><span>⌂</span> Casinha do Guardião</button>
+  <button class="nav-btn" data-view="guardiao"><span>✧</span> Guardião & Refúgio</button>
   <button class="nav-btn" data-view="conquistas"><span>☆</span> Conquistas</button>
   <button class="nav-btn" data-view="loja"><span>♧</span> Feira do Sol</button>
   <button class="nav-btn" data-view="pergaminho"><span>▤</span> Pergaminho</button>
@@ -805,16 +827,15 @@ aside{background:#e4eadf!important}
   <div class="hero"><div class="hero-copy"><h3 id="greeting">Bom dia, Guardiã.</h3><p id="greeting-message">Que hoje tenha espaço para florescer.</p></div><svg class="ghost-mascot hero-mascot" viewBox="0 0 120 140" role="img" aria-label="Fantasminha guardião do jardim"><g class="ghost-arm ghost-arm-left"><path d="M27 78 C18 78 13 84 9 92 C7 97 10 100 14 97 L29 87" fill="none" stroke="#e9e2cf" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M27 78 C18 78 13 84 9 92 C7 97 10 100 14 97 L29 87" fill="none" stroke="#fffdf7" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></g><g class="ghost-arm ghost-arm-right"><path d="M95 78 C104 78 109 84 113 92 C115 97 112 100 108 97 L93 87" fill="none" stroke="#e9e2cf" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M95 78 C104 78 109 84 113 92 C115 97 112 100 108 97 L93 87" fill="none" stroke="#fffdf7" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></g><path class="ghost-body" d="M18 116V62C18 31 37 10 61 10s43 21 43 52v54c-8-8-15-8-22 0-7-8-15-8-22 0-7-8-15-8-22 0-7-8-13-8-20 0Z"/><ellipse class="ghost-eye" cx="47" cy="62" rx="4" ry="6"/><ellipse class="ghost-eye" cx="76" cy="62" rx="4" ry="6"/><ellipse class="ghost-cheek" cx="35" cy="76" rx="7" ry="4"/><ellipse class="ghost-cheek" cx="88" cy="76" rx="7" ry="4"/><path class="ghost-mouth" d="M54 79q7 7 14 0" fill="none" stroke="#554c45" stroke-width="2.5" stroke-linecap="round"/><path class="ghost-leaf" d="M69 15q-2-13 12-13 0 12-12 13Zm-2 1q-13-8-19 1 10 7 19-1Z"/><path class="ghost-sparkles" d="M8 38l2 4 4 2-4 2-2 4-2-4-4-2 4-2zM108 89l2 3 3 2-3 2-2 3-2-3-3-2 3-2z" fill="#d1ad63" opacity=".9"><animate attributeName="opacity" values=".25;1;.25" dur="3.6s" repeatCount="indefinite"/></path></svg></div>
   <div class="stats">
    <div class="stat"><small>Flores de hoje</small><strong id="remaining">—</strong><em>tarefas em aberto</em></div>
-   <div class="stat"><small>Essência Solar</small><strong id="essence-total">—</strong><em id="essence-caption">carregando do Notion</em></div>
-   <div class="stat"><small>Nível atual</small><strong>—</strong><em>carregando do Notion</em></div>
-   <div class="stat"><small>Cultivos ativos</small><strong>—</strong><em>carregando do Notion</em></div>
+   <div class="stat"><small>Jornadas em curso</small><strong id="home-adventure-count">—</strong><em>sonhos em movimento</em></div>
+   <div class="stat"><small>Cultivos ativos</small><strong id="home-ritual-count">—</strong><em>registros no jardim</em></div>
   </div>
   <div class="section-head"><div><h3>O que pede cuidado hoje</h3><p>Pequenos passos que merecem um lugar no seu dia.</p></div><button class="text-btn" id="add-task">＋ Semear tarefa</button></div>
   <div class="columns">
    <div class="panel"><div class="panel-title"><h4>✿ Flores de Hoje</h4><span class="tag">Hoje</span></div><div id="task-list"></div></div>
    <div class="panel"><div class="panel-title"><h4>❧ Pequenos Cultivos</h4><span class="tag">Cultivo</span></div>
     <p class="loading-note" style="font-size:12px;color:var(--muted)">Carregando seus rituais do Notion...</p>
-    <div style="margin-top:19px"><div class="panel-title"><h4>✧ Próxima evolução</h4><small style="font-size:10px;color:var(--muted)">Nível 2 · Broto</small></div><div class="progress"><span id="home-xp-progress"></span></div><small id="home-xp-caption" style="font-size:10px;color:var(--muted)">Carregando sua próxima conquista...</small></div>
+
    </div>
   </div>
   <div class="section-head"><div><h3>Jornadas em curso</h3><p>Grandes sonhos, cultivados em pequenas etapas.</p></div><button class="text-btn" data-go="aventuras">Ver todas as aventuras →</button></div>
@@ -873,8 +894,7 @@ const recipeTitle=p=>{for(const [k,v] of Object.entries(p.properties||{})){if(v.
 const pages={
  aventuras:["🧭","Jornadas em curso","Projetos que ganham vida quando são divididos em etapas.","Suas aventuras",[]],
  rituais:["🌱","Pequenos Cultivos","Cuidados que, repetidos com carinho, criam raízes.","Seus cultivos",[]],
- personagem:["◎","Guardiã","Acompanhe sua evolução, sua Essência Solar e os caminhos que já percorreu.","Seu retrato no Herbário",["Nível e atributos carregados do Notion."]],
- casinha:["⌂","Casinha do Guardião","Um cantinho só dele, que você pode deixar com a sua cara.","Seu pequeno refúgio",[]],
+ guardiao:["✧","Guardião & Refúgio","Acompanhe seu florescimento e cuide do cantinho que é só dele.","Seu espaço no Herbário",[]],
  conquistas:["🏆","Coleção de conquistas","Cada avanço merece ser reconhecido.","Conquistas",["As conquistas serão conectadas ao Notion em uma próxima etapa."]],
  pergaminho:["📜","Pergaminho","Seu espaço de referências, ideias e conhecimentos.","Biblioteca",["Estudos e cursos","Referências importantes","Anotações e ideias para revisitar"]],
  loja:["♧","Feira do Sol","Pequenas recompensas para celebrar o caminho percorrido.","Recompensas disponíveis",[]]
@@ -1249,7 +1269,7 @@ function renderRitualView(box){
  if(!rituals.length){box.innerHTML='<div class="empty-state">Seu jardim ainda não tem rituais cadastrados no Notion.</div>';return}
  rituals.forEach(r=>{const card=document.createElement('div');card.className='view-card';card.innerHTML='<h4></h4><div class="view-filter"><span class="tag"></span><span class="tag"></span><span class="tag"></span></div><p></p>';card.querySelector('h4').textContent=title(r,'Ritual')||'Ritual';const tags=card.querySelectorAll('.tag');tags[0].textContent=prop(r,'Área')?.select?.name||'Área não definida';tags[1].textContent=prop(r,'Frequência')?.select?.name||'Frequência não definida';tags[2].textContent=prop(r,'Ativo')?.checkbox?'Ativo':'Pausado';const chosen=multi(r,'Dia');card.querySelector('p').textContent=chosen.length?'Dias: '+chosen.join(' · '):'Dias ainda não definidos';box.append(card)});
 }
-function renderCharacter(box){const xp=earnedXP(),balance=totalXP(),level=levelInfo(xp);box.innerHTML='<div class="metric-grid"><div class="metric"><strong>'+xp+' XP</strong><small>Experiência conquistada</small></div><div class="metric"><strong>'+balance+' XP</strong><small>Saldo disponível para resgates</small></div><div class="metric"><strong>'+level.name+'</strong><small>Nível atual</small></div></div><div class="view-card"><h4>Próximo florescer: '+level.next+'</h4><div class="progress"><span style="width:'+level.pct+'%"></span></div><p>'+level.pct+'% do caminho · '+(level.remaining?level.remaining+' XP para avançar':'Você alcançou o último nível cadastrado!')+'</p></div><div class="view-card"><h4>Seu cultivo</h4><p>Continue registrando suas tarefas e experiências no Notion. Os atributos pessoais poderão ser conectados quando definirmos como deseja acompanhá-los.</p></div>'}
+function renderGuardian(box){const xp=earnedXP(),balance=totalXP(),level=levelInfo(xp);box.innerHTML='<section class="guardian-dashboard"><div class="guardian-dashboard-head"><div><span class="eyebrow">SEU FLORESCIMENTO</span><h3>O caminho do Guardião</h3><p>Cada tarefa colhida fortalece sua jornada.</p></div><div class="guardian-level"><span>NÍVEL ATUAL</span><strong>'+level.name+'</strong></div></div><div class="guardian-metrics"><div class="guardian-metric"><small>Experiência conquistada</small><strong>'+xp+' XP</strong></div><div class="guardian-metric"><small>Essência disponível</small><strong>'+balance+' XP</strong></div><div class="guardian-metric"><small>Próximo florescer</small><strong>'+level.next+'</strong></div></div><div class="guardian-progress"><div class="guardian-progress-label"><strong>'+level.pct+'% do caminho</strong><span>'+(level.remaining?level.remaining+' XP para avançar':'Último nível alcançado')+'</span></div><div class="progress"><span style="width:'+level.pct+'%"></span></div></div></section><div id="guardian-house-content"></div>';renderHouse(box.querySelector("#guardian-house-content"))}
 
 const ACHIEVEMENT_ORDER=['Primeiro broto','Mãos à obra','Passo de gigante','Jardim florescendo','Uma etapa vencida','Grande aventura'];
 function achievementIllustration(name){
@@ -1322,7 +1342,7 @@ async function loadHouseState(){
    furniture:HOUSE_CHOICES.furniture.some(x=>x.value===saved.furniture)?saved.furniture:'reading'
   };
   houseStateLoaded=true;
-  if(document.querySelector('.nav-btn.active')?.dataset.view==='casinha')renderHouse(document.getElementById('other-content'));
+  if(document.querySelector('.nav-btn.active')?.dataset.view==='guardiao')renderGuardian(document.getElementById('other-content'));
  }catch(error){console.error('Falha ao carregar decoração:',error);toast('Não foi possível carregar a decoração salva.')}
 }
 async function saveHouse(box){
@@ -1343,7 +1363,7 @@ function showView(view){
  const p=pages[view];if(!p)return;
  document.getElementById('page-title').textContent=p[1];document.getElementById('page-subtitle').hidden=false;document.getElementById('page-subtitle').textContent=p[2];
  const box=document.getElementById('other-content');box.innerHTML='';
- if(view==='aventuras')renderAdventures(box);else if(view==='rituais')renderRitualView(box);else if(view==='personagem')renderCharacter(box);else if(view==='conquistas'){renderAchievements(box);syncAchievementsFromServer()}else if(view==='pergaminho')renderPergaminho(box);else if(view==='loja')renderShop(box);else if(view==='casinha'){renderHouse(box);if(!houseStateLoaded)loadHouseState();}
+ if(view==='aventuras')renderAdventures(box);else if(view==='rituais')renderRitualView(box);else if(view==='guardiao'){renderGuardian(box);if(!houseStateLoaded)loadHouseState()}else if(view==='conquistas'){renderAchievements(box);syncAchievementsFromServer()}else if(view==='pergaminho')renderPergaminho(box);else if(view==='loja')renderShop(box);
 }
 async function refreshData(){
   try{
@@ -1354,15 +1374,9 @@ async function refreshData(){
     load('exclusive_rewards').then(data=>{exclusiveRewardsLoadFailed=false;return data}).catch(err=>{exclusiveRewardsLoadFailed=true;console.warn('Recompensas exclusivas indisponíveis:',err);return []})
    ]);
    renderTasks();renderAdventures();renderRituals();
-   document.getElementById('essence-total').textContent=totalXP()+' ES';
-   document.querySelector('.stats .stat:nth-child(3) strong').textContent=levelInfo(earnedXP()).name;
-   document.querySelector('.stats .stat:nth-child(3) em').textContent=levelInfo(earnedXP()).remaining+' XP para o próximo nível';
-   document.getElementById('essence-caption').textContent='saldo disponível após resgates';
-   document.querySelector('.stats .stat:nth-child(4) strong').textContent=rituals.length;
-   document.querySelector('.stats .stat:nth-child(4) em').textContent='registros no Notion';
-   const level=levelInfo(earnedXP()),homeProgress=document.getElementById('home-xp-progress'),homeCaption=document.getElementById('home-xp-caption');
-   if(homeProgress)homeProgress.style.width=level.pct+'%';
-   if(homeCaption)homeCaption.textContent=level.remaining?level.pct+'% até '+level.next+' · faltam '+level.remaining+' XP':'Você alcançou o último nível cadastrado.';
+   const homeAdventureCount=document.getElementById('home-adventure-count'),homeRitualCount=document.getElementById('home-ritual-count');
+   if(homeAdventureCount)homeAdventureCount.textContent=adventures.filter(a=>select(a,'Status')!=='Concluída').length;
+   if(homeRitualCount)homeRitualCount.textContent=rituals.length;
    const activeView=document.querySelector('.nav-btn.active')?.dataset.view,other=document.getElementById('other-content');
    // Se Aventuras foi aberta enquanto os dados ainda carregavam, atualiza a tela
    // depois que a lista de recompensas exclusivas chega do Notion.
