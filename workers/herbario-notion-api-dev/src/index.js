@@ -10,15 +10,16 @@ const SOURCES = {
 };
 const SITE_ORIGIN = "https://herbario-do-sol.pages.dev";
 const NOTION_VERSION = "2025-09-03";
-const CORS = {
-  "Access-Control-Allow-Origin": SITE_ORIGIN,
+const isAllowedOrigin = origin => origin === SITE_ORIGIN || /^https:\/\/[a-f0-9]{8}\.herbario-do-sol\.pages\.dev$/i.test(origin || "");
+const isAllowedHostname = hostname => hostname === "herbario-do-sol.pages.dev" || /^[a-f0-9]{8}\.herbario-do-sol\.pages\.dev$/i.test(hostname || "");
+const corsHeaders = origin => ({
+  "Access-Control-Allow-Origin": isAllowedOrigin(origin) ? origin : SITE_ORIGIN,
   "Access-Control-Allow-Methods": "GET, POST, PATCH, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type",
-  "Access-Control-Allow-Credentials": "true",
   "Vary": "Origin"
-};
-const json = (data, status = 200) => new Response(JSON.stringify(data), {
-  status, headers: { ...CORS, "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" }
+});
+const json = (data, status = 200, origin = SITE_ORIGIN) => new Response(JSON.stringify(data), {
+  status, headers: { ...corsHeaders(origin), "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" }
 });
 const notionHeaders = token => ({
   Authorization: "Bearer " + token,
@@ -69,7 +70,7 @@ const notionWrite = async (env, path, method, body) => {
 
 // Valida cada gravação no servidor. O segredo permanece apenas no Worker.
 async function requireWriteAccess(request, env, expectedAction, token) {
-  if (request.headers.get("Origin") !== SITE_ORIGIN) return false;
+  if (!isAllowedOrigin(request.headers.get("Origin"))) return false;
   if (!env.TURNSTILE_SECRET || typeof token !== "string" || token.length === 0 || token.length > 2048) return false;
   const params = new URLSearchParams({ secret: env.TURNSTILE_SECRET, response: token });
   const remoteIp = request.headers.get("CF-Connecting-IP");
@@ -89,7 +90,7 @@ async function requireWriteAccess(request, env, expectedAction, token) {
   }
   return result?.success === true
     && result.action === expectedAction
-    && result.hostname === "herbario-do-sol.pages.dev";
+    && isAllowedHostname(result.hostname);
 }
 const difficultyXP = { "Leve": 5, "Média": 10, "Difícil": 15 };
 const HOUSE_DEFAULT = { wall: "cream", floor: "wood", furniture: "reading" };
@@ -300,16 +301,18 @@ let achievementSyncPromise;
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    const origin = request.headers.get("Origin");
+    const reply = (data, status = 200) => json(data, status, origin);
     const routePath = url.pathname.startsWith("/write/") ? url.pathname.slice(6) : url.pathname;
-    if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
-    if (!env.NOTION_TOKEN) return json({ ok: false, error: "NOTION_TOKEN não configurado" }, 500);
+    if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: corsHeaders(origin) });
+    if (!env.NOTION_TOKEN) return reply({ ok: false, error: "NOTION_TOKEN não configurado" }, 500);
     try {
       if (request.method === "GET" && url.pathname === "/health") {
-        return json({ ok: true, service: "herbario-notion-api-dev", writeProtection: "Cloudflare Turnstile" });
+        return reply({ ok: true, service: "herbario-notion-api-dev", writeProtection: "Cloudflare Turnstile" });
       }
       if (request.method === "GET" && url.pathname === "/house/state") {
         const state = await env.HOUSE_STATE.get("main", "json");
-        return json({ ok: true, state: state || HOUSE_DEFAULT });
+        return reply({ ok: true, state: state || HOUSE_DEFAULT });
       }
       if (request.method === "GET" && url.pathname === "/garden/state") {
         const stored = await env.HOUSE_STATE.get("garden-main", "json");
@@ -350,12 +353,12 @@ export default {
           });
         const nextState = { plants };
         await env.HOUSE_STATE.put("garden-main", JSON.stringify(nextState));
-        return json({ ok: true, state: nextState });
+        return reply({ ok: true, state: nextState });
       }
       if (request.method === "GET" && url.pathname === "/notion/status") {
         const r = await fetch("https://api.notion.com/v1/users/me", { headers: notionHeaders(env.NOTION_TOKEN) });
         const data = await r.json();
-        return json({ ok: r.ok, notion: r.ok ? { type: data.type, name: data.name } : null, error: r.ok ? null : data.message }, r.ok ? 200 : r.status);
+        return reply({ ok: r.ok, notion: r.ok ? { type: data.type, name: data.name } : null, error: r.ok ? null : data.message }, r.ok ? 200 : r.status);
       }
       if (request.method === "GET" && url.pathname === "/notion/check-databases") {
         const checks = await Promise.all(Object.entries(SOURCES).map(async ([key, id]) => {
@@ -363,11 +366,11 @@ export default {
           const d = await r.json();
           return { key, id, accessible: r.ok, title: r.ok ? (d.title || []).map(x => x.plain_text).join("") : null, error: r.ok ? null : d.message };
         }));
-        return json({ ok: checks.every(x => x.accessible), databases: checks });
+        return reply({ ok: checks.every(x => x.accessible), databases: checks });
       }
       if (request.method === "GET" && url.pathname.startsWith("/api/")) {
         const resource = url.pathname.split("/")[2];
-        if (!Object.prototype.hasOwnProperty.call(SOURCES, resource)) return json({ ok: false, error: "Recurso não encontrado" }, 404);
+        if (!Object.prototype.hasOwnProperty.call(SOURCES, resource)) return reply({ ok: false, error: "Recurso não encontrado" }, 404);
         const pageSize = Math.min(100, Math.max(1, Number(url.searchParams.get("page_size")) || 100));
         const body = { page_size: pageSize };
         const cursor = url.searchParams.get("start_cursor");
@@ -376,15 +379,15 @@ export default {
           method: "POST", headers: notionHeaders(env.NOTION_TOKEN), body: JSON.stringify(body)
         });
         const data = await r.json();
-        if (!r.ok) return json({ ok: false, resource, error: data.message || "Falha ao consultar Notion" }, r.status);
-        return json({ ok: true, resource, results: data.results || [], has_more: !!data.has_more, next_cursor: data.next_cursor || null });
+        if (!r.ok) return reply({ ok: false, resource, error: data.message || "Falha ao consultar Notion" }, r.status);
+        return reply({ ok: true, resource, results: data.results || [], has_more: !!data.has_more, next_cursor: data.next_cursor || null });
       }
       if ((request.method === "POST" || request.method === "PATCH") && url.pathname.startsWith("/write/")) {
         let payload;
         try {
           payload = await request.json();
         } catch {
-          return json({ ok: false, error: "Envie um JSON válido." }, 400);
+          return reply({ ok: false, error: "Envie um JSON válido." }, 400);
         }
         let expectedAction = "notion_write";
         if (request.method === "POST" && routePath === "/api/tasks") expectedAction = "create_task";
@@ -398,35 +401,35 @@ export default {
         else if (request.method === "POST" && routePath.startsWith("/api/claim-exclusive-reward/")) expectedAction = "claim_exclusive_reward";
         else if (request.method === "PATCH" && routePath.startsWith("/api/adventures/")) expectedAction = "start_journey";
         if (!await requireWriteAccess(request, env, expectedAction, payload?.turnstileToken)) {
-          return json({ ok: false, error: "Verificação de segurança não autorizada. Tente novamente." }, 403);
+          return reply({ ok: false, error: "Verificação de segurança não autorizada. Tente novamente." }, 403);
         }
         if (payload && typeof payload === "object") delete payload.turnstileToken;
         if (routePath === "/api/garden/action" && request.method === "POST") {
           const input = payload?.properties || {};
           const activityId = input.activityId || input.ritualId;
           if (input.operation !== "complete" || !/^[a-f0-9-]{32,36}$/i.test(activityId || "")) {
-            return json({ ok: false, error: "Conclusão de atividade inválida." }, 400);
+            return reply({ ok: false, error: "Conclusão de atividade inválida." }, 400);
           }
           const activity = await notionRead(env, "pages/" + activityId);
           if (normId(activity.parent?.data_source_id || "") !== normId(SOURCES.rituals)) {
-            return json({ ok: false, error: "Atividade não encontrada no Jardim." }, 404);
+            return reply({ ok: false, error: "Atividade não encontrada no Jardim." }, 404);
           }
           if (activity.properties?.Ativo?.checkbox !== true) {
-            return json({ ok: false, error: "Esta atividade está pausada." }, 409);
+            return reply({ ok: false, error: "Esta atividade está pausada." }, 409);
           }
           const parentRelation = activity.properties?.["Ritual principal"]?.relation || [];
           const parentId = parentRelation[0]?.id || activity.id;
           const parent = parentId === activity.id ? activity : await notionRead(env, "pages/" + parentId);
           if (parentId !== activity.id && (normId(parent.parent?.data_source_id || "") !== normId(SOURCES.rituals) || getSelect(parent, "Tipo") !== "Ritual")) {
-            return json({ ok: false, error: "Ritual principal não encontrado." }, 404);
+            return reply({ ok: false, error: "Ritual principal não encontrado." }, 404);
           }
           const currentDay = today();
           const weekday = new Intl.DateTimeFormat("pt-BR", { timeZone: "America/Sao_Paulo", weekday: "long" })
             .format(new Date()).replace(/^./, value => value.toUpperCase());
           const days = (activity.properties?.Dia?.multi_select || []).map(day => day.name);
-          if (!days.includes(weekday)) return json({ ok: false, error: "Esta atividade não está programada para hoje." }, 409);
+          if (!days.includes(weekday)) return reply({ ok: false, error: "Esta atividade não está programada para hoje." }, 409);
           const lastPracticed = getDate(activity, "Última prática");
-          if (lastPracticed === currentDay) return json({ ok: false, error: "Esta atividade já foi concluída hoje." }, 409);
+          if (lastPracticed === currentDay) return reply({ ok: false, error: "Esta atividade já foi concluída hoje." }, 409);
           const stored = await env.HOUSE_STATE.get("garden-main", "json");
           const state = stored && Array.isArray(stored.plants) ? stored : { plants: [] };
           const plant = state.plants.find(item => normId(item.ritualId) === normId(parentId)) || {
@@ -455,22 +458,22 @@ export default {
           plants.push(plant);
           const nextState = { plants };
           await env.HOUSE_STATE.put("garden-main", JSON.stringify(nextState));
-          return json({ ok: true, state: nextState, plant });
+          return reply({ ok: true, state: nextState, plant });
         }
         if (routePath === "/api/house/state" && request.method === "POST") {
           const input = payload?.properties;
-          if (!input || typeof input !== "object" || Array.isArray(input)) return json({ ok: false, error: "Envie uma decoração válida." }, 400);
+          if (!input || typeof input !== "object" || Array.isArray(input)) return reply({ ok: false, error: "Envie uma decoração válida." }, 400);
           const state = {};
           for (const field of Object.keys(HOUSE_OPTIONS)) {
             const value = input[field];
-            if (!HOUSE_OPTIONS[field].includes(value)) return json({ ok: false, error: "Uma das opções de decoração é inválida." }, 400);
+            if (!HOUSE_OPTIONS[field].includes(value)) return reply({ ok: false, error: "Uma das opções de decoração é inválida." }, 400);
             state[field] = value;
           }
           await env.HOUSE_STATE.put("main", JSON.stringify(state));
-          return json({ ok: true, state });
+          return reply({ ok: true, state });
         }
         if (routePath === "/api/reschedule-overdue" && request.method === "POST") {
-          return json({ ok: true, result: await rescheduleOverdueTasks(env) });
+          return reply({ ok: true, result: await rescheduleOverdueTasks(env) });
         }
         if (routePath === "/api/sync-xp" && request.method === "POST") {
           if (!syncPromise) {
@@ -486,49 +489,49 @@ export default {
               return { ...xp, achievements };
             })().finally(() => { syncPromise = null; });
           }
-          return json({ ok: true, result: await syncPromise });
+          return reply({ ok: true, result: await syncPromise });
         }
         if (routePath === "/api/sync-achievements" && request.method === "POST") {
           if (!achievementSyncPromise) achievementSyncPromise = syncAchievementUnlocks(env).finally(() => { achievementSyncPromise = null; });
-          return json({ ok: true, result: await achievementSyncPromise });
+          return reply({ ok: true, result: await achievementSyncPromise });
         }
         if (routePath.startsWith("/api/claim-exclusive-reward/") && request.method === "POST") {
           const rewardId = routePath.slice("/api/claim-exclusive-reward/".length);
-          return json({ ok: true, result: await claimExclusiveReward(env, rewardId, payload?.adventureId) });
+          return reply({ ok: true, result: await claimExclusiveReward(env, rewardId, payload?.adventureId) });
         }
         if (routePath.startsWith("/api/redeem-reward/") && request.method === "POST") {
           const rewardId = routePath.slice("/api/redeem-reward/".length);
-          return json({ ok: true, result: await redeemReward(env, rewardId) });
+          return reply({ ok: true, result: await redeemReward(env, rewardId) });
         }
         if (request.method === "PATCH" && routePath.startsWith("/api/adventures/")) {
           const adventureId = routePath.slice("/api/adventures/".length);
-          if (!/^[a-f0-9-]{32,36}$/i.test(adventureId)) return json({ ok:false, error:"ID de jornada inválido." },400);
+          if (!/^[a-f0-9-]{32,36}$/i.test(adventureId)) return reply({ ok:false, error:"ID de jornada inválido." },400);
           const current = await notionRead(env,"pages/"+adventureId);
-          if (normId(current.parent?.data_source_id||"") !== normId(SOURCES.adventures)) return json({ ok:false,error:"Jornada não encontrada." },404);
-          if (getDate(current,"Iniciada em")) return json({ ok:false,error:"Esta jornada já foi iniciada." },409);
-          if (!payload?.properties?.["Iniciada em"]?.date?.start || !payload?.properties?.["Prazo final"]?.date?.start) return json({ ok:false,error:"Informe a data de início e o prazo final." },400);
+          if (normId(current.parent?.data_source_id||"") !== normId(SOURCES.adventures)) return reply({ ok:false,error:"Jornada não encontrada." },404);
+          if (getDate(current,"Iniciada em")) return reply({ ok:false,error:"Esta jornada já foi iniciada." },409);
+          if (!payload?.properties?.["Iniciada em"]?.date?.start || !payload?.properties?.["Prazo final"]?.date?.start) return reply({ ok:false,error:"Informe a data de início e o prazo final." },400);
         }
         const parts = routePath.split("/").filter(Boolean);
-        if (parts[0] !== "api" || !Object.prototype.hasOwnProperty.call(SOURCES, parts[1])) return json({ ok: false, error: "Recurso não encontrado" }, 404);
-        if (!payload || !payload.properties || typeof payload.properties !== "object" || Array.isArray(payload.properties)) return json({ ok: false, error: "Envie um objeto properties válido" }, 400);
+        if (parts[0] !== "api" || !Object.prototype.hasOwnProperty.call(SOURCES, parts[1])) return reply({ ok: false, error: "Recurso não encontrado" }, 404);
+        if (!payload || !payload.properties || typeof payload.properties !== "object" || Array.isArray(payload.properties)) return reply({ ok: false, error: "Envie um objeto properties válido" }, 400);
         if (request.method === "POST" && parts.length === 2) {
           const page = await notionWrite(env, "pages", "POST", {
             parent: { type: "data_source_id", data_source_id: SOURCES[parts[1]] },
             properties: payload.properties
           });
-          return json({ ok: true, page }, 201);
+          return reply({ ok: true, page }, 201);
         }
         if (request.method === "PATCH" && parts.length === 3) {
           const pageId = parts[2];
-          if (!/^[a-f0-9-]{32,36}$/i.test(pageId)) return json({ ok: false, error: "ID de página inválido" }, 400);
+          if (!/^[a-f0-9-]{32,36}$/i.test(pageId)) return reply({ ok: false, error: "ID de página inválido" }, 400);
           const page = await notionWrite(env, "pages/" + pageId, "PATCH", { properties: payload.properties });
-          return json({ ok: true, page });
+          return reply({ ok: true, page });
         }
-        return json({ ok: false, error: "Rota de gravação inválida" }, 404);
+        return reply({ ok: false, error: "Rota de gravação inválida" }, 404);
       }
-      return json({ ok: false, error: "Rota ou método não permitido" }, 404);
+      return reply({ ok: false, error: "Rota ou método não permitido" }, 404);
     } catch (error) {
-      return json({ ok: false, error: error.message || "Erro interno", code: error.code || null }, error.status || 500);
+      return reply({ ok: false, error: error.message || "Erro interno", code: error.code || null }, error.status || 500);
     }
   },
   async scheduled(event, env) {
