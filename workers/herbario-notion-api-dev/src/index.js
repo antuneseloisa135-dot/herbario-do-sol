@@ -316,17 +316,38 @@ export default {
         const state = stored && Array.isArray(stored.plants) ? stored : { plants: [] };
         const rituals = await getPages(env, SOURCES.rituals);
         const active = rituals.filter(item => item.properties?.Ativo?.checkbox === true);
-        const plants = active.map(item => {
-          const previous = state.plants.find(plant => normId(plant.ritualId) === normId(item.id)) || {};
-          return {
-            ritualId: item.id,
-            name: getTitle(item, "Ritual") || "Ritual sem título",
-            area: getSelect(item, "Área") || "Autocuidado",
-            days: (item.properties?.Dia?.multi_select || []).map(day => day.name),
-            completions: Number.isInteger(previous.completions) ? previous.completions : 0,
-            lastPracticed: getDate(item, "Última prática") || previous.lastPracticed || null
-          };
-        });
+        const previousFor = id => state.plants.find(plant => normId(plant.ritualId) === normId(id)) || {};
+        const plants = active
+          .filter(item => getSelect(item, "Tipo") !== "Atividade")
+          .map(parent => {
+            const previous = previousFor(parent.id);
+            const children = active.filter(item =>
+              getSelect(item, "Tipo") === "Atividade" &&
+              (item.properties?.["Ritual principal"]?.relation || []).some(rel => normId(rel.id) === normId(parent.id))
+            );
+            const activities = children.map(item => {
+              const oldChild = previous.activities?.find(a => normId(a.activityId) === normId(item.id)) ||
+                previousFor(item.id);
+              return {
+                activityId: item.id,
+                name: getTitle(item, "Ritual") || "Atividade",
+                group: getSelect(item, "Grupo") || "Outros cuidados",
+                days: (item.properties?.Dia?.multi_select || []).map(day => day.name),
+                observations: getText(item, "Observações") || "",
+                completions: Number.isInteger(oldChild.completions) ? oldChild.completions : 0,
+                lastPracticed: getDate(item, "Última prática") || oldChild.lastPracticed || null
+              };
+            });
+            const migratedCount = children.reduce((sum, child) => sum + (previousFor(child.id).completions || 0), 0);
+            return {
+              ritualId: parent.id,
+              name: getTitle(parent, "Ritual") || "Ritual sem título",
+              area: getSelect(parent, "Área") || "Autocuidado",
+              completions: Number.isInteger(previous.completions) ? previous.completions : migratedCount,
+              lastPracticed: previous.lastPracticed || activities.map(a => a.lastPracticed).filter(Boolean).sort().at(-1) || null,
+              activities
+            };
+          });
         const nextState = { plants };
         await env.HOUSE_STATE.put("garden-main", JSON.stringify(nextState));
         return json({ ok: true, state: nextState });
@@ -382,38 +403,55 @@ export default {
         if (payload && typeof payload === "object") delete payload.turnstileToken;
         if (routePath === "/api/garden/action" && request.method === "POST") {
           const input = payload?.properties || {};
-          if (input.operation !== "complete" || !/^[a-f0-9-]{32,36}$/i.test(input.ritualId || "")) {
-            return json({ ok: false, error: "Conclusão de ritual inválida." }, 400);
+          const activityId = input.activityId || input.ritualId;
+          if (input.operation !== "complete" || !/^[a-f0-9-]{32,36}$/i.test(activityId || "")) {
+            return json({ ok: false, error: "Conclusão de atividade inválida." }, 400);
           }
-          const ritual = await notionRead(env, "pages/" + input.ritualId);
-          if (normId(ritual.parent?.data_source_id || "") !== normId(SOURCES.rituals)) {
-            return json({ ok: false, error: "Ritual não encontrado no Jardim." }, 404);
+          const activity = await notionRead(env, "pages/" + activityId);
+          if (normId(activity.parent?.data_source_id || "") !== normId(SOURCES.rituals)) {
+            return json({ ok: false, error: "Atividade não encontrada no Jardim." }, 404);
           }
-          if (ritual.properties?.Ativo?.checkbox !== true) {
-            return json({ ok: false, error: "Este ritual está pausado." }, 409);
+          if (activity.properties?.Ativo?.checkbox !== true) {
+            return json({ ok: false, error: "Esta atividade está pausada." }, 409);
+          }
+          const parentRelation = activity.properties?.["Ritual principal"]?.relation || [];
+          const parentId = parentRelation[0]?.id || activity.id;
+          const parent = parentId === activity.id ? activity : await notionRead(env, "pages/" + parentId);
+          if (parentId !== activity.id && (normId(parent.parent?.data_source_id || "") !== normId(SOURCES.rituals) || getSelect(parent, "Tipo") !== "Ritual")) {
+            return json({ ok: false, error: "Ritual principal não encontrado." }, 404);
           }
           const currentDay = today();
           const weekday = new Intl.DateTimeFormat("pt-BR", { timeZone: "America/Sao_Paulo", weekday: "long" })
             .format(new Date()).replace(/^./, value => value.toUpperCase());
-          const days = (ritual.properties?.Dia?.multi_select || []).map(day => day.name);
-          if (!days.includes(weekday)) return json({ ok: false, error: "Este ritual não está programado para hoje." }, 409);
-          const lastPracticed = getDate(ritual, "Última prática");
-          if (lastPracticed === currentDay) return json({ ok: false, error: "Este ritual já foi concluído hoje." }, 409);
+          const days = (activity.properties?.Dia?.multi_select || []).map(day => day.name);
+          if (!days.includes(weekday)) return json({ ok: false, error: "Esta atividade não está programada para hoje." }, 409);
+          const lastPracticed = getDate(activity, "Última prática");
+          if (lastPracticed === currentDay) return json({ ok: false, error: "Esta atividade já foi concluída hoje." }, 409);
           const stored = await env.HOUSE_STATE.get("garden-main", "json");
           const state = stored && Array.isArray(stored.plants) ? stored : { plants: [] };
-          const plant = state.plants.find(item => normId(item.ritualId) === normId(ritual.id)) || {
-            ritualId: ritual.id, name: getTitle(ritual, "Ritual"), area: getSelect(ritual, "Área"),
-            days, completions: 0, lastPracticed: null
+          const plant = state.plants.find(item => normId(item.ritualId) === normId(parentId)) || {
+            ritualId: parentId, name: getTitle(parent, "Ritual"), area: getSelect(parent, "Área"),
+            completions: 0, lastPracticed: null, activities: []
           };
-          await notionWrite(env, "pages/" + ritual.id, "PATCH", {
+          if (!Array.isArray(plant.activities)) plant.activities = [];
+          let activityState = plant.activities.find(item => normId(item.activityId) === normId(activity.id));
+          if (!activityState) {
+            activityState = { activityId: activity.id, name: getTitle(activity, "Ritual"), group: getSelect(activity, "Grupo") || "Outros cuidados", days, observations: getText(activity, "Observações") || "", completions: 0, lastPracticed: null };
+            plant.activities.push(activityState);
+          }
+          await notionWrite(env, "pages/" + activity.id, "PATCH", {
             properties: { "Última prática": { date: { start: currentDay } } }
           });
+          activityState.completions = (Number.isInteger(activityState.completions) ? activityState.completions : 0) + 1;
+          activityState.lastPracticed = currentDay;
+          activityState.name = getTitle(activity, "Ritual") || activityState.name;
+          activityState.group = getSelect(activity, "Grupo") || activityState.group;
+          activityState.days = days;
           plant.completions = (Number.isInteger(plant.completions) ? plant.completions : 0) + 1;
           plant.lastPracticed = currentDay;
-          plant.name = getTitle(ritual, "Ritual") || plant.name;
-          plant.area = getSelect(ritual, "Área") || plant.area;
-          plant.days = days;
-          const plants = state.plants.filter(item => normId(item.ritualId) !== normId(ritual.id));
+          plant.name = getTitle(parent, "Ritual") || plant.name;
+          plant.area = getSelect(parent, "Área") || plant.area;
+          const plants = state.plants.filter(item => normId(item.ritualId) !== normId(parentId));
           plants.push(plant);
           const nextState = { plants };
           await env.HOUSE_STATE.put("garden-main", JSON.stringify(nextState));
