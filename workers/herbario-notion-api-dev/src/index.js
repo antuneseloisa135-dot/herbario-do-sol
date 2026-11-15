@@ -406,5 +406,9 @@ export default {
     } catch (error) {
       return json({ ok: false, error: error.message || "Erro interno", code: error.code || null }, error.status || 500);
     }
+  },
+  async scheduled(event, env) {
+    const result = await rescheduleOverdueTasks(env);
+    console.log("Reagendamento diário de tarefas concluído:", JSON.stringify(result));
   }
 };
