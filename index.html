@@ -513,6 +513,126 @@ aside{background:#e4eadf!important}
 @media(max-width:699px){.journey-intro{align-items:flex-start;padding:15px}.journey-intro h3,.exclusive-head h3{font-size:20px}.journey-grid{grid-template-columns:1fr;gap:10px}.journey-card{grid-template-columns:88px minmax(0,1fr);gap:10px}.journey-cover{height:96px}.exclusive-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.exclusive-art{height:88px}}
 
 .home-ritual-card{padding:10px 0;border-bottom:1px solid var(--line);display:grid;gap:7px}.home-ritual-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.home-ritual-top strong{font:600 13px Lora,serif;color:var(--night)}.home-ritual-link{border:0;background:transparent;color:var(--moss);font-size:10px;font-weight:700;cursor:pointer}.home-ritual-action-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-left:12px;font-size:11px;color:var(--muted)}.home-ritual-check{min-width:42px;border:0;border-radius:8px;background:var(--moss);color:white;padding:5px 9px;font-size:10px;font-weight:700;cursor:pointer}.home-ritual-check:disabled{background:#e9e7dc;color:#8d887c;cursor:default}.home-ritual-note{font-size:10px;color:var(--muted);padding-left:12px}
+
+/* Herbário do Sol — edição do caderno botânico encantado */
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Cormorant+Garamond:wght@500;600;700&family=Patrick+Hand&display=swap');
+:root{
+ --ink:#625747;--paper:#f8f2df;--paper-light:#fffaf0;--leaf-ink:#617a55;
+ --pencil:#9a8061;--pressed:#d9c9a7;
+}
+body{
+ background-color:#f4eedc!important;
+ background-image:
+  radial-gradient(ellipse at 8% 12%,#e5d9b955 0,transparent 34%),
+  radial-gradient(ellipse at 94% 72%,#d9e2ce66 0,transparent 32%),
+  repeating-linear-gradient(0deg,#7c684008 0,#7c684008 1px,transparent 1px,transparent 5px)!important;
+ color:var(--ink);
+}
+h1,h2,h3,h4,.brand h1,.section-head h3,.panel-title h4,.view-card h4,
+.guardian-dashboard-head h3,.garden-intro h3,.house-intro h3{
+ font-family:'Cormorant Garamond',Lora,serif;
+}
+.subtitle,.hero p,.view-card p,.garden-intro p,.house-intro p{line-height:1.75}
+.eyebrow,.nav-label{font-family:'Patrick Hand',sans-serif;letter-spacing:.12em}
+.brand h1{font-size:30px;font-weight:700}
+.brand p{font-family:'Patrick Hand',sans-serif;font-size:12px;letter-spacing:.08em}
+main{max-width:1520px}
+.topbar{align-items:center}
+.topbar h2{font-size:clamp(32px,4.3vw,45px);font-weight:600;letter-spacing:-.025em}
+.date-pill{font-family:'Patrick Hand',sans-serif;font-size:14px;border:1px dashed #bca982;background:#fff9e9}
+.nav-btn{font-family:'Patrick Hand',sans-serif;font-size:15px;border-radius:13px}
+.nav-btn.active{background:#f8f1df!important;border:1px dashed #aeb99d!important;box-shadow:2px 3px 0 #d9d2bc!important}
+.nav-btn.active:before{content:"✧";left:5px}
+.hero{
+ background:#607a58!important;
+ background-image:linear-gradient(110deg,#526b50,#71866a)!important;
+ border:1px solid #9aa786!important;border-radius:25px 19px 27px 18px!important;
+ box-shadow:0 5px 0 #d8d2bd,0 12px 25px #554c4510!important;
+}
+.hero:before{background:radial-gradient(ellipse,#f7e7b966,transparent 65%)!important;opacity:1}
+.hero:after{content:"❧  ✧  ❀";font:34px 'Cormorant Garamond',serif;letter-spacing:.2em;color:#f7edc688;right:7%;top:10px}
+.hero h3{font-family:'Cormorant Garamond',serif;font-size:clamp(27px,3.5vw,36px);font-weight:600}
+.hero p{font-family:'Patrick Hand',sans-serif;font-size:16px}
+.ghost-mascot{filter:drop-shadow(2px 4px 2px #263b2a24)!important}
+.hero-mascot{transform:rotate(2deg);width:clamp(88px,12vw,132px)}
+.view-ghost{
+ width:68px;height:78px;display:grid;place-items:center;flex:none;
+ transform:rotate(4deg);filter:drop-shadow(2px 4px 2px #554c4520);
+}
+.view-ghost .ghost-mascot{width:66px;height:auto}
+.stat,.panel,.guardian-dashboard,.garden-plot,.journey-card,.achievement-card{
+ background-color:#fffaf0!important;
+ background-image:repeating-linear-gradient(0deg,#806b4807 0,#806b4807 1px,transparent 1px,transparent 4px)!important;
+ border:1px solid #d9cdb5!important;
+ border-radius:18px 15px 19px 14px!important;
+ box-shadow:2px 3px 0 #e5dcc8,0 8px 20px #554c4509!important;
+}
+.stat{position:relative}
+.stat:after{border:1px dashed #c5b58e!important;opacity:.6}
+.stat strong{font-family:'Cormorant Garamond',serif;font-size:30px}
+.panel{position:relative}
+.panel:after{
+ content:"❧";position:absolute;right:13px;top:7px;color:#a4ae8d;
+ font:22px 'Cormorant Garamond',serif;opacity:.6;pointer-events:none;
+}
+.section-head h3{font-size:25px;font-weight:600}
+.section-head h3:before{width:22px;height:1px;background:#a98b58}
+.section-head h3:after{content:"✿";font:14px 'Cormorant Garamond',serif;color:#9aab85}
+.task{border-bottom:1px dashed #ded4bf!important}
+.task-info strong,.adventure-info strong{font-family:'Patrick Hand',sans-serif;font-size:15px}
+.task-info small,.adventure-info small{font-family:'Patrick Hand',sans-serif;font-size:12px}
+.check{border-radius:48% 42% 50% 43%!important;border:1.5px solid #829573!important}
+.check.done{background:#71866a!important}
+.tag,.stage-status{font-family:'Patrick Hand',sans-serif;font-size:12px}
+.ritual-icon,.adventure-icon{
+ border:1px dashed #c8b995!important;border-radius:45% 55% 48% 52%!important;
+ box-shadow:none!important;
+}
+.view-card{border-bottom:1px dashed #d8cdb7!important}
+.view-card h4{font-size:21px;font-weight:600}
+.view-card h4:before{content:"❧";font-size:16px;color:#8b9b75}
+.view-card p{font-family:'Patrick Hand',sans-serif;font-size:14px}
+.guardian-dashboard{position:relative;overflow:hidden;padding:23px!important}
+.guardian-dashboard:after{
+ content:"";position:absolute;right:15px;bottom:-8px;width:108px;height:108px;
+ border:1px dashed #9da987;border-radius:48% 52% 44% 56%;opacity:.45;
+ pointer-events:none;
+}
+.guardian-dashboard-head h3{font-size:30px!important}
+.guardian-dashboard-head p,.guardian-metric small,.guardian-progress-label{font-family:'Patrick Hand',sans-serif;font-size:13px}
+.guardian-level,.guardian-metric{background:#f5efdE!important;border:1px dashed #c8b995!important}
+.garden-landscape{border:1px dashed #9daa87!important;border-radius:22px 16px 25px 18px!important;box-shadow:3px 4px 0 #e2d8c2!important}
+.landscape-caption{border:1px dashed #c7b78e!important;border-radius:15px 11px 16px 12px!important}
+.landscape-caption strong{font-family:'Cormorant Garamond',serif;font-size:27px}
+.landscape-caption p{font-family:'Patrick Hand',sans-serif;font-size:13px}
+.garden-plot{border-style:dashed!important}
+.ritual-flower .flower-bloom{filter:drop-shadow(1px 2px 1px #79624b22)}
+.ritual-activity-group{border:1px dashed #cfc2a6!important;background:#fbf6e8!important}
+.ritual-activity-summary,.ritual-activity-copy strong{font-family:'Patrick Hand',sans-serif;font-size:14px}
+.house-scene{border:1px dashed #b7a77f!important;border-radius:20px 14px 23px 16px!important}
+.house-customize{background:#fff8e9!important;border:1px dashed #d2c3a5!important;border-radius:18px!important}
+.house-customize-head h3{font-family:'Cormorant Garamond',serif!important;font-size:26px!important}
+.house-customize-head p,.house-option-group h4{font-family:'Patrick Hand',sans-serif!important;font-size:14px!important}
+.house-choice{border:1px dashed #b9ad91!important;background:#fffaf0!important}
+.primary,.secondary,.text-btn,.ritual-complete{font-family:'Patrick Hand',sans-serif!important;font-size:14px!important}
+.primary{background:#637a57!important;border:1px dashed #879875!important}
+.secondary{border:1px dashed #c9b995!important;background:#f3ead5!important}
+.progress{background:#e8dfca!important;border:1px dashed #c8b995!important}
+.progress span{background:linear-gradient(90deg,#83966e,#c5a45d)!important}
+.footer{font-family:'Caveat',cursive!important;font-size:19px!important;color:#8d8067!important}
+.footer:before{content:"❧   ✿   ❧"!important;font-size:23px!important}
+.modal{background:#fff9e9!important;border:1px dashed #c9b995!important;border-radius:20px 15px 22px 16px!important}
+.modal h3{font-family:'Cormorant Garamond',serif!important;font-size:27px!important}
+@media(max-width:699px){
+ .topbar h2{font-size:31px}
+ .view-ghost{width:48px;height:56px}
+ .view-ghost .ghost-mascot{width:48px}
+ .hero{border-radius:19px 14px 21px 15px!important}
+ .hero p{font-size:14px}
+ .section-head h3{font-size:23px}
+ .panel:after{right:8px;top:5px;font-size:18px}
+}
+
 </style>
 <style>
 #task-list .check{padding:0;display:grid;place-items:center;cursor:pointer}
@@ -1447,6 +1567,13 @@ async function saveHouse(box){
  finally{if(button.isConnected){button.disabled=false;button.textContent='Salvar decoração'}}
 }
 function renderRefuge(box){renderHouse(box);if(!houseStateLoaded&&!houseStateLoading)loadHouseState()}
+function syncViewCompanion(view){
+ const topbar=document.querySelector('.topbar'),source=document.querySelector('.hero-mascot');
+ let companion=document.getElementById('view-ghost-companion');
+ if(!companion){companion=document.createElement('div');companion.id='view-ghost-companion';companion.className='view-ghost';companion.setAttribute('aria-hidden','true');}
+ if(view==='inicio'){companion.remove();return}
+ if(source){companion.innerHTML='';companion.append(source.cloneNode(true));topbar.append(companion)}
+}
 function showView(view){
  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
  const home=view==='inicio';document.getElementById('home-view').style.display=home?'block':'none';document.getElementById('other-view').style.display=home?'none':'block';
@@ -1455,6 +1582,7 @@ function showView(view){
  document.getElementById('page-title').textContent=p[1];document.getElementById('page-subtitle').hidden=false;document.getElementById('page-subtitle').textContent=p[2];
  const box=document.getElementById('other-content');box.innerHTML='';
  if(view==='aventuras')renderAdventures(box);else if(view==='rituais')renderRitualView(box);else if(view==='personagem')renderCharacter(box);else if(view==='conquistas'){renderAchievements(box);syncAchievementsFromServer()}else if(view==='pergaminho')renderPergaminho(box);else if(view==='loja')renderShop(box);else if(view==='refugio'){renderRefuge(box)}
+ syncViewCompanion(view);
 }
 async function refreshData(){
   try{
