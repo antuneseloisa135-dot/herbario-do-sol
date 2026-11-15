@@ -93,6 +93,8 @@ async function requireWriteAccess(request, env, expectedAction, token) {
 }
 const difficultyXP = { "Leve": 5, "Média": 10, "Difícil": 15 };
 const HOUSE_DEFAULT = { wall: "cream", floor: "wood", furniture: "reading" };
+const GARDEN_DEFAULT = { seeds: 3, flowers: [], plots: [{ id: "plot-1", plant: null }, { id: "plot-2", plant: null }, { id: "plot-3", plant: null }] };
+const GARDEN_GROW_MS = 24 * 60 * 60 * 1000;
 const HOUSE_OPTIONS = {
   wall: ["cream", "sage", "lavender"],
   floor: ["wood", "sand", "rose"],
@@ -309,6 +311,10 @@ export default {
         const state = await env.HOUSE_STATE.get("main", "json");
         return json({ ok: true, state: state || HOUSE_DEFAULT });
       }
+      if (request.method === "GET" && url.pathname === "/garden/state") {
+        const state = await env.HOUSE_STATE.get("garden-main", "json");
+        return json({ ok: true, state: state || GARDEN_DEFAULT });
+      }
       if (request.method === "GET" && url.pathname === "/notion/status") {
         const r = await fetch("https://api.notion.com/v1/users/me", { headers: notionHeaders(env.NOTION_TOKEN) });
         const data = await r.json();
@@ -350,6 +356,7 @@ export default {
         else if (request.method === "POST" && routePath === "/api/reschedule-overdue") expectedAction = "reschedule_overdue";
         else if (request.method === "POST" && routePath === "/api/sync-achievements") expectedAction = "sync_achievements";
         else if (request.method === "POST" && routePath === "/api/house/state") expectedAction = "save_house";
+        else if (request.method === "POST" && routePath === "/api/garden/action") expectedAction = "save_garden";
         else if (request.method === "POST" && routePath.startsWith("/api/redeem-reward/")) expectedAction = "redeem_reward";
         else if (request.method === "POST" && routePath.startsWith("/api/claim-exclusive-reward/")) expectedAction = "claim_exclusive_reward";
         else if (request.method === "PATCH" && routePath.startsWith("/api/adventures/")) expectedAction = "start_journey";
@@ -357,6 +364,31 @@ export default {
           return json({ ok: false, error: "Verificação de segurança não autorizada. Tente novamente." }, 403);
         }
         if (payload && typeof payload === "object") delete payload.turnstileToken;
+        if (routePath === "/api/garden/action" && request.method === "POST") {
+          const operation = payload?.properties?.operation, plotId = payload?.properties?.plotId;
+          if (!["plant", "water", "harvest"].includes(operation) || !["plot-1", "plot-2", "plot-3"].includes(plotId)) return json({ ok: false, error: "Ação de cultivo inválida." }, 400);
+          const state = await env.HOUSE_STATE.get("garden-main", "json") || structuredClone(GARDEN_DEFAULT);
+          if (!Array.isArray(state.plots) || !Array.isArray(state.flowers) || !Number.isInteger(state.seeds) || state.seeds < 0) return json({ ok: false, error: "O estado do jardim está inválido." }, 500);
+          const plot = state.plots.find(item => item.id === plotId);
+          if (!plot) return json({ ok: false, error: "Canteiro não encontrado." }, 404);
+          const now = Date.now();
+          if (operation === "plant") {
+            if (plot.plant) return json({ ok: false, error: "Este canteiro já tem uma planta." }, 409);
+            if (state.seeds < 1) return json({ ok: false, error: "Você não tem sementes disponíveis." }, 409);
+            state.seeds--; plot.plant = { plantedAt: now, readyAt: now + GARDEN_GROW_MS, wateredAt: null };
+          } else if (operation === "water") {
+            if (!plot.plant) return json({ ok: false, error: "Não há planta neste canteiro." }, 409);
+            if (now >= plot.plant.readyAt) return json({ ok: false, error: "Esta flor já está pronta para colher." }, 409);
+            if (plot.plant.wateredAt && now - plot.plant.wateredAt < 12 * 60 * 60 * 1000) return json({ ok: false, error: "Esta planta já recebeu cuidado recentemente. Volte mais tarde." }, 409);
+            plot.plant.readyAt = Math.max(now, plot.plant.readyAt - 4 * 60 * 60 * 1000); plot.plant.wateredAt = now;
+          } else {
+            if (!plot.plant) return json({ ok: false, error: "Não há flor neste canteiro." }, 409);
+            if (now < plot.plant.readyAt) return json({ ok: false, error: "A flor ainda está crescendo." }, 409);
+            state.flowers.push({ id: crypto.randomUUID(), name: "Flor silvestre", harvestedAt: now }); plot.plant = null;
+          }
+          await env.HOUSE_STATE.put("garden-main", JSON.stringify(state));
+          return json({ ok: true, state });
+        }
         if (routePath === "/api/house/state" && request.method === "POST") {
           const input = payload?.properties;
           if (!input || typeof input !== "object" || Array.isArray(input)) return json({ ok: false, error: "Envie uma decoração válida." }, 400);
