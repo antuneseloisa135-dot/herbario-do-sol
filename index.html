@@ -824,7 +824,7 @@ aside{background:#e4eadf!important}
   <button class="nav-btn" data-view="aventuras"><span>◇</span> Aventuras</button>
   <button class="nav-btn" data-view="rituais"><span>✳</span> Rituais do Jardim</button>
   <button class="nav-btn" data-view="personagem"><span>◎</span> Guardião</button>
-  <button class="nav-btn" data-view="refugio"><span>✿</span> Refúgio & Jardim</button>
+  <button class="nav-btn" data-view="refugio"><span>✿</span> Refúgio</button>
   <button class="nav-btn" data-view="conquistas"><span>☆</span> Conquistas</button>
   <button class="nav-btn" data-view="loja"><span>♧</span> Feira do Sol</button>
   <button class="nav-btn" data-view="pergaminho"><span>▤</span> Pergaminho</button>
@@ -908,7 +908,7 @@ const pages={
  aventuras:["🧭","Jornadas em curso","Projetos que ganham vida quando são divididos em etapas.","Suas aventuras",[]],
  rituais:["🌱","Pequenos Cultivos","Cuidados que, repetidos com carinho, criam raízes.","Seus cultivos",[]],
  personagem:["◎","Guardiã","Acompanhe sua evolução, sua Essência Solar e os caminhos que já percorreu.","Seu retrato no Herbário",["Nível e atributos carregados do Notion."]],
- refugio:["✿","Refúgio & Jardim","Um espaço para descansar e acompanhar cada ritual florescer.","Seu jardim e seu refúgio",[]],
+ refugio:["✿","Refúgio","Um cantinho para descansar entre uma aventura e outra.","Seu pequeno refúgio",[]],
  conquistas:["🏆","Coleção de conquistas","Cada avanço merece ser reconhecido.","Conquistas",["As conquistas serão conectadas ao Notion em uma próxima etapa."]],
  pergaminho:["📜","Pergaminho","Seu espaço de referências, ideias e conhecimentos.","Biblioteca",["Estudos e cursos","Referências importantes","Anotações e ideias para revisitar"]],
  loja:["♧","Feira do Sol","Pequenas recompensas para celebrar o caminho percorrido.","Recompensas disponíveis",[]],
@@ -1281,8 +1281,8 @@ function renderShop(box){
 }
 function levelInfo(xp){const levels=[['Semente',0],['Broto',100],['Muda',250],['Floração',500],['Árvore',900],['Bosque',1500]];let current=levels[0],next=levels[1];for(let i=0;i<levels.length;i++){if(xp>=levels[i][1]){current=levels[i];next=levels[i+1]||null}}const pct=next?Math.min(100,Math.round((xp-current[1])/(next[1]-current[1])*100)):100;return{name:current[0],next:next?next[0]:'Nível máximo',pct,remaining:next?Math.max(0,next[1]-xp):0}}
 function renderRitualView(box){
- if(!rituals.length){box.innerHTML='<div class="empty-state">Seu jardim ainda não tem rituais cadastrados no Notion.</div>';return}
- rituals.forEach(r=>{const card=document.createElement('div');card.className='view-card';card.innerHTML='<h4></h4><div class="view-filter"><span class="tag"></span><span class="tag"></span><span class="tag"></span></div><p></p>';card.querySelector('h4').textContent=title(r,'Ritual')||'Ritual';const tags=card.querySelectorAll('.tag');tags[0].textContent=prop(r,'Área')?.select?.name||'Área não definida';tags[1].textContent=prop(r,'Frequência')?.select?.name||'Frequência não definida';tags[2].textContent=prop(r,'Ativo')?.checkbox?'Ativo':'Pausado';const chosen=multi(r,'Dia');card.querySelector('p').textContent=chosen.length?'Dias: '+chosen.join(' · '):'Dias ainda não definidos';box.append(card)});
+ renderGarden(box);
+ if(!gardenLoaded)loadGardenState();
 }
 function renderCharacter(box){const xp=earnedXP(),balance=totalXP(),level=levelInfo(xp);box.innerHTML='<section class="guardian-dashboard"><div class="guardian-dashboard-head"><div><span class="eyebrow">SEU FLORESCIMENTO</span><h3>O caminho do Guardião</h3><p>Cada tarefa colhida fortalece sua jornada.</p></div><div class="guardian-level"><span>NÍVEL ATUAL</span><strong>'+level.name+'</strong></div></div><div class="guardian-metrics"><div class="guardian-metric"><small>Experiência conquistada</small><strong>'+xp+' XP</strong></div><div class="guardian-metric"><small>Essência disponível</small><strong>'+balance+' XP</strong></div><div class="guardian-metric"><small>Próximo florescer</small><strong>'+level.next+'</strong></div></div><div class="guardian-progress"><div class="guardian-progress-label"><strong>'+level.pct+'% do caminho</strong><span>'+(level.remaining?level.remaining+' XP para avançar':'Último nível alcançado')+'</span></div><div class="progress"><span style="width:'+level.pct+'%"></span></div></div></section>'}
 
@@ -1346,8 +1346,8 @@ function renderGarden(box){
  plants.forEach((p,i)=>{const card=document.createElement("article");card.className="garden-plot ritual-plant-card";const art=document.createElement("div");art.innerHTML=flowerArt(p.completions||0,i);const h=document.createElement("h4");h.textContent=p.name;const d=document.createElement("p");d.textContent=(p.area||"Autocuidado")+" · "+((p.days||[]).join(" e ")||"dias a definir");const m=document.createElement("div");m.className="garden-meta";m.textContent=(p.completions||0)+" cuidados · estágio: "+gardenStage(p.completions||0);const btn=document.createElement("button");btn.type="button";btn.className="primary ritual-complete";const done=p.lastPracticed===today,scheduled=(p.days||[]).includes(weekday);btn.disabled=gardenBusy||done||!scheduled;btn.textContent=done?"Cultivada hoje":scheduled?"Concluir ritual":"Próximo cuidado: "+((p.days||[]).join(" · ")||"defina os dias");if(scheduled&&!done)btn.addEventListener("click",()=>completeRitual(p.ritualId,box,btn));card.append(art,h,d,m,btn);grid.append(card)});
  box.innerHTML='<section class="garden-intro"><div><span class="eyebrow">UM JARDIM, MUITOS COMEÇOS</span><h3>Seu cuidado ganha raízes.</h3><p>Cada ritual tem uma flor própria. Quando você pratica, ela cresce um pouquinho. Se precisar pausar, ela continuará aqui, esperando seu retorno.</p></div><div class="garden-inventory"><span>SEUS RITUAIS</span><strong>'+plants.length+'</strong><small>uma flor para cada cuidado</small></div></section>'+scene;box.append(summary,grid);
 }
-async function loadGardenState(){if(gardenLoading||gardenLoaded)return;gardenLoading=true;try{const r=await fetch(API+"/garden/state"),j=await r.json();if(!r.ok||!j?.ok)throw Error(j?.error||"Não foi possível carregar o jardim.");gardenState=j.state||{plants:[]};gardenLoaded=true;if(document.querySelector(".nav-btn.active")?.dataset.view==="refugio")renderRefuge(document.getElementById("other-content"))}catch(e){console.error(e);toast("Não foi possível carregar o Jardim de Cultivo.")}finally{gardenLoading=false}}
-async function completeRitual(id,box,button){if(gardenBusy||button.disabled)return;gardenBusy=true;button.disabled=true;button.textContent="Cultivando...";try{const r=await protectedWrite("/write/api/garden/action","POST",{operation:"complete",ritualId:id},"complete_ritual");gardenState=r.state;rituals=await load("rituals");gardenLoaded=true;toast("Ritual concluído. Sua flor cresceu um pouquinho!")}catch(e){console.error(e);toast(e.message||"Não foi possível registrar o ritual.")}finally{gardenBusy=false;if(box.isConnected)renderRefuge(box)}}
+async function loadGardenState(){if(gardenLoading||gardenLoaded)return;gardenLoading=true;try{const r=await fetch(API+"/garden/state"),j=await r.json();if(!r.ok||!j?.ok)throw Error(j?.error||"Não foi possível carregar o jardim.");gardenState=j.state||{plants:[]};gardenLoaded=true;if(document.querySelector(".nav-btn.active")?.dataset.view==="rituais")renderGarden(document.getElementById("other-content"))}catch(e){console.error(e);toast("Não foi possível carregar o Jardim de Cultivo.")}finally{gardenLoading=false}}
+async function completeRitual(id,box,button){if(gardenBusy||button.disabled)return;gardenBusy=true;button.disabled=true;button.textContent="Cultivando...";try{const r=await protectedWrite("/write/api/garden/action","POST",{operation:"complete",ritualId:id},"complete_ritual");gardenState=r.state;rituals=await load("rituals");gardenLoaded=true;toast("Ritual concluído. Sua flor cresceu um pouquinho!")}catch(e){console.error(e);toast(e.message||"Não foi possível registrar o ritual.")}finally{gardenBusy=false;if(box.isConnected)renderGarden(box)}}
 function renderPergaminho(box){box.innerHTML='<div class="view-card"><h4>Biblioteca do jardim</h4><p>Seu acervo de conhecimentos, receitas e feitiços para consultar e cultivar suas jornadas.</p></div><div class="view-card"><h4>Receitas e Feitiços</h4><p>'+recipes.length+' registros encontrados na coleção Receitas e Feitiços.</p></div>'}
 
 function renderHouse(box){
@@ -1373,7 +1373,7 @@ async function loadHouseState(){
    furniture:HOUSE_CHOICES.furniture.some(x=>x.value===saved.furniture)?saved.furniture:'reading'
   };
   houseStateLoaded=true;
-  if(document.querySelector('.nav-btn.active')?.dataset.view==='refugio')renderRefuge(document.getElementById('other-content'));
+  if(document.querySelector('.nav-btn.active')?.dataset.view==='refugio')renderHouse(document.getElementById('other-content'));
  }catch(error){console.error('Falha ao carregar decoração:',error);toast('Não foi possível carregar a decoração salva.')}finally{houseStateLoading=false}
 }
 async function saveHouse(box){
@@ -1387,7 +1387,7 @@ async function saveHouse(box){
  }catch(error){console.error('Falha ao salvar decoração:',error);toast(error.message||'Não foi possível salvar a casinha.')}
  finally{if(button.isConnected){button.disabled=false;button.textContent='Salvar decoração'}}
 }
-function renderRefuge(box){renderGarden(box);const house=document.createElement("section");house.className="house-combined";house.innerHTML='<div class="refuge-divider"><span>✧</span><h3>O Refúgio do Guardião</h3><p>Um cantinho para descansar entre um cuidado e outro.</p></div>';const content=document.createElement("div");content.className="house-content";house.append(content);box.append(house);renderHouse(content);if(!gardenLoaded)loadGardenState();if(!houseStateLoaded&&!houseStateLoading)loadHouseState()}
+function renderRefuge(box){renderHouse(box);if(!houseStateLoaded&&!houseStateLoading)loadHouseState()}
 function showView(view){
  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
  const home=view==='inicio';document.getElementById('home-view').style.display=home?'block':'none';document.getElementById('other-view').style.display=home?'none':'block';
