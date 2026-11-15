@@ -601,6 +601,19 @@ aside{background:#e4eadf!important}
 <meta name="apple-mobile-web-app-title" content="Herbário do Sol">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+<style>
+/* Primeiro passeio do guardião: animação leve, sem dependências externas */
+.hero{position:relative;overflow:hidden}
+.ghost-walker{position:absolute;left:0;bottom:1px;width:34px;height:40px;z-index:3;pointer-events:none;animation:ghost-walk-across 17s linear infinite,ghost-walk-bob .62s ease-in-out infinite alternate;filter:drop-shadow(0 3px 3px #344b3b20)}
+.ghost-walker .walker-body{fill:#fffdf7;stroke:#d9d2c2;stroke-width:2}
+.ghost-walker ellipse:not(.walker-cheek){fill:#554c45}
+.ghost-walker .walker-cheek{fill:#dfb8aa}
+.ghost-walker .walker-leaf{fill:#a9b69a;stroke:#526b50;stroke-width:1.5}
+@keyframes ghost-walk-across{from{left:2%}to{left:calc(98% - 34px)}}
+@keyframes ghost-walk-bob{from{transform:translateY(0) rotate(-3deg)}to{transform:translateY(-4px) rotate(3deg)}}
+@media(prefers-reduced-motion:reduce){.ghost-walker{animation:none;left:calc(50% - 17px)}}
+</style>
 </head>
 <body>
 <div class="shell">
