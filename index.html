@@ -621,6 +621,19 @@ aside{background:#e4eadf!important}
   animation:guardian-leaf 4s ease-in-out infinite;
 }
 .hero-mascot .ghost-mouth{animation:guardian-smile 6.8s ease-in-out infinite}
+.hero-mascot.mood-pending .ghost-leaf{rotate:-12deg;transition:rotate .35s ease}
+.hero-mascot.mood-happy{filter:drop-shadow(0 0 10px #e6c66c99)!important}
+.hero-mascot.mood-happy .ghost-mouth{transform:scale(1.22);transform-origin:70px 80px}
+.hero-mascot.mood-happy .ghost-cheek{opacity:1}
+.hero-mascot.mood-celebrate{animation:guardian-celebrate 1.15s ease-in-out 2!important}
+.hero-mascot.mood-celebrate .ghost-sparkles{animation:guardian-sparkle .45s ease-in-out 4 alternate}
+@keyframes guardian-celebrate{
+  0%,100%{transform:translateY(0) scale(1);rotate:0deg}
+  25%{transform:translateY(-13px) scale(1.08);rotate:-5deg}
+  55%{transform:translateY(-4px) scale(1.04);rotate:5deg}
+  80%{transform:translateY(-10px) scale(1.07);rotate:-3deg}
+}
+@keyframes guardian-sparkle{from{opacity:.35}to{opacity:1;filter:drop-shadow(0 0 5px #d1ad63)}}
 @keyframes guardian-float{
   0%,100%{transform:translateY(3px)}
   50%{transform:translateY(-7px)}
@@ -668,7 +681,7 @@ aside{background:#e4eadf!important}
 <main>
  <div class="topbar"><div><div class="eyebrow">Um pequeno universo para cultivar a própria vida</div><h2 id="page-title">A Clareira do Dia</h2><div class="subtitle" id="page-subtitle" hidden>Pequenos passos também fazem florescer grandes mudanças.</div></div><div class="date-pill" id="today"></div></div>
  <section id="home-view">
-  <div class="hero"><div class="hero-copy"><h3 id="greeting">Bom dia, Guardiã.</h3><p id="greeting-message">Que hoje tenha espaço para florescer.</p></div><svg class="ghost-mascot hero-mascot" viewBox="0 0 120 140" role="img" aria-label="Fantasminha guardião do jardim"><path class="ghost-body" d="M18 116V62C18 31 37 10 61 10s43 21 43 52v54c-8-8-15-8-22 0-7-8-15-8-22 0-7-8-15-8-22 0-7-8-13-8-20 0Z"/><ellipse class="ghost-eye" cx="47" cy="62" rx="4" ry="6"/><ellipse class="ghost-eye" cx="76" cy="62" rx="4" ry="6"/><ellipse class="ghost-cheek" cx="35" cy="76" rx="7" ry="4"/><ellipse class="ghost-cheek" cx="88" cy="76" rx="7" ry="4"/><path class="ghost-mouth" d="M54 79q7 7 14 0" fill="none" stroke="#554c45" stroke-width="2.5" stroke-linecap="round"/><path class="ghost-leaf" d="M69 15q-2-13 12-13 0 12-12 13Zm-2 1q-13-8-19 1 10 7 19-1Z"/><path d="M8 38l2 4 4 2-4 2-2 4-2-4-4-2 4-2zM108 89l2 3 3 2-3 2-2 3-2-3-3-2 3-2z" fill="#d1ad63" opacity=".9"><animate attributeName="opacity" values=".25;1;.25" dur="3.6s" repeatCount="indefinite"/></path></svg></div>
+  <div class="hero"><div class="hero-copy"><h3 id="greeting">Bom dia, Guardiã.</h3><p id="greeting-message">Que hoje tenha espaço para florescer.</p></div><svg class="ghost-mascot hero-mascot" viewBox="0 0 120 140" role="img" aria-label="Fantasminha guardião do jardim"><path class="ghost-body" d="M18 116V62C18 31 37 10 61 10s43 21 43 52v54c-8-8-15-8-22 0-7-8-15-8-22 0-7-8-15-8-22 0-7-8-13-8-20 0Z"/><ellipse class="ghost-eye" cx="47" cy="62" rx="4" ry="6"/><ellipse class="ghost-eye" cx="76" cy="62" rx="4" ry="6"/><ellipse class="ghost-cheek" cx="35" cy="76" rx="7" ry="4"/><ellipse class="ghost-cheek" cx="88" cy="76" rx="7" ry="4"/><path class="ghost-mouth" d="M54 79q7 7 14 0" fill="none" stroke="#554c45" stroke-width="2.5" stroke-linecap="round"/><path class="ghost-leaf" d="M69 15q-2-13 12-13 0 12-12 13Zm-2 1q-13-8-19 1 10 7 19-1Z"/><path class="ghost-sparkles" d="M8 38l2 4 4 2-4 2-2 4-2-4-4-2 4-2zM108 89l2 3 3 2-3 2-2 3-2-3-3-2 3-2z" fill="#d1ad63" opacity=".9"><animate attributeName="opacity" values=".25;1;.25" dur="3.6s" repeatCount="indefinite"/></path></svg></div>
   <div class="stats">
    <div class="stat"><small>Flores de hoje</small><strong id="remaining">—</strong><em>tarefas em aberto</em></div>
    <div class="stat"><small>Essência Solar</small><strong id="essence-total">—</strong><em id="essence-caption">carregando do Notion</em></div>
@@ -760,8 +773,35 @@ async function load(resource){
  }while(cursor);
  return all;
 }
+function updateGuardianMood(){
+ const mascot=document.querySelector('.hero-mascot');
+ const message=document.getElementById('greeting-message');
+ if(!mascot||!message)return;
+ const todays=tasks.filter(t=>(date(t,'Date')||'').slice(0,10)===localToday());
+ const open=todays.filter(t=>!['Done','Colhido'].includes(select(t,'Status')));
+ const mood=!todays.length?'resting':open.length?'pending':'happy';
+ mascot.classList.remove('mood-resting','mood-pending','mood-happy');
+ mascot.classList.add('mood-'+mood);
+ mascot.setAttribute('aria-label',mood==='pending'?'Guardião atento às tarefas do dia':mood==='happy'?'Guardião feliz: todas as tarefas de hoje foram concluídas':'Guardião descansando no jardim');
+ message.textContent=mood==='pending'
+  ? 'Ainda temos '+open.length+' '+(open.length===1?'flor para cuidar':'flores para cuidar')+'. Vamos uma de cada vez.'
+  : mood==='happy'
+   ? 'Todas as flores de hoje foram cuidadas. Que orgulho do que você cultivou!'
+   : 'Hoje o jardim está tranquilo. Aproveite o espaço para respirar.';
+}
+let guardianCelebrationTimer=null;
+function celebrateGuardian(){
+ const mascot=document.querySelector('.hero-mascot');
+ if(!mascot)return;
+ clearTimeout(guardianCelebrationTimer);
+ mascot.classList.remove('mood-celebrate');
+ void mascot.getBoundingClientRect();
+ mascot.classList.add('mood-celebrate');
+ guardianCelebrationTimer=setTimeout(()=>mascot.classList.remove('mood-celebrate'),2400);
+}
 function renderTasks(){
  const box=document.getElementById('task-list');box.innerHTML='';
+ updateGuardianMood();
  const todays=tasks.filter(t=>(date(t,'Date')||'').slice(0,10)===localToday());
  const open=todays.filter(t=>!['Done','Colhido'].includes(select(t,'Status')));
  const completed=todays.filter(t=>['Done','Colhido'].includes(select(t,'Status')));
@@ -1288,6 +1328,7 @@ async function toggleTask(task,button){
    console.error('Tarefa atualizada, mas a sincronização de XP falhou:',syncError);
   }
   await refreshData();
+  if(!isHarvested)celebrateGuardian();
   toast(xpSyncError?'Tarefa atualizada; não foi possível sincronizar o XP. Tente novamente.':(isHarvested?'Status anterior restaurado e XP recalculado.':'Tarefa colhida! Essência Solar atualizada.'));
  }catch(error){
   console.error(error);button.disabled=false;toast(error.message||'Não foi possível atualizar a tarefa.');
