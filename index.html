@@ -528,6 +528,26 @@ aside{background:#e4eadf!important}
 .ritual-flower.botanical-specimen.stage-semente svg{transform:scale(.76) translateY(12px)}
 .ritual-flower.botanical-specimen.stage-broto svg{transform:scale(.88) translateY(6px)}
 
+
+/* Ajustes de alinhamento e ritmo visual da Clareira do Dia */
+#page-title{margin-left:0!important}
+.topbar{width:100%;box-sizing:border-box;align-items:center}
+#home-view{width:100%;box-sizing:border-box}
+#home-view > .hero,
+#home-view > .stats,
+#home-view > .columns,
+#home-view > .section-head,
+#home-view > #adventure-list{width:100%;box-sizing:border-box}
+#home-view > .section-head{padding-left:0;padding-right:0;margin-left:0}
+#home-view > .columns{align-items:stretch;gap:22px}
+#home-view > .columns > .panel{min-width:0}
+#home-view > .section-head + .panel{margin-top:0}
+@media(max-width:699px){
+ #home-view > .columns{gap:16px}
+ #home-view > .stats{gap:12px}
+ #home-view > .section-head{margin-top:28px}
+}
+
 </style>
 <style>
 #task-list .check{padding:0;display:grid;place-items:center;cursor:pointer}
@@ -872,7 +892,7 @@ aside{background:#e4eadf!important}
    <div class="panel"><div class="panel-title"><h4>✿ Flores de Hoje</h4><span class="tag">Hoje</span></div><div id="task-list"></div></div>
    <div class="panel"><div class="panel-title"><h4>❧ Pequenos Cultivos</h4><span class="tag">Cultivo</span></div>
     <p class="loading-note" style="font-size:12px;color:var(--muted)">Carregando seus rituais do Notion...</p>
-    <div style="margin-top:19px"><div class="panel-title"><h4>✧ Próxima evolução</h4><small style="font-size:10px;color:var(--muted)">Nível 2 · Broto</small></div><div class="progress"><span id="home-xp-progress"></span></div><small id="home-xp-caption" style="font-size:10px;color:var(--muted)">Carregando sua próxima conquista...</small></div>
+
    </div>
   </div>
   <div class="section-head"><div><h3>Jornadas em curso</h3><p>Grandes sonhos, cultivados em pequenas etapas.</p></div><button class="text-btn" data-go="aventuras">Ver todas as aventuras →</button></div>
