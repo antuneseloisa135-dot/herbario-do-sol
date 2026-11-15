@@ -512,6 +512,7 @@ aside{background:#e4eadf!important}
 .exclusive-card.redeemed{opacity:.62}.exclusive-card.redeemed .exclusive-art{filter:grayscale(.6)}
 @media(max-width:699px){.journey-intro{align-items:flex-start;padding:15px}.journey-intro h3,.exclusive-head h3{font-size:20px}.journey-grid{grid-template-columns:1fr;gap:10px}.journey-card{grid-template-columns:88px minmax(0,1fr);gap:10px}.journey-cover{height:96px}.exclusive-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.exclusive-art{height:88px}}
 
+.home-ritual-card{padding:10px 0;border-bottom:1px solid var(--line);display:grid;gap:7px}.home-ritual-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.home-ritual-top strong{font:600 13px Lora,serif;color:var(--night)}.home-ritual-link{border:0;background:transparent;color:var(--moss);font-size:10px;font-weight:700;cursor:pointer}.home-ritual-action-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-left:12px;font-size:11px;color:var(--muted)}.home-ritual-check{min-width:42px;border:0;border-radius:8px;background:var(--moss);color:white;padding:5px 9px;font-size:10px;font-weight:700;cursor:pointer}.home-ritual-check:disabled{background:#e9e7dc;color:#8d887c;cursor:default}.home-ritual-note{font-size:10px;color:var(--muted);padding-left:12px}
 </style>
 <style>
 #task-list .check{padding:0;display:grid;place-items:center;cursor:pointer}
@@ -1179,7 +1180,6 @@ async function claimExclusiveReward(reward,adventure){
   await refreshData();showView('aventuras');toast('Recompensa exclusiva conquistada!');
  }catch(error){toast(error.message||'Não foi possível liberar a recompensa.')}
 }
-.home-ritual-card{padding:10px 0;border-bottom:1px solid var(--line);display:grid;gap:7px}.home-ritual-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.home-ritual-top strong{font:600 13px Lora,serif;color:var(--night)}.home-ritual-link{border:0;background:transparent;color:var(--moss);font-size:10px;font-weight:700;cursor:pointer}.home-ritual-action-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-left:12px;font-size:11px;color:var(--muted)}.home-ritual-check{min-width:42px;border:0;border-radius:8px;background:var(--moss);color:white;padding:5px 9px;font-size:10px;font-weight:700;cursor:pointer}.home-ritual-check:disabled{background:#e9e7dc;color:#8d887c;cursor:default}.home-ritual-note{font-size:10px;color:var(--muted);padding-left:12px}
 function renderRituals(){
  const box=document.querySelector('#home-view .columns .panel:nth-child(2)');
  if(!box)return;
