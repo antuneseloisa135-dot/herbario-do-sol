@@ -513,6 +513,21 @@ aside{background:#e4eadf!important}
 @media(max-width:699px){.journey-intro{align-items:flex-start;padding:15px}.journey-intro h3,.exclusive-head h3{font-size:20px}.journey-grid{grid-template-columns:1fr;gap:10px}.journey-card{grid-template-columns:88px minmax(0,1fr);gap:10px}.journey-cover{height:96px}.exclusive-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.exclusive-art{height:88px}}
 
 .home-ritual-card{padding:10px 0;border-bottom:1px solid var(--line);display:grid;gap:7px}.home-ritual-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.home-ritual-top strong{font:600 13px Lora,serif;color:var(--night)}.home-ritual-link{border:0;background:transparent;color:var(--moss);font-size:10px;font-weight:700;cursor:pointer}.home-ritual-action-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-left:12px;font-size:11px;color:var(--muted)}.home-ritual-check{min-width:42px;border:0;border-radius:8px;background:var(--moss);color:white;padding:5px 9px;font-size:10px;font-weight:700;cursor:pointer}.home-ritual-check:disabled{background:#e9e7dc;color:#8d887c;cursor:default}.home-ritual-note{font-size:10px;color:var(--muted);padding-left:12px}
+
+/* Tela breve de entrada do Herbário */
+#welcome-splash{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:#526b50;color:#fffdf7;opacity:1;visibility:visible;transition:opacity .45s ease,visibility .45s ease}
+#welcome-splash.is-leaving{opacity:0;visibility:hidden;pointer-events:none}
+#welcome-splash .welcome-ghost{width:88px;height:auto;filter:drop-shadow(0 7px 8px #263b2a35);animation:welcome-float 2.8s ease-in-out infinite}
+#welcome-splash p{max-width:280px;margin:0;padding:0 22px;text-align:center;font:500 15px Lora,serif;line-height:1.6;color:#fffdf7}
+@keyframes welcome-float{0%,100%{transform:translateY(2px)}50%{transform:translateY(-7px)}}
+@media(prefers-reduced-motion:reduce){#welcome-splash .welcome-ghost{animation:none}}
+
+.ritual-flower.botanical-specimen{width:100px;height:116px;display:flex;align-items:center;justify-content:center;position:relative;background:radial-gradient(ellipse at 50% 70%,#e8dfc3aa,transparent 65%)}
+.ritual-flower.botanical-specimen:before{content:"";position:absolute;inset:7px 9px 5px;border:1px solid #c8b99455;border-radius:48% 52% 43% 57%;transform:rotate(-7deg)}
+.ritual-flower.botanical-specimen svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(1px 2px 1px #78674b20)}
+.ritual-flower.botanical-specimen.stage-semente svg{transform:scale(.76) translateY(12px)}
+.ritual-flower.botanical-specimen.stage-broto svg{transform:scale(.88) translateY(6px)}
+
 </style>
 <style>
 #task-list .check{padding:0;display:grid;place-items:center;cursor:pointer}
@@ -817,6 +832,16 @@ aside{background:#e4eadf!important}
 </style>
 </head>
 <body>
+<div id="welcome-splash" role="status" aria-label="Entrando no Herbário do Sol">
+ <svg class="welcome-ghost" viewBox="0 0 120 140" aria-hidden="true">
+  <path d="M18 116V62C18 31 37 10 61 10s43 21 43 52v54c-8-8-15-8-22 0-7-8-15-8-22 0-7-8-15-8-22 0-7-8-13-8-20 0Z" fill="#fffdf7" stroke="#e9e2cf" stroke-width="2"/>
+  <ellipse cx="47" cy="62" rx="4" ry="6" fill="#554c45"/><ellipse cx="76" cy="62" rx="4" ry="6" fill="#554c45"/>
+  <ellipse cx="35" cy="76" rx="7" ry="4" fill="#d9b8a7"/><ellipse cx="88" cy="76" rx="7" ry="4" fill="#d9b8a7"/>
+  <path d="M54 79q7 7 14 0" fill="none" stroke="#554c45" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M69 15q-2-13 12-13 0 12-12 13Zm-2 1q-13-8-19 1 10 7 19-1Z" fill="#a9b69a" stroke="#526b50" stroke-width="1.5"/>
+ </svg>
+ <p>Um pequeno universo para cultivar a própria vida.</p>
+</div>
 <div class="shell">
 <aside>
  <div class="brand"><div class="brand-mark"><svg class="ghost-mascot" viewBox="0 0 120 140" role="img" aria-label="Fantasminha do Herbário"><path class="ghost-body" d="M18 116V62C18 31 37 10 61 10s43 21 43 52v54c-8-8-15-8-22 0-7-8-15-8-22 0-7-8-15-8-22 0-7-8-13-8-20 0Z"/><ellipse class="ghost-eye" cx="47" cy="62" rx="4" ry="6"/><ellipse class="ghost-eye" cx="76" cy="62" rx="4" ry="6"/><ellipse class="ghost-cheek" cx="35" cy="76" rx="7" ry="4"/><ellipse class="ghost-cheek" cx="88" cy="76" rx="7" ry="4"/><path d="M54 79q7 7 14 0" fill="none" stroke="#554c45" stroke-width="2.5" stroke-linecap="round"/><path class="ghost-leaf" d="M69 15q-2-13 12-13 0 12-12 13Zm-2 1q-13-8-19 1 10 7 19-1Z"/></svg></div><h1>Herbário do Sol</h1><p>UM PEQUENO UNIVERSO PARA CULTIVAR A PRÓPRIA VIDA</p></div>
@@ -833,7 +858,7 @@ aside{background:#e4eadf!important}
  <div class="aside-note">“A vida floresce quando cuidamos, um pouquinho por dia, daquilo que importa.”</div>
 </aside>
 <main>
- <div class="topbar"><div><div class="eyebrow">Um pequeno universo para cultivar a própria vida</div><h2 id="page-title">A Clareira do Dia</h2><div class="subtitle" id="page-subtitle" hidden>Pequenos passos também fazem florescer grandes mudanças.</div></div><div class="date-pill" id="today"></div></div>
+ <div class="topbar"><div><h2 id="page-title">A Clareira do Dia</h2><div class="subtitle" id="page-subtitle" hidden>Pequenos passos também fazem florescer grandes mudanças.</div></div><div class="date-pill" id="today"></div></div>
  <section id="home-view">
   <div class="hero"><div class="hero-copy"><h3 id="greeting">Bom dia, Guardiã.</h3><p id="greeting-message">Que hoje tenha espaço para florescer.</p></div><svg class="ghost-mascot hero-mascot" viewBox="0 0 120 140" role="img" aria-label="Fantasminha guardião do jardim"><g class="ghost-arm ghost-arm-left"><path d="M27 78 C18 78 13 84 9 92 C7 97 10 100 14 97 L29 87" fill="none" stroke="#e9e2cf" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M27 78 C18 78 13 84 9 92 C7 97 10 100 14 97 L29 87" fill="none" stroke="#fffdf7" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></g><g class="ghost-arm ghost-arm-right"><path d="M95 78 C104 78 109 84 113 92 C115 97 112 100 108 97 L93 87" fill="none" stroke="#e9e2cf" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M95 78 C104 78 109 84 113 92 C115 97 112 100 108 97 L93 87" fill="none" stroke="#fffdf7" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></g><path class="ghost-body" d="M18 116V62C18 31 37 10 61 10s43 21 43 52v54c-8-8-15-8-22 0-7-8-15-8-22 0-7-8-15-8-22 0-7-8-13-8-20 0Z"/><ellipse class="ghost-eye" cx="47" cy="62" rx="4" ry="6"/><ellipse class="ghost-eye" cx="76" cy="62" rx="4" ry="6"/><ellipse class="ghost-cheek" cx="35" cy="76" rx="7" ry="4"/><ellipse class="ghost-cheek" cx="88" cy="76" rx="7" ry="4"/><path class="ghost-mouth" d="M54 79q7 7 14 0" fill="none" stroke="#554c45" stroke-width="2.5" stroke-linecap="round"/><path class="ghost-leaf" d="M69 15q-2-13 12-13 0 12-12 13Zm-2 1q-13-8-19 1 10 7 19-1Z"/><path class="ghost-sparkles" d="M8 38l2 4 4 2-4 2-2 4-2-4-4-2 4-2zM108 89l2 3 3 2-3 2-2 3-2-3-3-2 3-2z" fill="#d1ad63" opacity=".9"><animate attributeName="opacity" values=".25;1;.25" dur="3.6s" repeatCount="indefinite"/></path></svg></div>
   <div class="stats">
@@ -1352,7 +1377,15 @@ async function syncAchievementsFromServer(){
 }
 let gardenState=null,gardenLoaded=false,gardenLoading=false,gardenBusy=false,houseStateLoading=false;
 function gardenStage(n){return n>=7?"floração":n>=3?"botão":n>=1?"broto":"semente"}
-function flowerArt(n,i){const c=["#d9b8a7","#b9a8ce","#d6c879","#c5d1bb"];return '<div class="ritual-flower stage-'+gardenStage(n)+'" style="--flower:'+c[i%4]+'"><i class="flower-ground"></i><i class="flower-pot"></i><i class="flower-stem"></i><i class="flower-leaf left"></i><i class="flower-leaf right"></i><b class="flower-bloom">'+(n>=3?"✿":n>=1?"✧":"●")+'</b></div>'}
+function flowerArt(n,i){
+ const palettes=[['#c78d9d','#e6b9bf','#f1d6cb'],['#9b83b7','#c4afd4','#e7d8ec'],['#d3a94f','#ecd38a','#f5e7b9'],['#829b6d','#b9c7a2','#e1e7d0']];
+ const p=palettes[i%palettes.length],stage=gardenStage(n);
+ const bud=n<1;
+ const bloom=bud
+ ? '<path d="M48 64C37 55 41 44 51 45C55 34 68 38 67 49C78 51 76 63 65 66Z" fill="'+p[0]+'" stroke="#6d795c" stroke-width="1.7"/>'
+ : '<g stroke="#766c5d" stroke-width="1.35" stroke-linejoin="round"><path d="M56 46C39 39 34 24 43 18C52 13 59 27 59 39C61 22 73 12 80 20C87 29 74 42 63 47C80 38 94 43 92 53C90 63 73 61 62 53C75 65 74 79 64 81C53 82 51 65 56 54C48 68 34 71 29 62C25 52 42 44 56 46Z" fill="'+p[1]+'"/><path d="M56 46C45 38 45 28 51 25C58 24 62 36 59 45C65 34 76 30 80 36C83 43 71 50 62 51C73 52 79 62 73 67C66 71 59 60 58 53C53 63 42 65 39 59C36 53 48 47 56 46Z" fill="'+p[2]+'" opacity=".8"/></g><circle cx="59" cy="49" r="7" fill="#d8b45f" stroke="#8d744b" stroke-width="1.5"/><g fill="#fff2c8"><circle cx="57" cy="47" r="1.2"/><circle cx="62" cy="50" r="1.1"/><circle cx="57" cy="52" r="1"/></g>';
+ return '<div class="ritual-flower botanical-specimen stage-'+stage+'" aria-hidden="true"><svg viewBox="0 0 120 142" role="img"><path d="M60 130C58 108 65 89 59 68" fill="none" stroke="#587653" stroke-width="3.2" stroke-linecap="round"/><path d="M59 105C43 84 27 88 28 97C31 108 47 111 59 105Z" fill="#8ea47a" stroke="#587653" stroke-width="1.5"/><path d="M61 91C73 70 91 72 91 82C89 94 73 99 61 91Z" fill="#a6b68b" stroke="#587653" stroke-width="1.5"/><path d="M59 119C43 105 31 110 35 119C40 128 52 127 59 119Z" fill="#9aaf83" stroke="#587653" stroke-width="1.4"/><path d="M60 130Q48 136 34 133M60 130Q73 136 88 132" fill="none" stroke="#927b5b" stroke-width="1.5" stroke-linecap="round"/>'+bloom+'<path d="M18 132q12-5 22 0m43 0q10-5 20 0" fill="none" stroke="#a6a17f" stroke-width="1.4" stroke-linecap="round"/></svg></div>';
+}
 function renderGarden(box){
  if(!gardenState){box.innerHTML='<p class="garden-loading">Despertando o jardim...</p>';return}
  const plants=gardenState.plants||[],today=localToday(),weekday=new Intl.DateTimeFormat("pt-BR",{weekday:"long"}).format(new Date()).replace(/^./,c=>c.toUpperCase());
@@ -1663,7 +1696,12 @@ async function createTask(){
 function updateGreeting(){const hour=new Date().getHours();const greeting=hour<12?'Bom dia':hour<18?'Boa tarde':'Boa noite';document.getElementById('greeting').textContent=greeting+', Guardiã.';const messages=['Que hoje tenha espaço para florescer.','Um pequeno passo já faz diferença.','Cultive o que importa, no seu ritmo.','Hoje é um bom dia para recomeçar.','Cuide do essencial, sem pressa.','A constância faz a vida florescer.','Que seu dia seja leve e gentil.'];document.getElementById('greeting-message').textContent=messages[Math.floor(Date.now()/86400000)%messages.length];}
 updateGreeting();
 document.getElementById('today').textContent=new Intl.DateTimeFormat('pt-BR',{weekday:'long',day:'2-digit',month:'long'}).format(new Date());
-renderTasks();rescheduleOverdueTasksOnOpen().finally(refreshData);
+const welcomeSplash=document.getElementById('welcome-splash');
+let welcomeHidden=false;
+function hideWelcomeSplash(){if(welcomeHidden)return;welcomeHidden=true;welcomeSplash?.classList.add('is-leaving');setTimeout(()=>welcomeSplash?.remove(),500)}
+const welcomeFallback=setTimeout(hideWelcomeSplash,4500);
+renderTasks();
+rescheduleOverdueTasksOnOpen().finally(async()=>{try{await refreshData()}finally{clearTimeout(welcomeFallback);setTimeout(hideWelcomeSplash,450)}});
 </script>
 </body>
 </html>
