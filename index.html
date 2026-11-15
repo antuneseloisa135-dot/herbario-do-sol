@@ -677,6 +677,59 @@ aside{background:#e4eadf!important}
   .hero-mascot,.hero-mascot *{animation:none!important;will-change:auto}
 }
 </style>
+<style>
+.house-intro{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 20px;margin-bottom:16px;border-radius:18px;background:#f1ead0}
+.house-intro h3,.house-customize-head h3{font:600 22px Lora,serif;color:#5c5142;margin:6px 0}
+.house-intro p,.house-customize-head p{font-size:12px;line-height:1.55;color:#837b70;margin:0;max-width:570px}
+.house-status{flex:none;padding:9px 12px;border-radius:20px;background:#fffdf7;color:#7c8652;font-size:10px;font-weight:700}
+.house-scene{height:clamp(250px,48vw,430px);position:relative;overflow:hidden;border-radius:20px;border:2px solid #e1d4b4;isolation:isolate}
+.house-wall{position:absolute;inset:0 0 27%;background:#f2e7cf;transition:background .25s}
+.wall-cream .house-wall{background:#f2e7cf}.wall-sage .house-wall{background:#dce6d4}.wall-lavender .house-wall{background:#e8deee}
+.house-floor{position:absolute;inset:auto 0 0;height:28%;background:repeating-linear-gradient(0deg,#c99e70 0 3px,#d8b68c 3px 7px);border-top:5px solid #b88d63}
+.floor-sand .house-floor{background:repeating-linear-gradient(0deg,#d8c7a6 0 3px,#e7d8ba 3px 7px);border-color:#c6b18c}
+.floor-rose .house-floor{background:repeating-linear-gradient(0deg,#c99b91 0 3px,#d9b1a7 3px 7px);border-color:#b98278}
+.house-window{position:absolute;left:9%;top:12%;width:24%;height:38%;border:8px solid #fff9e8;border-radius:9px;background:linear-gradient(145deg,#a9c6c0,#d8e9d5);box-shadow:0 4px 0 #c9b995}
+.house-window:before,.house-window:after{content:"";position:absolute;background:#fff9e8}.house-window:before{width:6px;height:100%;left:50%;top:0}.house-window:after{height:6px;width:100%;left:0;top:50%}
+.house-window span{position:absolute;left:12%;bottom:0;width:35%;height:48%;background:#8ea77d;clip-path:polygon(50% 0,100% 100%,0 100%)}
+.house-window i{position:absolute;right:8%;bottom:0;width:28%;height:40%;background:#6f8f6c;clip-path:polygon(50% 0,100% 100%,0 100%)}
+.house-picture{position:absolute;left:45%;top:13%;width:13%;aspect-ratio:1;border:7px solid #f8f0dc;background:#f5d978;border-radius:50%;display:grid;place-items:center;color:#a77b36;font-size:clamp(18px,4vw,32px);box-shadow:0 3px 0 #c9b995}
+.house-shelf{position:absolute;right:7%;top:19%;width:22%;height:8%;background:#a87d53;border:3px solid #8d6848;border-radius:5px;display:flex;align-items:flex-end;justify-content:space-around;padding:0 7px 5px;color:#f5e7bd;font-size:clamp(12px,2.5vw,20px)}
+.house-shelf:before{content:"";position:absolute;left:0;right:0;bottom:-7px;height:5px;background:#8d6848}
+.house-rug{position:absolute;left:26%;bottom:7%;width:49%;height:22%;border-radius:50%;background:#d8b7a5;border:5px solid #c59c8c;z-index:2}
+.house-plant{position:absolute;right:13%;bottom:26%;width:10%;height:24%;z-index:3}
+.house-plant:before{content:"";position:absolute;bottom:0;left:13%;width:75%;height:35%;background:#c58e66;clip-path:polygon(12% 0,88% 0,72% 100%,28% 100%)}
+.house-plant i,.house-plant b{position:absolute;bottom:29%;left:25%;width:45%;height:55%;background:#8da779;border-radius:100% 0 100% 0;transform:rotate(-27deg)}
+.house-plant b{left:49%;transform:rotate(35deg);background:#a8bb8c}
+.house-furniture{position:absolute;left:37%;bottom:22%;width:32%;height:36%;z-index:4}
+.house-back{position:absolute;left:8%;top:0;width:84%;height:69%;background:#b5a0b4;border:4px solid #927c91;border-radius:18px 18px 8px 8px}
+.house-seat{position:absolute;left:0;bottom:12%;width:100%;height:38%;background:#c6adc1;border:4px solid #927c91;border-radius:12px}
+.house-pillow{position:absolute;right:17%;top:22%;width:27%;height:24%;background:#f2d783;border-radius:8px;transform:rotate(-8deg)}
+.house-legs{position:absolute;left:14%;right:14%;bottom:0;height:15%;border-left:5px solid #8d6848;border-right:5px solid #8d6848}
+.furniture-garden .house-back{height:42%;top:24%;border-radius:10px;background:#a7b78e;border-color:#7d936b}
+.furniture-garden .house-seat{height:30%;background:#c9ad7f;border-color:#9b8057}
+.furniture-garden .house-pillow{background:#e7c2a8}
+.furniture-rest .house-back{height:76%;top:0;border-radius:15px 15px 5px 5px;background:#d8b8a7;border-color:#b78f7d}
+.furniture-rest .house-seat{height:38%;background:#f1dfc9;border-color:#b78f7d}
+.furniture-rest .house-pillow{background:#b9a8ce}
+.house-lamp{position:absolute;left:20%;bottom:24%;width:9%;height:24%;z-index:3}
+.house-lamp:before{content:"";position:absolute;left:42%;bottom:0;height:65%;width:5px;background:#987b55}
+.house-lamp i{position:absolute;top:0;left:0;width:100%;height:42%;background:#e8c85e;clip-path:polygon(20% 0,80% 0,100% 100%,0 100%)}
+.house-lamp b{position:absolute;bottom:0;left:12%;width:76%;height:8px;background:#987b55;border-radius:50%}
+.house-ghost{position:absolute;right:27%;bottom:25%;width:13%;z-index:5;animation:house-ghost-float 3.5s ease-in-out infinite}
+.house-ghost svg{width:100%;height:auto;filter:drop-shadow(0 3px 3px #554c4520)}
+@keyframes house-ghost-float{0%,100%{transform:translateY(2px)}50%{transform:translateY(-8px)}}
+.house-customize{margin-top:18px;padding:18px;background:#fffdf7;border:1px solid #e4dccb;border-radius:17px}
+.house-customize-head{margin-bottom:12px}.house-customize-head h3{font-size:19px}
+.house-option-group{padding:12px 0;border-top:1px solid #eee8db}
+.house-option-group h4{font:600 13px Lora,serif;margin:0 0 9px;color:#66594b}
+.house-options{display:flex;gap:8px;flex-wrap:wrap}
+.house-choice{border:1px solid #ded6c4;background:#fffaf0;color:#6b6255;border-radius:20px;padding:9px 13px;font-size:11px}
+.house-choice.active{background:#e7eddc;border-color:#9bad8b;color:#526b50;font-weight:700}
+.house-actions{display:flex;justify-content:flex-end;gap:9px;flex-wrap:wrap;margin-top:13px}
+.house-actions button{min-height:42px}
+.house-save-note{font-size:10px;color:#8b806d;text-align:right;margin:9px 3px 0}
+@media(max-width:520px){.house-intro{align-items:flex-start;padding:14px}.house-intro h3{font-size:20px}.house-status{font-size:9px;padding:7px 9px}.house-scene{height:270px}.house-window{border-width:5px}.house-picture{border-width:5px}.house-shelf{padding-bottom:3px}.house-customize{padding:14px}.house-actions{display:grid;grid-template-columns:1fr}.house-actions button{width:100%}}
+</style>
 </head>
 <body>
 <div class="shell">
@@ -687,6 +740,7 @@ aside{background:#e4eadf!important}
   <button class="nav-btn" data-view="aventuras"><span>◇</span> Aventuras</button>
   <button class="nav-btn" data-view="rituais"><span>✳</span> Rituais do Jardim</button>
   <button class="nav-btn" data-view="personagem"><span>◎</span> Guardião</button>
+  <button class="nav-btn" data-view="casinha"><span>⌂</span> Casinha do Guardião</button>
   <button class="nav-btn" data-view="conquistas"><span>☆</span> Conquistas</button>
   <button class="nav-btn" data-view="loja"><span>♧</span> Feira do Sol</button>
   <button class="nav-btn" data-view="pergaminho"><span>▤</span> Pergaminho</button>
@@ -745,6 +799,7 @@ aside{background:#e4eadf!important}
 <div id="turnstile-redeem_reward" style="position:fixed;bottom:64px;left:50%;transform:translateX(-50%);z-index:1200" aria-live="polite"></div>
 <div id="turnstile-claim_exclusive_reward" style="position:fixed;bottom:64px;left:50%;transform:translateX(-50%);z-index:1200" aria-live="polite"></div>
 <div id="turnstile-start_journey" style="position:fixed;bottom:64px;left:50%;transform:translateX(-50%);z-index:1200" aria-live="polite"></div>
+<div id="turnstile-save_house" style="position:fixed;bottom:64px;left:50%;transform:translateX(-50%);z-index:1200" aria-live="polite"></div>
 <div class="modal-backdrop" id="reward-modal"><div class="modal"><div class="eyebrow">Feira do Sol</div><h3 id="reward-modal-title">Uma recompensa merece ser celebrada</h3><p id="reward-modal-copy"></p><div class="modal-actions"><button class="secondary" id="reward-modal-cancel">Voltar</button><button class="primary" id="reward-modal-confirm">Confirmar resgate</button></div></div></div>
 <div class="toast" id="toast"></div>
 <script>
@@ -754,12 +809,20 @@ let tasks=[], adventures=[], rituals=[], xpEntries=[], recipes=[], rewards=[], a
 let exclusiveRewardsLoadFailed=false;
 let shopSection='vitrine';
 let pendingReward=null;
+let houseState={wall:"cream",floor:"wood",furniture:"reading"};
+let houseStateLoaded=false;
+const HOUSE_CHOICES={
+ wall:[{value:"cream",label:"Baunilha"},{value:"sage",label:"Sálvia"},{value:"lavender",label:"Lavanda"}],
+ floor:[{value:"wood",label:"Madeira clara"},{value:"sand",label:"Areia"},{value:"rose",label:"Rosa antigo"}],
+ furniture:[{value:"reading",label:"Cantinho de leitura"},{value:"garden",label:"Jardim interno"},{value:"rest",label:"Cantinho de descanso"}]
+};
 const localToday=()=>{const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')};
 const recipeTitle=p=>{for(const [k,v] of Object.entries(p.properties||{})){if(v.type==='title')return (v.title||[]).map(x=>x.plain_text||'').join('')}return 'Etapa sem título'};
 const pages={
  aventuras:["🧭","Jornadas em curso","Projetos que ganham vida quando são divididos em etapas.","Suas aventuras",[]],
  rituais:["🌱","Pequenos Cultivos","Cuidados que, repetidos com carinho, criam raízes.","Seus cultivos",[]],
  personagem:["◎","Guardiã","Acompanhe sua evolução, sua Essência Solar e os caminhos que já percorreu.","Seu retrato no Herbário",["Nível e atributos carregados do Notion."]],
+ casinha:["⌂","Casinha do Guardião","Um cantinho só dele, que você pode deixar com a sua cara.","Seu pequeno refúgio",[]],
  conquistas:["🏆","Coleção de conquistas","Cada avanço merece ser reconhecido.","Conquistas",["As conquistas serão conectadas ao Notion em uma próxima etapa."]],
  pergaminho:["📜","Pergaminho","Seu espaço de referências, ideias e conhecimentos.","Biblioteca",["Estudos e cursos","Referências importantes","Anotações e ideias para revisitar"]],
  loja:["♧","Feira do Sol","Pequenas recompensas para celebrar o caminho percorrido.","Recompensas disponíveis",[]]
@@ -1185,6 +1248,42 @@ async function syncAchievementsFromServer(){
 }
 function renderPergaminho(box){box.innerHTML='<div class="view-card"><h4>Biblioteca do jardim</h4><p>Seu acervo de conhecimentos, receitas e feitiços para consultar e cultivar suas jornadas.</p></div><div class="view-card"><h4>Receitas e Feitiços</h4><p>'+recipes.length+' registros encontrados na coleção Receitas e Feitiços.</p></div>'}
 
+function renderHouse(box){
+ const optionButtons=(field,label)=>'<div class="house-option-group"><h4>'+label+'</h4><div class="house-options">'+HOUSE_CHOICES[field].map(item=>'<button type="button" class="house-choice '+(houseState[field]===item.value?'active':'')+'" data-house-field="'+field+'" data-house-value="'+item.value+'">'+item.label+'</button>').join('')+'</div></div>';
+ box.innerHTML='<div class="house-intro"><div><span class="eyebrow">UM LUGAR PARA VOLTAR</span><h3>A casinha do Guardião</h3><p>Um refúgio tranquilo para descansar entre uma aventura e outra. Escolha as cores e o cantinho que combinam com ele.</p></div><div class="house-status">Decoração inicial</div></div><div class="house-scene wall-'+houseState.wall+' floor-'+houseState.floor+'"><div class="house-wall"></div><div class="house-window"><span></span><i></i></div><div class="house-picture">✿</div><div class="house-shelf"><span>✧</span><span>▤</span><span>❀</span></div><div class="house-rug"></div><div class="house-plant"><i></i><b></b></div><div class="house-furniture furniture-'+houseState.furniture+'"><div class="house-back"></div><div class="house-seat"></div><div class="house-pillow"></div><div class="house-legs"></div></div><div class="house-lamp"><i></i><b></b></div><div class="house-ghost"><svg viewBox="0 0 120 140" aria-hidden="true"><path d="M18 116V62C18 31 37 10 61 10s43 21 43 52v54c-8-8-15-8-22 0-7-8-15-8-22 0-7-8-15-8-22 0-7-8-13-8-20 0Z" fill="#fffdf7" stroke="#e9e2cf" stroke-width="2"/><ellipse cx="47" cy="62" rx="4" ry="6" fill="#554c45"/><ellipse cx="76" cy="62" rx="4" ry="6" fill="#554c45"/><path d="M54 79q7 7 14 0" fill="none" stroke="#554c45" stroke-width="2.5" stroke-linecap="round"/><path d="M69 15q-2-13 12-13 0 12-12 13Zm-2 1q-13-8-19 1 10 7 19-1Z" fill="#a9b69a" stroke="#526b50" stroke-width="1.5"/></svg></div><div class="house-floor"></div></div><div class="house-customize"><div class="house-customize-head"><h3>Deixe o cantinho com a sua cara</h3><p>As mudanças ficam na prévia até você salvar.</p></div>'+optionButtons("wall","Paredes")+optionButtons("floor","Piso")+optionButtons("furniture","Móveis")+'</div><div class="house-actions"><button type="button" class="secondary" data-house-reset>Voltar à decoração inicial</button><button type="button" class="primary" data-house-save>Salvar decoração</button></div><p class="house-save-note">Sua decoração fica guardada no Herbário e continua aqui quando você voltar.</p>';
+ box.querySelectorAll('[data-house-field]').forEach(button=>button.addEventListener('click',()=>{
+  const field=button.dataset.houseField,value=button.dataset.houseValue;
+  houseState={...houseState,[field]:value};renderHouse(box);
+ }));
+ box.querySelector('[data-house-reset]').addEventListener('click',()=>{houseState={wall:"cream",floor:"wood",furniture:"reading"};renderHouse(box);toast('Decoração inicial restaurada na prévia. Salve para confirmar.')});
+ box.querySelector('[data-house-save]').addEventListener('click',()=>saveHouse(box));
+}
+async function loadHouseState(){
+ try{
+  const response=await fetch(API+'/house/state');
+  const result=await response.json();
+  if(!response.ok||!result?.ok)throw new Error(result?.error||'Não foi possível carregar a casinha.');
+  const saved=result.state||{};
+  houseState={
+   wall:HOUSE_CHOICES.wall.some(x=>x.value===saved.wall)?saved.wall:'cream',
+   floor:HOUSE_CHOICES.floor.some(x=>x.value===saved.floor)?saved.floor:'wood',
+   furniture:HOUSE_CHOICES.furniture.some(x=>x.value===saved.furniture)?saved.furniture:'reading'
+  };
+  houseStateLoaded=true;
+  if(document.querySelector('.nav-btn.active')?.dataset.view==='casinha')renderHouse(document.getElementById('other-content'));
+ }catch(error){console.error('Falha ao carregar decoração:',error);toast('Não foi possível carregar a decoração salva.')}
+}
+async function saveHouse(box){
+ const button=box.querySelector('[data-house-save]');
+ if(!button||button.disabled)return;
+ button.disabled=true;button.textContent='Salvando...';
+ try{
+  const result=await protectedWrite('/write/api/house/state','POST',houseState,'save_house');
+  houseState=result.state||houseState;houseStateLoaded=true;
+  toast('Casinha salva! O cantinho está do jeitinho que você escolheu.');
+ }catch(error){console.error('Falha ao salvar decoração:',error);toast(error.message||'Não foi possível salvar a casinha.')}
+ finally{if(button.isConnected){button.disabled=false;button.textContent='Salvar decoração'}}
+}
 function showView(view){
  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
  const home=view==='inicio';document.getElementById('home-view').style.display=home?'block':'none';document.getElementById('other-view').style.display=home?'none':'block';
@@ -1192,7 +1291,7 @@ function showView(view){
  const p=pages[view];if(!p)return;
  document.getElementById('page-title').textContent=p[1];document.getElementById('page-subtitle').hidden=false;document.getElementById('page-subtitle').textContent=p[2];
  const box=document.getElementById('other-content');box.innerHTML='';
- if(view==='aventuras')renderAdventures(box);else if(view==='rituais')renderRitualView(box);else if(view==='personagem')renderCharacter(box);else if(view==='conquistas'){renderAchievements(box);syncAchievementsFromServer()}else if(view==='pergaminho')renderPergaminho(box);else if(view==='loja')renderShop(box);
+ if(view==='aventuras')renderAdventures(box);else if(view==='rituais')renderRitualView(box);else if(view==='personagem')renderCharacter(box);else if(view==='conquistas'){renderAchievements(box);syncAchievementsFromServer()}else if(view==='pergaminho')renderPergaminho(box);else if(view==='loja')renderShop(box);else if(view==='casinha'){renderHouse(box);if(!houseStateLoaded)loadHouseState();}
 }
 async function refreshData(){
   try{
@@ -1223,8 +1322,8 @@ async function refreshData(){
 document.getElementById('navigation').addEventListener('click',e=>{const b=e.target.closest('[data-view]');if(b)showView(b.dataset.view)});
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>showView(b.dataset.go));
 const TURNSTILE_SITEKEY='0x4AAAAAAFva0ZVGmY_UU-4C';
-const turnstileWidgets={create_task:null,toggle_task:null,sync_xp:null,sync_achievements:null,redeem_reward:null,reschedule_overdue:null,claim_exclusive_reward:null,start_journey:null};
-const turnstilePending={create_task:null,toggle_task:null,sync_xp:null,sync_achievements:null,redeem_reward:null,reschedule_overdue:null,claim_exclusive_reward:null,start_journey:null};
+const turnstileWidgets={create_task:null,toggle_task:null,sync_xp:null,sync_achievements:null,redeem_reward:null,reschedule_overdue:null,claim_exclusive_reward:null,start_journey:null,save_house:null};
+const turnstilePending={create_task:null,toggle_task:null,sync_xp:null,sync_achievements:null,redeem_reward:null,reschedule_overdue:null,claim_exclusive_reward:null,start_journey:null,save_house:null};
 const PREVIOUS_STATUS_KEY='herbario-task-status-before-colhido';
 const VALID_TASK_STATUSES=new Set(['Not started','In progress','Abandonado','Done']);
 
