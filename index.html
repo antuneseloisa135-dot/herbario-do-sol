@@ -870,6 +870,13 @@ aside{background:#e4eadf!important}
 .landscape-caption{display:none}
 .ritual-plant-card{grid-template-columns:104px minmax(0,1fr);align-items:start;row-gap:4px}.ritual-plant-card>.ritual-plant-art-wrap{grid-row:1/5;align-self:center;min-width:0}.ritual-plant-card h4,.ritual-plant-card .ritual-plant-subtitle,.ritual-plant-card .garden-meta{grid-column:2;text-align:left;overflow-wrap:anywhere}.ritual-plant-card h4{line-height:1.25;margin:2px 0 1px}.ritual-plant-card .ritual-plant-subtitle{line-height:1.4;margin:0 0 3px}.ritual-plant-card .garden-meta{line-height:1.4;margin:0 0 5px}.ritual-activity-groups{grid-column:1/-1}
 @media(max-width:650px){.garden-landscape{min-height:245px;padding:15px 12px 10px}.garden-stage-heading strong{font-size:19px}.garden-stage-pots{min-height:145px;gap:7px}.garden-stage-plant{width:clamp(76px,24vw,104px)}.garden-stage-plant svg{max-height:104px}.ritual-plant-card{grid-template-columns:82px minmax(0,1fr);align-items:start}.ritual-plant-card>.ritual-plant-art-wrap{grid-row:1/5}}
+/* Alinhamento da página de rituais: conteúdo no mesmo eixo do cabeçalho */
+#other-view,#other-content{width:100%;box-sizing:border-box}
+#other-content.ritual-page-content{padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important}
+.ritual-page-content .garden-intro{padding-left:0;padding-right:0}
+.ritual-page-content .garden-summary{padding-left:0;padding-right:0}
+.garden-closing-note{margin:28px 0 8px;text-align:center;color:#837b70;font:italic 14px Lora,serif;letter-spacing:.01em}
+@media(max-width:650px){.garden-closing-note{margin:22px 0 6px;font-size:13px}}
 </style>
 </head>
 <body>
@@ -1364,6 +1371,7 @@ function renderShop(box){
 }
 function levelInfo(xp){const levels=[['Semente',0],['Broto',100],['Muda',250],['Floração',500],['Árvore',900],['Bosque',1500]];let current=levels[0],next=levels[1];for(let i=0;i<levels.length;i++){if(xp>=levels[i][1]){current=levels[i];next=levels[i+1]||null}}const pct=next?Math.min(100,Math.round((xp-current[1])/(next[1]-current[1])*100)):100;return{name:current[0],next:next?next[0]:'Nível máximo',pct,remaining:next?Math.max(0,next[1]-xp):0}}
 function renderRitualView(box){
+ box.classList.add("ritual-page-content");
  renderGarden(box);
  if(!gardenLoaded)loadGardenState();
 }
@@ -1435,7 +1443,7 @@ function gardenDisplayPlant(n,i,name){
 function renderGarden(box){
  if(!gardenState){box.innerHTML='<p class="garden-loading">Despertando o jardim...</p>';return}
  const plants=gardenState.plants||[],today=localToday(),weekday=new Intl.DateTimeFormat("pt-BR",{weekday:"long"}).format(new Date()).replace(/^./,c=>c.toUpperCase());
- const scene='<section class="garden-landscape" aria-label="Seu pequeno jardim em cultivo"><div class="garden-backdrop"><span class="garden-sun"></span><i class="garden-hill hill-back"></i><i class="garden-hill hill-front"></i></div><div class="garden-stage-heading"><span>SEU JARDIM EM CULTIVO</span><strong>Um cuidado de cada vez.</strong></div><div class="garden-stage-pots">'+(plants.length?plants.map((p,i)=>gardenDisplayPlant(p.completions||0,i,p.name)).join(''):'<p class="garden-empty-stage">Seu primeiro vasinho vai aparecer aqui quando você cultivar um ritual.</p>')+'</div></section>';
+ const scene='<section class="garden-landscape" aria-label="Seu pequeno jardim em cultivo"><div class="garden-backdrop"><span class="garden-sun"></span><i class="garden-hill hill-back"></i><i class="garden-hill hill-front"></i></div><div class="garden-stage-heading"><span>SEU JARDIM EM CULTIVO</span></div><div class="garden-stage-pots">'+(plants.length?plants.map((p,i)=>gardenDisplayPlant(p.completions||0,i,p.name)).join(''):'<p class="garden-empty-stage">Seu primeiro vasinho vai aparecer aqui quando você cultivar um ritual.</p>')+'</div></section>';
  const summary=document.createElement("div");summary.className="garden-summary";
  const activityCount=plants.reduce((sum,p)=>sum+(p.activities||[]).length,0);
  summary.innerHTML='<span>'+plants.length+' plantas em cultivo</span><span>'+activityCount+' atividades · '+plants.reduce((a,p)=>a+(p.completions||0),0)+' práticas registradas</span>';
@@ -1483,6 +1491,7 @@ function renderGarden(box){
  });
  box.innerHTML=scene+'<section class="garden-intro"><div><span class="eyebrow">CULTIVO EM ANDAMENTO</span><h3>Seus rituais em cultivo</h3><p>Cada ritual tem sua própria planta. As pequenas atividades ficam reunidas aqui e, juntas, nutrem a mesma flor.</p></div><div class="garden-inventory"><span>PLANTAS ATIVAS</span><strong>'+plants.length+'</strong><small>uma para cada ritual principal</small></div></section>';
  box.append(summary,grid);
+ const closing=document.createElement("p");closing.className="garden-closing-note";closing.textContent="Um cuidado de cada vez.";box.append(closing);
 }
 async function loadGardenState(){if(gardenLoading||gardenLoaded)return;gardenLoading=true;try{const r=await fetch(API+"/garden/state"),j=await r.json();if(!r.ok||!j?.ok)throw Error(j?.error||"Não foi possível carregar o jardim.");gardenState=j.state||{plants:[]};gardenLoaded=true;renderRituals();if(document.querySelector(".nav-btn.active")?.dataset.view==="rituais")renderGarden(document.getElementById("other-content"))}catch(e){console.error(e);toast("Não foi possível carregar o Jardim de Cultivo.")}finally{gardenLoading=false}}
 async function completeRitual(id,box,button){if(gardenBusy||button.disabled)return;gardenBusy=true;button.disabled=true;button.textContent="Cultivando...";try{const r=await protectedWrite("/write/api/garden/action","POST",{operation:"complete",ritualId:id},"complete_ritual");gardenState=r.state;rituals=await load("rituals");gardenLoaded=true;toast("Ritual concluído. Sua flor cresceu um pouquinho!")}catch(e){console.error(e);toast(e.message||"Não foi possível registrar o ritual.")}finally{gardenBusy=false;renderRituals();const gardenBox=document.getElementById('other-content');if(gardenBox?.isConnected&&document.querySelector('.nav-btn.active')?.dataset.view==='rituais')renderGarden(gardenBox)}}
