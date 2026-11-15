@@ -1179,21 +1179,38 @@ async function claimExclusiveReward(reward,adventure){
   await refreshData();showView('aventuras');toast('Recompensa exclusiva conquistada!');
  }catch(error){toast(error.message||'Não foi possível liberar a recompensa.')}
 }
+.home-ritual-card{padding:10px 0;border-bottom:1px solid var(--line);display:grid;gap:7px}.home-ritual-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.home-ritual-top strong{font:600 13px Lora,serif;color:var(--night)}.home-ritual-link{border:0;background:transparent;color:var(--moss);font-size:10px;font-weight:700;cursor:pointer}.home-ritual-action-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-left:12px;font-size:11px;color:var(--muted)}.home-ritual-check{min-width:42px;border:0;border-radius:8px;background:var(--moss);color:white;padding:5px 9px;font-size:10px;font-weight:700;cursor:pointer}.home-ritual-check:disabled{background:#e9e7dc;color:#8d887c;cursor:default}.home-ritual-note{font-size:10px;color:var(--muted);padding-left:12px}
 function renderRituals(){
  const box=document.querySelector('#home-view .columns .panel:nth-child(2)');
  if(!box)return;
  const heading=box.querySelector('.panel-title');
- box.querySelectorAll('.ritual').forEach(x=>x.remove());
- const list=rituals.filter(r=>select(r,'Tipo')==='Ritual');
- if(!list.length){const empty=document.createElement('p');empty.style.cssText='font-size:12px;color:var(--muted)';empty.textContent='Nenhum ritual cadastrado no Notion.';heading.after(empty);return}
- list.forEach(r=>{
-  const row=document.createElement('div');row.className='ritual';
-  row.innerHTML='<span class="ritual-icon">✦</span><span></span><span class="tag"></span>';
-  row.children[1].textContent=title(r,'Ritual')||'Ritual';
-  row.children[2].textContent=prop(r,'Frequência')?.select?.name||'';
-  heading.after(row);
+ box.querySelectorAll('.home-ritual-card,.home-ritual-empty').forEach(x=>x.remove());
+ if(!gardenLoaded){const loading=document.createElement('p');loading.className='home-ritual-empty';loading.style.cssText='font-size:12px;color:var(--muted)';loading.textContent='Carregando seus rituais...';heading.after(loading);loadGardenState();return}
+ const plants=gardenState?.plants||[];
+ if(!plants.length){const empty=document.createElement('p');empty.className='home-ritual-empty';empty.style.cssText='font-size:12px;color:var(--muted)';empty.textContent='Nenhum ritual cadastrado no Notion.';heading.after(empty);return}
+ const today=localToday(),weekday=new Intl.DateTimeFormat("pt-BR",{weekday:"long"}).format(new Date()).replace(/^./,c=>c.toUpperCase());
+ plants.forEach(plant=>{
+  const card=document.createElement('div');card.className='home-ritual-card';
+  const top=document.createElement('div');top.className='home-ritual-top';
+  const name=document.createElement('strong');name.textContent=plant.name;
+  const link=document.createElement('button');link.type='button';link.className='home-ritual-link';link.textContent='Ver jardim →';link.addEventListener('click',()=>showView('rituais'));
+  top.append(name,link);card.append(top);
+  const due=(plant.activities||[]).filter(a=>(a.days||[]).includes(weekday));
+  if(!due.length){const note=document.createElement('small');note.className='home-ritual-note';note.textContent='Sem atividades programadas para hoje.';card.append(note)}
+  due.forEach(activity=>{
+   const row=document.createElement('div');row.className='home-ritual-action-row';
+   const label=document.createElement('span');label.textContent=activity.name;
+   const btn=document.createElement('button');btn.type='button';btn.className='home-ritual-check';
+   const done=activity.lastPracticed===today;
+   btn.textContent=done?'✓ Feito': 'OK';
+   btn.disabled=done||gardenBusy;
+   if(!done)btn.addEventListener('click',()=>completeRitual(activity.activityId,box,btn));
+   row.append(label,btn);card.append(row);
+  });
+  heading.after(card);
  });
 }
+
 function earnedXP(){
   if(!xpEntries.length)return tasks.reduce((sum,task)=>sum+(select(task,'Status')==='Colhido'?(number(task,'XP')||0):0),0);
   return xpEntries.reduce((sum,entry)=>{
@@ -1388,8 +1405,8 @@ function renderGarden(box){
  box.innerHTML=scene+'<section class="garden-intro"><div><span class="eyebrow">CULTIVO EM ANDAMENTO</span><h3>Seus rituais em cultivo</h3><p>Cada ritual tem sua própria planta. As pequenas atividades ficam reunidas aqui e, juntas, nutrem a mesma flor.</p></div><div class="garden-inventory"><span>PLANTAS ATIVAS</span><strong>'+plants.length+'</strong><small>uma para cada ritual principal</small></div></section>';
  box.append(summary,grid);
 }
-async function loadGardenState(){if(gardenLoading||gardenLoaded)return;gardenLoading=true;try{const r=await fetch(API+"/garden/state"),j=await r.json();if(!r.ok||!j?.ok)throw Error(j?.error||"Não foi possível carregar o jardim.");gardenState=j.state||{plants:[]};gardenLoaded=true;if(document.querySelector(".nav-btn.active")?.dataset.view==="rituais")renderGarden(document.getElementById("other-content"))}catch(e){console.error(e);toast("Não foi possível carregar o Jardim de Cultivo.")}finally{gardenLoading=false}}
-async function completeRitual(id,box,button){if(gardenBusy||button.disabled)return;gardenBusy=true;button.disabled=true;button.textContent="Cultivando...";try{const r=await protectedWrite("/write/api/garden/action","POST",{operation:"complete",ritualId:id},"complete_ritual");gardenState=r.state;rituals=await load("rituals");gardenLoaded=true;toast("Ritual concluído. Sua flor cresceu um pouquinho!")}catch(e){console.error(e);toast(e.message||"Não foi possível registrar o ritual.")}finally{gardenBusy=false;if(box.isConnected)renderGarden(box)}}
+async function loadGardenState(){if(gardenLoading||gardenLoaded)return;gardenLoading=true;try{const r=await fetch(API+"/garden/state"),j=await r.json();if(!r.ok||!j?.ok)throw Error(j?.error||"Não foi possível carregar o jardim.");gardenState=j.state||{plants:[]};gardenLoaded=true;renderRituals();if(document.querySelector(".nav-btn.active")?.dataset.view==="rituais")renderGarden(document.getElementById("other-content"))}catch(e){console.error(e);toast("Não foi possível carregar o Jardim de Cultivo.")}finally{gardenLoading=false}}
+async function completeRitual(id,box,button){if(gardenBusy||button.disabled)return;gardenBusy=true;button.disabled=true;button.textContent="Cultivando...";try{const r=await protectedWrite("/write/api/garden/action","POST",{operation:"complete",ritualId:id},"complete_ritual");gardenState=r.state;rituals=await load("rituals");gardenLoaded=true;toast("Ritual concluído. Sua flor cresceu um pouquinho!")}catch(e){console.error(e);toast(e.message||"Não foi possível registrar o ritual.")}finally{gardenBusy=false;renderRituals();const gardenBox=document.getElementById('other-content');if(gardenBox?.isConnected&&document.querySelector('.nav-btn.active')?.dataset.view==='rituais')renderGarden(gardenBox)}}
 function renderPergaminho(box){box.innerHTML='<div class="view-card"><h4>Biblioteca do jardim</h4><p>Seu acervo de conhecimentos, receitas e feitiços para consultar e cultivar suas jornadas.</p></div><div class="view-card"><h4>Receitas e Feitiços</h4><p>'+recipes.length+' registros encontrados na coleção Receitas e Feitiços.</p></div>'}
 
 function renderHouse(box){
