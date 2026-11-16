@@ -656,7 +656,10 @@ aside{background:#e4eadf!important}
   transform-origin:10% 90%;
   animation:guardian-leaf 4s ease-in-out infinite;
 }
-.hero-mascot .ghost-mouth{animation:guardian-smile 6.8s ease-in-out infinite}
+.hero-mascot .ghost-mouth{opacity:0;animation:none!important;transition:opacity .22s ease}
+.hero-mascot .ghost-mouth-normal{opacity:1}
+.hero-mascot .ghost-brow{opacity:0;transition:opacity .22s ease}
+.hero-mascot .ghost-leaf-vein{fill:none;stroke:#526b50;stroke-width:1;stroke-linecap:round;opacity:.72}
 .hero-mascot .ghost-arm{
   transform-box:fill-box;
   transform-origin:50% 12%;
@@ -674,10 +677,10 @@ aside{background:#e4eadf!important}
 @keyframes guardian-wave-right{from{transform:rotate(42deg)}to{transform:rotate(105deg) translateY(-4px)}}
 .hero-mascot.mood-pending .ghost-leaf{rotate:-12deg;transition:rotate .35s ease}
 .hero-mascot .ghost-sparkles{opacity:0}
-.hero-mascot .ghost-mouth-worried,.hero-mascot .ghost-mouth-happy{opacity:0}
 .hero-mascot.mood-pending-night .ghost-mouth-normal,.hero-mascot.mood-happy .ghost-mouth-normal{opacity:0}
 .hero-mascot.mood-pending-night .ghost-mouth-worried{opacity:1}
 .hero-mascot.mood-happy .ghost-mouth-happy{opacity:1}
+.hero-mascot.mood-pending-night .ghost-brow{opacity:.82}
 .hero-mascot.mood-pending-night .ghost-eye{transform:translateY(2px) scaleY(.88)}
 .hero-mascot.mood-happy{filter:none!important}
 .hero-mascot.mood-happy .ghost-mouth{transform:scale(1.22);transform-origin:70px 80px}
@@ -710,10 +713,6 @@ aside{background:#e4eadf!important}
 @keyframes guardian-leaf{
   0%,100%{rotate:0deg}
   45%,55%{rotate:-9deg}
-}
-@keyframes guardian-smile{
-  0%,42%,48%,100%{opacity:1}
-  45%{opacity:.65}
 }
 @media(prefers-reduced-motion:reduce){
   .hero-mascot,.hero-mascot *{animation:none!important;will-change:auto}
@@ -914,7 +913,7 @@ aside{background:#e4eadf!important}
 <main>
  <div class="topbar"><div><h2 id="page-title">A Clareira do Dia</h2><div class="subtitle" id="page-subtitle" hidden>Pequenos passos também fazem florescer grandes mudanças.</div></div><div class="date-pill" id="today"></div></div>
  <section id="home-view">
-  <div class="hero"><div class="hero-copy"><h3 id="greeting">Bom dia, Guardiã.</h3><p id="greeting-message">Que hoje tenha espaço para florescer.</p></div><svg class="ghost-mascot hero-mascot" viewBox="0 0 120 140" role="img" aria-label="Fantasminha guardião do jardim"><g class="ghost-arm ghost-arm-left"><path d="M27 78 C18 78 13 84 9 92 C7 97 10 100 14 97 L29 87" fill="none" stroke="#e9e2cf" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M27 78 C18 78 13 84 9 92 C7 97 10 100 14 97 L29 87" fill="none" stroke="#fffdf7" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></g><g class="ghost-arm ghost-arm-right"><path d="M95 78 C104 78 109 84 113 92 C115 97 112 100 108 97 L93 87" fill="none" stroke="#e9e2cf" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M95 78 C104 78 109 84 113 92 C115 97 112 100 108 97 L93 87" fill="none" stroke="#fffdf7" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></g><path class="ghost-body" d="M18 116V62C18 31 37 10 61 10s43 21 43 52v54c-8-8-15-8-22 0-7-8-15-8-22 0-7-8-15-8-22 0-7-8-13-8-20 0Z"/><ellipse class="ghost-eye" cx="47" cy="62" rx="4" ry="6"/><ellipse class="ghost-eye" cx="76" cy="62" rx="4" ry="6"/><ellipse class="ghost-cheek" cx="35" cy="76" rx="7" ry="4"/><ellipse class="ghost-cheek" cx="88" cy="76" rx="7" ry="4"/><path class="ghost-mouth ghost-mouth-normal" d="M54 79q7 7 14 0" fill="none" stroke="#554c45" stroke-width="2.5" stroke-linecap="round"/><path class="ghost-mouth ghost-mouth-worried" d="M54 84q7-8 14 0" fill="none" stroke="#554c45" stroke-width="2.5" stroke-linecap="round"/><path class="ghost-mouth ghost-mouth-happy" d="M51 77q9 14 18 0" fill="none" stroke="#554c45" stroke-width="2.8" stroke-linecap="round"/><path class="ghost-leaf" d="M69 15q-2-13 12-13 0 12-12 13Zm-2 1q-13-8-19 1 10 7 19-1Z"/><path class="ghost-sparkles" d="M8 38l2 4 4 2-4 2-2 4-2-4-4-2 4-2zM108 89l2 3 3 2-3 2-2 3-2-3-3-2 3-2z" fill="#d1ad63" opacity=".9"><animate attributeName="opacity" values=".25;1;.25" dur="3.6s" repeatCount="indefinite"/></path></svg></div>
+  <div class="hero"><div class="hero-copy"><h3 id="greeting">Bom dia, Guardiã.</h3><p id="greeting-message">Que hoje tenha espaço para florescer.</p></div><svg class="ghost-mascot hero-mascot" viewBox="0 0 120 140" role="img" aria-label="Fantasminha guardião do jardim"><g class="ghost-arm ghost-arm-left"><path d="M27 78 C18 78 13 84 9 92 C7 97 10 100 14 97 L29 87" fill="none" stroke="#e9e2cf" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M27 78 C18 78 13 84 9 92 C7 97 10 100 14 97 L29 87" fill="none" stroke="#fffdf7" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></g><g class="ghost-arm ghost-arm-right"><path d="M95 78 C104 78 109 84 113 92 C115 97 112 100 108 97 L93 87" fill="none" stroke="#e9e2cf" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M95 78 C104 78 109 84 113 92 C115 97 112 100 108 97 L93 87" fill="none" stroke="#fffdf7" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></g><path class="ghost-body" d="M18 116V62C18 31 37 10 61 10s43 21 43 52v54c-8-8-15-8-22 0-7-8-15-8-22 0-7-8-15-8-22 0-7-8-13-8-20 0Z"/><ellipse class="ghost-eye" cx="47" cy="62" rx="4" ry="6"/><ellipse class="ghost-eye" cx="76" cy="62" rx="4" ry="6"/><path class="ghost-brow" d="M40 52q6-3 11 0M72 52q6-3 11 0" fill="none" stroke="#554c45" stroke-width="1.6" stroke-linecap="round"/><ellipse class="ghost-cheek" cx="35" cy="76" rx="7" ry="4"/><ellipse class="ghost-cheek" cx="88" cy="76" rx="7" ry="4"/><path class="ghost-mouth ghost-mouth-normal" d="M55 80q6 4 12 0" fill="none" stroke="#554c45" stroke-width="2.2" stroke-linecap="round"/><path class="ghost-mouth ghost-mouth-worried" d="M55 83q6-5 12 0" fill="none" stroke="#554c45" stroke-width="2.2" stroke-linecap="round"/><path class="ghost-mouth ghost-mouth-happy" d="M52 78q9 12 18 0q-9 4-18 0Z" fill="#554c45" stroke="#554c45" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path class="ghost-leaf" d="M69 15q-2-13 12-13 0 12-12 13Zm-2 1q-13-8-19 1 10 7 19-1Z"/><path class="ghost-leaf-vein" d="M70 14q5-5 9-10M68 15q-8-4-16 1"/><path class="ghost-sparkles" d="M8 38l2 4 4 2-4 2-2 4-2-4-4-2 4-2zM108 89l2 3 3 2-3 2-2 3-2-3-3-2 3-2z" fill="#d1ad63" opacity=".9"><animate attributeName="opacity" values=".25;1;.25" dur="3.6s" repeatCount="indefinite"/></path></svg></div>
   <div class="stats">
    <div class="stat"><small>Flores de hoje</small><strong id="remaining">—</strong><em>tarefas em aberto</em></div>
    <div class="stat"><small>Essência Solar</small><strong id="essence-total">—</strong><em id="essence-caption">carregando do Notion</em></div>
