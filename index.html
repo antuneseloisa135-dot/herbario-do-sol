@@ -1432,19 +1432,38 @@ async function syncAchievementsFromServer(){
 }
 let gardenState=null,gardenLoaded=false,gardenLoading=false,gardenBusy=false,houseStateLoading=false;
 function gardenStage(n){return n>=7?"floração":n>=3?"botão":n>=1?"broto":"semente"}
-function flowerArt(n,i){
- const palettes=[['#c78d9d','#e6b9bf','#f1d6cb'],['#9b83b7','#c4afd4','#e7d8ec'],['#d3a94f','#ecd38a','#f5e7b9'],['#829b6d','#b9c7a2','#e1e7d0']];
- const p=palettes[i%palettes.length],stage=gardenStage(n);
- const bud=n<1;
- const bloom=bud
- ? '<path d="M48 64C37 55 41 44 51 45C55 34 68 38 67 49C78 51 76 63 65 66Z" fill="'+p[0]+'" stroke="#6d795c" stroke-width="1.7"/>'
- : '<g stroke="#766c5d" stroke-width="1.35" stroke-linejoin="round"><path d="M56 46C39 39 34 24 43 18C52 13 59 27 59 39C61 22 73 12 80 20C87 29 74 42 63 47C80 38 94 43 92 53C90 63 73 61 62 53C75 65 74 79 64 81C53 82 51 65 56 54C48 68 34 71 29 62C25 52 42 44 56 46Z" fill="'+p[1]+'"/><path d="M56 46C45 38 45 28 51 25C58 24 62 36 59 45C65 34 76 30 80 36C83 43 71 50 62 51C73 52 79 62 73 67C66 71 59 60 58 53C53 63 42 65 39 59C36 53 48 47 56 46Z" fill="'+p[2]+'" opacity=".8"/></g><circle cx="59" cy="49" r="7" fill="#d8b45f" stroke="#8d744b" stroke-width="1.5"/><g fill="#fff2c8"><circle cx="57" cy="47" r="1.2"/><circle cx="62" cy="50" r="1.1"/><circle cx="57" cy="52" r="1"/></g>';
- return '<div class="ritual-flower botanical-specimen stage-'+stage+'" aria-hidden="true"><svg viewBox="0 0 120 142" role="img"><path d="M60 130C58 108 65 89 59 68" fill="none" stroke="#587653" stroke-width="3.2" stroke-linecap="round"/><path d="M59 105C43 84 27 88 28 97C31 108 47 111 59 105Z" fill="#8ea47a" stroke="#587653" stroke-width="1.5"/><path d="M61 91C73 70 91 72 91 82C89 94 73 99 61 91Z" fill="#a6b68b" stroke="#587653" stroke-width="1.5"/><path d="M59 119C43 105 31 110 35 119C40 128 52 127 59 119Z" fill="#9aaf83" stroke="#587653" stroke-width="1.4"/><path d="M60 130Q48 136 34 133M60 130Q73 136 88 132" fill="none" stroke="#927b5b" stroke-width="1.5" stroke-linecap="round"/>'+bloom+'<path d="M18 132q12-5 22 0m43 0q10-5 20 0" fill="none" stroke="#a6a17f" stroke-width="1.4" stroke-linecap="round"/></svg></div>';
+const RITUAL_SPECIES=[
+ {name:"Margarida",colors:["#d9a6a9","#f0d4cc","#f5e8d7"],kind:"daisy"},
+ {name:"Lavanda",colors:["#9b83b7","#c4afd4","#e7d8ec"],kind:"lavender"},
+ {name:"Girassol",colors:["#d3a94f","#ecd38a","#f5e7b9"],kind:"sunflower"},
+ {name:"Camélia",colors:["#c78d9d","#e6b9bf","#f1d6cb"],kind:"camellia"}
+];
+function speciesForRitual(name){
+ const value=String(name||"Ritual");
+ let hash=0;
+ for(let i=0;i<value.length;i++)hash=(hash*31+value.charCodeAt(i))>>>0;
+ return RITUAL_SPECIES[hash%RITUAL_SPECIES.length];
+}
+function botanicalFlower(species,stage){
+ const [dark,mid,light]=species.colors;
+ if(stage==="semente")return '<path d="M53 49q-8-9 1-15 10-4 14 7-4 11-15 8Z" fill="#b28b55" stroke="#80633e" stroke-width="1.6"/><path d="M57 46q5-7 9-6" fill="none" stroke="#ead4a7" stroke-width="1.2" stroke-linecap="round"/>';
+ if(stage==="broto")return '<path d="M60 61Q47 48 39 55Q40 69 60 64Q68 45 81 48Q84 61 60 66Z" fill="#9caf83" stroke="#587653" stroke-width="1.6"/><path d="M60 64Q58 53 65 45" fill="none" stroke="#587653" stroke-width="2" stroke-linecap="round"/>';
+ if(stage==="botão")return species.kind==="lavender" ? '<path d="M60 62Q52 51 58 39Q65 31 69 43Q72 53 60 62Z" fill="'+mid+'" stroke="#766c5d" stroke-width="1.5"/><path d="M59 54q-8-8-3-14m9 15q9-9 5-15" fill="none" stroke="'+dark+'" stroke-width="2" stroke-linecap="round"/>' : '<path d="M60 63Q43 55 47 43Q52 34 60 44Q68 31 76 42Q82 55 60 63Z" fill="'+mid+'" stroke="#766c5d" stroke-width="1.6"/><path d="M60 59Q57 49 61 43" fill="none" stroke="'+dark+'" stroke-width="1.2"/>';
+ if(species.kind==="lavender")return '<g stroke="#766c5d" stroke-width="1.1" stroke-linejoin="round"><path d="M60 66Q48 53 56 43Q65 39 64 53Q72 43 78 50Q80 61 64 67Z" fill="'+mid+'"/><path d="M58 53Q46 43 53 34Q62 33 62 46Q69 32 76 39Q79 49 63 56Z" fill="'+light+'"/><path d="M59 42Q52 31 59 24Q67 26 64 39Q71 25 78 31Q79 41 64 46Z" fill="'+mid+'"/></g><path d="M60 65q-4-18 4-39" fill="none" stroke="#587653" stroke-width="1.5"/>';
+ if(species.kind==="sunflower")return '<g stroke="#8d744b" stroke-width="1.15" stroke-linejoin="round" fill="'+mid+'"><ellipse cx="60" cy="29" rx="6" ry="17"/><ellipse cx="60" cy="29" rx="6" ry="17" transform="rotate(45 60 46)"/><ellipse cx="60" cy="29" rx="6" ry="17" transform="rotate(90 60 46)"/><ellipse cx="60" cy="29" rx="6" ry="17" transform="rotate(135 60 46)"/></g><circle cx="60" cy="46" r="11" fill="#9a7040" stroke="#765633" stroke-width="1.5"/><g fill="#f2d28a"><circle cx="56" cy="43" r="1.3"/><circle cx="63" cy="45" r="1.2"/><circle cx="59" cy="50" r="1.1"/><circle cx="66" cy="50" r="1"/></g>';
+ if(species.kind==="camellia")return '<g stroke="#8b6b67" stroke-width="1.2" stroke-linejoin="round"><path d="M60 48Q35 39 43 23Q54 14 62 39Q67 14 82 21Q91 39 65 49Q91 49 84 65Q73 75 61 55Q53 77 39 65Q34 52 60 48Z" fill="'+mid+'"/><path d="M60 47Q46 37 53 29Q62 26 64 43Q72 30 79 39Q79 48 64 52Q72 60 64 65Q55 63 59 52Q47 58 45 50Q48 44 60 47Z" fill="'+light+'"/></g><circle cx="61" cy="49" r="5" fill="#d7ad65"/>';
+ return '<g stroke="#8b6b67" stroke-width="1.15" stroke-linejoin="round" fill="'+mid+'"><ellipse cx="60" cy="29" rx="6" ry="16"/><ellipse cx="60" cy="29" rx="6" ry="16" transform="rotate(45 60 45)"/><ellipse cx="60" cy="29" rx="6" ry="16" transform="rotate(90 60 45)"/><ellipse cx="60" cy="29" rx="6" ry="16" transform="rotate(135 60 45)"/></g><circle cx="60" cy="45" r="6.5" fill="#d8b45f" stroke="#8d744b" stroke-width="1.2"/>';
+}
+function flowerArt(n,i,name){
+ const species=speciesForRitual(name),stage=gardenStage(n);
+ return '<div class="ritual-flower botanical-specimen stage-'+stage+' species-'+species.kind+'" aria-hidden="true"><svg viewBox="0 0 120 142" role="img" aria-label="'+species.name+' no estágio '+stage+'"><path d="M60 130C58 108 65 89 59 68" fill="none" stroke="#587653" stroke-width="3.2" stroke-linecap="round"/><path d="M59 105C43 84 27 88 28 97C31 108 47 111 59 105Z" fill="#8ea47a" stroke="#587653" stroke-width="1.5"/><path d="M61 91C73 70 91 72 91 82C89 94 73 99 61 91Z" fill="#a6b68b" stroke="#587653" stroke-width="1.5"/><path d="M59 119C43 105 31 110 35 119C40 128 52 127 59 119Z" fill="#9aaf83" stroke="#587653" stroke-width="1.4"/><path d="M60 130Q48 136 34 133M60 130Q73 136 88 132" fill="none" stroke="#927b5b" stroke-width="1.5" stroke-linecap="round"/>'+botanicalFlower(species,stage)+'<path d="M18 132q12-5 22 0m43 0q10-5 20 0" fill="none" stroke="#a6a17f" stroke-width="1.4" stroke-linecap="round"/></svg></div>';
 }
 function gardenDisplayPlant(n,i,name){
- const stage=gardenStage(n),colors=[["#c78d9d","#e6b9bf"],["#9b83b7","#c4afd4"],["#d3a94f","#ecd38a"],["#829b6d","#b9c7a2"]],p=colors[i%colors.length];
- const growth=n<1?'<ellipse cx="60" cy="86" rx="8" ry="5" transform="rotate(-24 60 86)" fill="#b28b55" stroke="#80633e" stroke-width="1.5"/><path d="M60 82q-2-10 5-14" fill="none" stroke="#71875e" stroke-width="2" stroke-linecap="round"/>':'<path d="M60 86Q58 65 61 43" fill="none" stroke="#607d55" stroke-width="3" stroke-linecap="round"/><path d="M60 70Q39 52 34 65Q39 78 60 70M61 61Q78 42 88 54Q84 69 61 61" fill="#91a879" stroke="#607d55" stroke-width="1.5"/>'+(n>=3?'<g fill="'+p[1]+'" stroke="#766c5d" stroke-width="1.2"><path d="M60 42Q38 38 43 22Q55 17 62 38Q64 13 78 18Q86 32 64 43Q87 34 91 48Q82 60 63 48Q72 68 60 72Q48 64 58 47Q39 61 31 49Q34 36 60 42Z"/></g><circle cx="61" cy="44" r="6" fill="#d8b45f"/>':'<path d="M61 44q-17-15-5-21 9 1 8 12q8-15 17-7 4 11-15 18" fill="'+p[0]+'" stroke="#6d795c" stroke-width="1.5"/>');
- return '<div class="garden-stage-plant"><svg viewBox="0 0 120 126" role="img" aria-label="'+(name||"Ritual")+' no estágio '+stage+'"><path d="M34 87h52l-6 31H40Z" fill="#b77950" stroke="#865c43" stroke-width="2"/><path d="M31 86q29-8 58 0v8H31Z" fill="#d4a477" stroke="#865c43" stroke-width="2"/><ellipse cx="60" cy="87" rx="29" ry="6" fill="#70543c"/>'+growth+'</svg><span>'+name+'</span><small>'+stage+'</small></div>';
+ const species=speciesForRitual(name),stage=gardenStage(n);
+ const leaves=n<1?'':'<path d="M60 70Q39 52 34 65Q39 78 60 70M61 61Q78 42 88 54Q84 69 61 61" fill="#91a879" stroke="#607d55" stroke-width="1.5"/>';
+ const stem=n<1?'':'<path d="M60 86Q58 65 61 43" fill="none" stroke="#607d55" stroke-width="3" stroke-linecap="round"/>';
+ const growth=stem+leaves+botanicalFlower(species,stage);
+ return '<div class="garden-stage-plant species-'+species.kind+'"><svg viewBox="0 0 120 126" role="img" aria-label="'+species.name+' de '+(name||"Ritual")+' no estágio '+stage+'"><path d="M34 87h52l-6 31H40Z" fill="#b77950" stroke="#865c43" stroke-width="2"/><path d="M31 86q29-8 58 0v8H31Z" fill="#d4a477" stroke="#865c43" stroke-width="2"/><ellipse cx="60" cy="87" rx="29" ry="6" fill="#70543c"/>'+growth+'</svg><span>'+name+'</span><small>'+species.name+' · '+stage+'</small></div>';
 }
 function renderGarden(box){
  if(!gardenState){box.innerHTML='<p class="garden-loading">Despertando o jardim...</p>';return}
@@ -1457,7 +1476,7 @@ function renderGarden(box){
  if(!plants.length){const e=document.createElement("div");e.className="garden-note";e.textContent="Quando você cadastrar um ritual ativo, sua flor aparecerá aqui.";grid.append(e)}
  plants.forEach((p,i)=>{
   const card=document.createElement("article");card.className="garden-plot ritual-plant-card";
-  const art=document.createElement("div");art.className="ritual-plant-art-wrap";art.innerHTML=flowerArt(p.completions||0,i);
+  const art=document.createElement("div");art.className="ritual-plant-art-wrap";art.innerHTML=flowerArt(p.completions||0,i,p.name);
   const h=document.createElement("h4");h.textContent=p.name;
   const d=document.createElement("p");d.className="ritual-plant-subtitle";d.textContent=p.area||"Autocuidado";
   const m=document.createElement("div");m.className="garden-meta";m.textContent=(p.completions||0)+" práticas · estágio: "+gardenStage(p.completions||0);
