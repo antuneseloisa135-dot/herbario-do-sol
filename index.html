@@ -1462,7 +1462,8 @@ function gardenDisplayPlant(n,i,name){
  const species=speciesForRitual(name),stage=gardenStage(n);
  const leaves=n<1?'':'<path d="M60 70Q39 52 34 65Q39 78 60 70M61 61Q78 42 88 54Q84 69 61 61" fill="#91a879" stroke="#607d55" stroke-width="1.5"/>';
  const stem=n<1?'':'<path d="M60 86Q58 65 61 43" fill="none" stroke="#607d55" stroke-width="3" stroke-linecap="round"/>';
- const growth=stem+leaves+botanicalFlower(species,stage);
+ const head=stage==="semente"?'<g transform="translate(0 28)">'+botanicalFlower(species,stage)+'</g>':botanicalFlower(species,stage);
+ const growth=stem+leaves+head;
  return '<div class="garden-stage-plant species-'+species.kind+'"><svg viewBox="0 0 120 126" role="img" aria-label="'+species.name+' de '+(name||"Ritual")+' no estágio '+stage+'"><path d="M34 87h52l-6 31H40Z" fill="#b77950" stroke="#865c43" stroke-width="2"/><path d="M31 86q29-8 58 0v8H31Z" fill="#d4a477" stroke="#865c43" stroke-width="2"/><ellipse cx="60" cy="87" rx="29" ry="6" fill="#70543c"/>'+growth+'</svg><span>'+name+'</span><small>'+species.name+' · '+stage+'</small></div>';
 }
 function renderGarden(box){
