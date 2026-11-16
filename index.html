@@ -1028,7 +1028,7 @@ function updateGuardianMood(){
  const mood=!todays.length?'resting':open.length?(night?'pending-night':'pending'):'happy';
  mascot.classList.remove('mood-resting','mood-pending','mood-pending-night','mood-happy');
  mascot.classList.add('mood-'+mood);
- mascot.setAttribute('aria-label':mood==='pending-night'?'Guardião preocupado com tarefas pendentes à noite':mood==='pending'?'Guardião atento às tarefas do dia':mood==='happy'?'Guardião feliz: todas as tarefas de hoje foram concluídas':'Guardião descansando no jardim');
+ mascot.setAttribute('aria-label',mood==='pending-night'?'Guardião preocupado com tarefas pendentes à noite':mood==='pending'?'Guardião atento às tarefas do dia':mood==='happy'?'Guardião feliz: todas as tarefas de hoje foram concluídas':'Guardião descansando no jardim');
  message.textContent=(mood==='pending'||mood==='pending-night')
   ? 'Ainda temos '+open.length+' '+(open.length===1?'flor para cuidar':'flores para cuidar')+'. Vamos uma de cada vez.'
   : mood==='happy'
